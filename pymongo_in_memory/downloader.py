@@ -55,6 +55,3 @@ def download(version: str):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     download('4.0.10')
-    # print(platform.platform())
-    # print(platform.system())
-    # print(platform.node())
