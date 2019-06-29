@@ -10,7 +10,6 @@ import urllib.request as request
 DOWNLOAD_URL_PATTERNS = {
     'Darwin': 'https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz'
 }
-
 VERSIONS = {
     'Darwin': [
         '4.0.10',
@@ -20,6 +19,7 @@ VERSIONS = {
         '3.0.15',
     ]
 }
+
 
 def _download_folder() -> str:
     current_folder = os.path.dirname(__file__)
