@@ -5,7 +5,6 @@ import platform
 import shutil
 import tempfile
 import urllib.request as request
-from math import floor
 
 
 DOWNLOAD_URL_PATTERNS = {
@@ -31,10 +30,9 @@ def _download_folder() -> str:
 def _dl_reporter(blocknum, block_size, total_size):
     logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
     percent_dled = blocknum * block_size / total_size * 100
-    if floor(percent_dled) % 10 == 0:
-        size_dlded = blocknum * block_size / 1024 / 1024  # MBs
-        total_size = total_size / 1024 / 1024  # MBs
-        logger.info('{:.0f} % ({:.0f} MiB of {:.0f} MiB)'.format(percent_dled, size_dlded, total_size))
+    size_dlded = blocknum * block_size / 1024 / 1024  # MBs
+    total_size = total_size / 1024 / 1024  # MBs
+    logger.info('{:.0f} % ({:.0f} MiB of {:.0f} MiB)'.format(percent_dled, size_dlded, total_size))
 
 
 def download(version: str):
@@ -44,7 +42,10 @@ def download(version: str):
     if not os.path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
-    dst_file = os.path.join(dl_folder, 'mongodb_archive.tgz')
+    dst_file = os.path.join(dl_folder, 'mongodb_archive_{}.tgz'.format(version))
+    if os.path.isfile(dst_file):
+        logger.debug("There is already a downloaded file {}, skipping download".format(dst_file))
+        return
     with tempfile.NamedTemporaryFile(delete=False) as temp:
         logger.debug("Starting download to temporary location {}".format(temp.name))
         request.urlretrieve(dl_url, filename=temp.name, reporthook=_dl_reporter)
