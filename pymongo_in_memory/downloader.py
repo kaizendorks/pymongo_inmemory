@@ -32,7 +32,9 @@ def _dl_reporter(blocknum, block_size, total_size):
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
     total_size = total_size / 1024 / 1024  # MBs
-    logger.info('{:.0f} % ({:.0f} MiB of {:.0f} MiB)'.format(percent_dled, size_dlded, total_size))
+    logger.info('{:.0f} % ({:.0f} MiB of {:.0f} MiB)'.format(
+        percent_dled, size_dlded, total_size)
+    )
 
 
 def download(version: str):
@@ -44,7 +46,10 @@ def download(version: str):
         os.mkdir(dl_folder)
     dst_file = os.path.join(dl_folder, 'mongodb_archive_{}.tgz'.format(version))
     if os.path.isfile(dst_file):
-        logger.debug("There is already a downloaded file {}, skipping download".format(dst_file))
+        logger.debug((
+            "There is already a downloaded file {}, "
+            "skipping download"
+        ).format(dst_file))
         return
     with tempfile.NamedTemporaryFile(delete=False) as temp:
         logger.debug("Starting download to temporary location {}".format(temp.name))
@@ -52,6 +57,7 @@ def download(version: str):
         logger.debug("Finished download.")
         shutil.copyfile(temp.name, dst_file)
         logger.debug("Copied file to {}".format(dst_file))
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
