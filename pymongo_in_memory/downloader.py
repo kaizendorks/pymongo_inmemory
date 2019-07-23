@@ -1,4 +1,5 @@
 # -*- coding: utf8 -*-
+import glob
 import logging
 import os
 import platform
@@ -35,6 +36,16 @@ def _download_folder() -> str:
     return os.environ.get('PYMONGOIM__DOWNLOAD_FOLDER', default_download_folder)
 
 
+def _extract_folder() -> str:
+    default_extract_folder = _mkdir_ifnot_exist('extract')
+    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', default_extract_folder)
+
+
+def _bin_folder() -> str:
+    default_bin_folder = _mkdir_ifnot_exist('bin')
+    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', default_bin_folder)
+
+
 def _dl_reporter(blocknum, block_size, total_size):
     logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
     percent_dled = blocknum * block_size / total_size * 100
@@ -45,7 +56,20 @@ def _dl_reporter(blocknum, block_size, total_size):
     )
 
 
-def download(version: str):
+def _copy_bins():
+    logger = logging.getLogger('PYMONGOIM_COPYBINS')
+    extract_folder = _extract_folder()
+    bin_folder = _bin_folder()
+    for binfile_path in glob.iglob(os.path.join(extract_folder, "**/bin/*"), recursive=True):
+        binfile_name = os.path.basename(binfile_path)
+        logger.debug("Copying {} to bin folder".format(binfile_name))
+        shutil.copyfile(
+            binfile_path, os.path.join(bin_folder, binfile_name)
+        )
+        logger.debug("Copied {}".format(binfile_name))
+
+
+def _download(version: str):
     logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
     dl_folder = _download_folder()
     dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(version=version)
@@ -67,13 +91,13 @@ def download(version: str):
         logger.debug("Copied file to {}".format(dst_file))
 
 
-def extract(version: str):
+def _extract(version: str):
     logger = logging.getLogger('PYMONGOIM_EXTRACT')
     tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(version))
     if not os.path.isfile(tar_file):
         logger.error("Archive file is not found, {}".format(tar_file))
-        download(version)
-    extract_folder = _mkdir_ifnot_exist('extract')
+        _download(version)
+    extract_folder = _extract_folder()
     with tarfile.open(tar_file, 'r') as t:
         logger.info("Starting extraction.")
         for f in t.getnames():
@@ -85,5 +109,6 @@ def extract(version: str):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    # download('4.0.10')
-    extract('4.0.10')
+    # _download('4.0.10')
+    # extract('4.0.10')
+    _copy_bins()
