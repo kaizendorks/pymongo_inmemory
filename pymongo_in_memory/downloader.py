@@ -3,6 +3,7 @@ import logging
 import os
 import platform
 import shutil
+import tarfile
 import tempfile
 import urllib.request as request
 
@@ -10,6 +11,7 @@ import urllib.request as request
 DOWNLOAD_URL_PATTERNS = {
     'Darwin': 'https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz'
 }
+FILE_NAME_PATTERN = 'mongodb_archive_{}.tgz'
 VERSIONS = {
     'Darwin': [
         '4.0.10',
@@ -21,9 +23,15 @@ VERSIONS = {
 }
 
 
+def _mkdir_ifnot_exist(folder_name: str) -> str:
+    path = os.path.join(os.path.dirname(__file__), '..', folder_name)
+    if not os.path.isdir(path):
+        os.mkdir(path)
+    return path
+
+
 def _download_folder() -> str:
-    current_folder = os.path.dirname(__file__)
-    default_download_folder = os.path.join(current_folder, '..', 'download')
+    default_download_folder = _mkdir_ifnot_exist('download')
     return os.environ.get('PYMONGOIM__DOWNLOAD_FOLDER', default_download_folder)
 
 
@@ -44,7 +52,7 @@ def download(version: str):
     if not os.path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
-    dst_file = os.path.join(dl_folder, 'mongodb_archive_{}.tgz'.format(version))
+    dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(version))
     if os.path.isfile(dst_file):
         logger.debug((
             "There is already a downloaded file {}, "
@@ -59,6 +67,22 @@ def download(version: str):
         logger.debug("Copied file to {}".format(dst_file))
 
 
+def extract(version: str):
+    logger = logging.getLogger('PYMONGOIM_EXTRACT')
+    tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(version))
+    if not os.path.isfile(tar_file):
+        logger.error("Archive file is not found, {}".format(tar_file))
+        download(version)
+    extract_folder = _mkdir_ifnot_exist('extract')
+    with tarfile.open(tar_file, 'r') as t:
+        logger.info("Starting extraction.")
+        for f in t.getnames():
+            logger.debug("Extracting {} to {}".format(f, extract_folder))
+            t.extract(f, extract_folder)
+            logger.debug("Done extracting {}".format(f))
+        logger.info("Extractiong finished.")
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    download('4.0.10')
+    # download('4.0.10')
+    extract('4.0.10')
