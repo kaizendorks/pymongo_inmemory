@@ -4,3 +4,4 @@ __pycache__/
 *$py.class
 download/*
 !download/.gitkeep
+.mypy_cache/
