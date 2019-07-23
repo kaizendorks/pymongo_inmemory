@@ -60,7 +60,9 @@ def _copy_bins():
     logger = logging.getLogger('PYMONGOIM_COPYBINS')
     extract_folder = _extract_folder()
     bin_folder = _bin_folder()
-    for binfile_path in glob.iglob(os.path.join(extract_folder, "**/bin/*"), recursive=True):
+    for binfile_path in glob.iglob(
+        os.path.join(extract_folder, "**/bin/*"), recursive=True
+    ):
         binfile_name = os.path.basename(binfile_path)
         logger.debug("Copying {} to bin folder".format(binfile_name))
         shutil.copyfile(
@@ -69,7 +71,7 @@ def _copy_bins():
         logger.debug("Copied {}".format(binfile_name))
 
 
-def _download(version: str):
+def _download_tar(version: str):
     logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
     dl_folder = _download_folder()
     dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(version=version)
@@ -96,7 +98,7 @@ def _extract(version: str):
     tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(version))
     if not os.path.isfile(tar_file):
         logger.error("Archive file is not found, {}".format(tar_file))
-        _download(version)
+        _download_tar(version)
     extract_folder = _extract_folder()
     with tarfile.open(tar_file, 'r') as t:
         logger.info("Starting extraction.")
@@ -107,8 +109,11 @@ def _extract(version: str):
         logger.info("Extractiong finished.")
 
 
+def download(version: str):
+    _extract(version)
+    _copy_bins()
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    # _download('4.0.10')
-    # extract('4.0.10')
-    _copy_bins()
+    download('4.0.10')
