@@ -82,6 +82,7 @@ def extract(version: str):
             logger.debug("Done extracting {}".format(f))
         logger.info("Extractiong finished.")
 
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     # download('4.0.10')
