@@ -8,3 +8,5 @@ extract/*
 !download/.gitkeep
 .mypy_cache/
 .pytest_cache/
+.env
+settings.json

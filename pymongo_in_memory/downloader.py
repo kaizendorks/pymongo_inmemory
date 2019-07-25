@@ -32,18 +32,15 @@ def _mkdir_ifnot_exist(folder_name: str) -> str:
 
 
 def _download_folder() -> str:
-    default_download_folder = _mkdir_ifnot_exist('download')
-    return os.environ.get('PYMONGOIM__DOWNLOAD_FOLDER', default_download_folder)
+    return os.environ.get('PYMONGOIM__DOWNLOAD_FOLDER', _mkdir_ifnot_exist('download'))
 
 
 def _extract_folder() -> str:
-    default_extract_folder = _mkdir_ifnot_exist('extract')
-    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', default_extract_folder)
+    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', _mkdir_ifnot_exist('extract'))
 
 
 def _bin_folder() -> str:
-    default_bin_folder = _mkdir_ifnot_exist('bin')
-    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', default_bin_folder)
+    return os.environ.get('PYMONGOIM__BIN_FOLDER', _mkdir_ifnot_exist('bin'))
 
 
 def _dl_reporter(blocknum, block_size, total_size):
