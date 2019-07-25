@@ -25,7 +25,10 @@ VERSIONS = {
 
 
 def _mkdir_ifnot_exist(folder_name: str) -> str:
-    path = os.path.join(os.path.dirname(__file__), '..', folder_name)
+    path = os.path.join(os.path.dirname(__file__), '..', '.cache')
+    if not os.path.isdir(path):
+        os.mkdir(path)
+    path = os.path.join(path, folder_name)
     if not os.path.isdir(path):
         os.mkdir(path)
     return path
@@ -39,7 +42,7 @@ def _extract_folder() -> str:
     return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', _mkdir_ifnot_exist('extract'))
 
 
-def _bin_folder() -> str:
+def bin_folder() -> str:
     return os.environ.get('PYMONGOIM__BIN_FOLDER', _mkdir_ifnot_exist('bin'))
 
 
@@ -56,14 +59,14 @@ def _dl_reporter(blocknum, block_size, total_size):
 def _copy_bins():
     logger = logging.getLogger('PYMONGOIM_COPYBINS')
     extract_folder = _extract_folder()
-    bin_folder = _bin_folder()
+    bin_path = bin_folder()
     for binfile_path in glob.iglob(
         os.path.join(extract_folder, "**/bin/*"), recursive=True
     ):
         binfile_name = os.path.basename(binfile_path)
         logger.debug("Copying {} to bin folder".format(binfile_name))
         shutil.copyfile(
-            binfile_path, os.path.join(bin_folder, binfile_name)
+            binfile_path, os.path.join(bin_path, binfile_name)
         )
         logger.debug("Copied {}".format(binfile_name))
 
