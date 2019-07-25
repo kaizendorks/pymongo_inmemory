@@ -109,11 +109,11 @@ def _extract(version: str):
         logger.info("Extractiong finished.")
 
 
-def download(version: str):
+def download(version: str = '4.0.10'):  # TODO: Get version automatically
     _extract(version)
     _copy_bins()
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    download('4.0.10')
+    download()
