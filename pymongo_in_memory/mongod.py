@@ -16,7 +16,7 @@ MONGOD_CONFIG = {
 class Mongod:
     def __init__(self):
         self._proc = None
-        self._cmd = [
+        self._boot = [
             os.path.join(bin_folder(), "mongod"),
             "--dbpath", MONGOD_CONFIG["data_folder"],
             "--port", str(MONGOD_CONFIG["port"]),
@@ -41,7 +41,7 @@ class Mongod:
         self.stop()
 
     def start(self):
-        self._proc = subprocess.Popen(self._cmd)
+        self._proc = subprocess.Popen(self._boot)
         while not self.is_healthy():
             pass
 
