@@ -22,13 +22,13 @@ VERSIONS = {
         "3.0.15",
     ]
 }
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", ".cache")
 
 
 def _mkdir_ifnot_exist(folder_name: str) -> str:
-    path = os.path.join(os.path.dirname(__file__), "..", ".cache")
-    if not os.path.isdir(path):
-        os.mkdir(path)
-    path = os.path.join(path, folder_name)
+    if not os.path.isdir(CACHE_FOLDER):
+        os.mkdir(CACHE_FOLDER)
+    path = os.path.join(CACHE_FOLDER, folder_name)
     if not os.path.isdir(path):
         os.mkdir(path)
     return path
@@ -76,7 +76,7 @@ def _download_tar(version: str):
     dl_folder = _download_folder()
     dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(version=version)
     if not os.path.isdir(dl_folder):
-        logger.debug("Download folder doesn"t exist, creating it.")
+        logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
     dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(version))
     if os.path.isfile(dst_file):
