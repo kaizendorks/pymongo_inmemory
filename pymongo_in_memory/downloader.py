@@ -23,7 +23,7 @@ VERSIONS = {
         "3.0.15",
     ]
 }
-CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", ".cache")
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), ".cache")
 
 
 def _mkdir_ifnot_exist(folder_name: str) -> str:
