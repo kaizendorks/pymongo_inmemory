@@ -12,5 +12,7 @@ setup(
     description="Pymongo Mocking Tool with in memory MongoDB running.",
     author="Kaizen Dorks",
     author_email="kaizendorks@gmail.com",
-    license="MIT"
+    license="MIT",
+    packages=find_packages(exclude=["tests", "tests.*", "tasks", "tasks.*"]),
+    install_requires=required
 )
