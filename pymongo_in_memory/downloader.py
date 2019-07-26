@@ -3,6 +3,7 @@ import glob
 import logging
 import os
 import platform
+import stat
 import shutil
 import tarfile
 import tempfile
@@ -65,9 +66,16 @@ def _copy_bins():
     ):
         binfile_name = os.path.basename(binfile_path)
         logger.debug("Copying {} to bin folder".format(binfile_name))
-        shutil.copyfile(
-            binfile_path, os.path.join(bin_path, binfile_name)
-        )
+        target = os.path.join(bin_path, binfile_name)
+        shutil.copyfile(binfile_path, target)
+        os.chmod(target, (
+            stat.S_IRUSR
+            | stat.S_IXUSR
+            | stat.S_IRGRP
+            | stat.S_IXGRP
+            | stat.S_IROTH
+            | stat.S_IXOTH
+        ))
         logger.debug("Copied {}".format(binfile_name))
 
 
@@ -110,6 +118,9 @@ def _extract(version: str):
 
 
 def download(version: str = "4.0.10"):  # TODO: Get version automatically
+    _mkdir_ifnot_exist("data")
+    if os.path.isfile(os.path.join(bin_folder(), "mongod")):
+        return
     _extract(version)
     _copy_bins()
 
