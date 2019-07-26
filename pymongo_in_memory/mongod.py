@@ -1,10 +1,8 @@
 import os
 import subprocess
 
-import pymongo
-
 from ._utils import find_open_port
-from .downloader import CACHE_FOLDER, bin_folder
+from .downloader import CACHE_FOLDER, bin_folder, download
 
 MONGOD_CONFIG = {
     "data_folder": os.path.join(CACHE_FOLDER, "data"),
@@ -15,6 +13,7 @@ MONGOD_CONFIG = {
 
 class Mongod:
     def __init__(self):
+        download()
         self._proc = None
         self._boot = [
             os.path.join(bin_folder(), "mongod"),
@@ -63,5 +62,3 @@ class Mongod:
 if __name__ == "__main__":
     with Mongod() as md:
         pass
-        # client = pymongo.MongoClient(md.connection_string)
-        # db = client["test"]
