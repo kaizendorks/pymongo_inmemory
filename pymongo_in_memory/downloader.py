@@ -10,22 +10,22 @@ import urllib.request as request
 
 
 DOWNLOAD_URL_PATTERNS = {
-    'Darwin': 'https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz'
+    "Darwin": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz"
 }
-FILE_NAME_PATTERN = 'mongodb_archive_{}.tgz'
+FILE_NAME_PATTERN = "mongodb_archive_{}.tgz"
 VERSIONS = {
-    'Darwin': [
-        '4.0.10',
-        '3.6.13',
-        '3.4.21',
-        '3.2.22',
-        '3.0.15',
+    "Darwin": [
+        "4.0.10",
+        "3.6.13",
+        "3.4.21",
+        "3.2.22",
+        "3.0.15",
     ]
 }
 
 
 def _mkdir_ifnot_exist(folder_name: str) -> str:
-    path = os.path.join(os.path.dirname(__file__), '..', '.cache')
+    path = os.path.join(os.path.dirname(__file__), "..", ".cache")
     if not os.path.isdir(path):
         os.mkdir(path)
     path = os.path.join(path, folder_name)
@@ -35,29 +35,29 @@ def _mkdir_ifnot_exist(folder_name: str) -> str:
 
 
 def _download_folder() -> str:
-    return os.environ.get('PYMONGOIM__DOWNLOAD_FOLDER', _mkdir_ifnot_exist('download'))
+    return os.environ.get("PYMONGOIM__DOWNLOAD_FOLDER", _mkdir_ifnot_exist("download"))
 
 
 def _extract_folder() -> str:
-    return os.environ.get('PYMONGOIM__EXTRACT_FOLDER', _mkdir_ifnot_exist('extract'))
+    return os.environ.get("PYMONGOIM__EXTRACT_FOLDER", _mkdir_ifnot_exist("extract"))
 
 
 def bin_folder() -> str:
-    return os.environ.get('PYMONGOIM__BIN_FOLDER', _mkdir_ifnot_exist('bin'))
+    return os.environ.get("PYMONGOIM__BIN_FOLDER", _mkdir_ifnot_exist("bin"))
 
 
 def _dl_reporter(blocknum, block_size, total_size):
-    logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
+    logger = logging.getLogger("PYMONGOIM_DOWNLOAD")
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
     total_size = total_size / 1024 / 1024  # MBs
-    logger.info('{:.0f} % ({:.0f} MiB of {:.0f} MiB)'.format(
+    logger.info("{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
         percent_dled, size_dlded, total_size)
     )
 
 
 def _copy_bins():
-    logger = logging.getLogger('PYMONGOIM_COPYBINS')
+    logger = logging.getLogger("PYMONGOIM_COPYBINS")
     extract_folder = _extract_folder()
     bin_path = bin_folder()
     for binfile_path in glob.iglob(
@@ -72,11 +72,11 @@ def _copy_bins():
 
 
 def _download_tar(version: str):
-    logger = logging.getLogger('PYMONGOIM_DOWNLOAD')
+    logger = logging.getLogger("PYMONGOIM_DOWNLOAD")
     dl_folder = _download_folder()
     dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(version=version)
     if not os.path.isdir(dl_folder):
-        logger.debug("Download folder doesn't exist, creating it.")
+        logger.debug("Download folder doesn"t exist, creating it.")
         os.mkdir(dl_folder)
     dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(version))
     if os.path.isfile(dst_file):
@@ -94,13 +94,13 @@ def _download_tar(version: str):
 
 
 def _extract(version: str):
-    logger = logging.getLogger('PYMONGOIM_EXTRACT')
+    logger = logging.getLogger("PYMONGOIM_EXTRACT")
     tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(version))
     if not os.path.isfile(tar_file):
         logger.error("Archive file is not found, {}".format(tar_file))
         _download_tar(version)
     extract_folder = _extract_folder()
-    with tarfile.open(tar_file, 'r') as t:
+    with tarfile.open(tar_file, "r") as t:
         logger.info("Starting extraction.")
         for f in t.getnames():
             logger.debug("Extracting {} to {}".format(f, extract_folder))
@@ -109,11 +109,11 @@ def _extract(version: str):
         logger.info("Extractiong finished.")
 
 
-def download(version: str = '4.0.10'):  # TODO: Get version automatically
+def download(version: str = "4.0.10"):  # TODO: Get version automatically
     _extract(version)
     _copy_bins()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     download()

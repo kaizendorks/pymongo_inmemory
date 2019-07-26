@@ -28,6 +28,6 @@ def stop():
 if __name__ == "__main__":
     start()
     client = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
-    db = client['test']
+    db = client["test"]
     sleep(60)
     stop()
