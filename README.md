@@ -19,3 +19,4 @@ with MongoClient() as client:
 ## TODO
 * Cross platform support (currently only MacOS)
 * Providing download config through some way
+* Increase test coverage
