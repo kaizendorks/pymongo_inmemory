@@ -18,7 +18,8 @@ with MongoClient() as client:
 
 ## TODO
 * Cross platform support (currently only MacOS)
-* Providing download config through some way
+* Publish to PIP
+* Ability to define folders through config (env overwrites)
+* Wire ability to overwrite conf through env
 * Increase test coverage
 * Remove PIPE output from mongod
-* Publish to PIP
