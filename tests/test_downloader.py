@@ -1,7 +1,7 @@
 import pytest  # noqa: F401
 import os.path as path
 
-from pymongo_in_memory import downloader
+from pymongo_inmemory import downloader
 
 
 def test_env_folders_overwrite_default_downloadfolder(monkeypatch):
@@ -22,5 +22,5 @@ def test_env_folders_overwrite_default_binfolder(monkeypatch):
 def test_can_get_default_bin_folder():
     assert path.samefile(
         downloader.bin_folder(),
-        path.join(path.dirname(__file__), "..", ".cache", "bin")
+        path.join(path.dirname(__file__), "..", "pymongo_inmemory", ".cache", "bin")
     )
