@@ -20,3 +20,5 @@ with MongoClient() as client:
 * Cross platform support (currently only MacOS)
 * Providing download config through some way
 * Increase test coverage
+* Remove PIPE output from mongod
+* Publish to PIP
