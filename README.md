@@ -22,4 +22,5 @@ with MongoClient() as client:
 * Ability to define folders through config (env overwrites)
 * Wire ability to overwrite conf through env
 * Increase test coverage
+* Increase mypy coverage also fix broken parts
 * Remove PIPE output from mongod
