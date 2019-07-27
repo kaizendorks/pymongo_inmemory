@@ -10,12 +10,10 @@ def find_open_port(sq: Sequence[int]) -> int:
 
 
 def _sanitize_mongoclient_args(args, kwargs):
-    if str(args[0]).startswith("mongodb"):
+    if len(args) > 0 and str(args[0]).startswith("mongodb"):
         args = args[1:]
-    try:
-        kwargs.pop("host")
-    except KeyError:
-        pass
+    for kw in ["host", "port"]:
+        kwargs.pop(kw, None)
     return args, kwargs
 
 
