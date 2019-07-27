@@ -1,4 +1,3 @@
-import pytest  # noqa: F401
 import os.path as path
 
 from pymongo_inmemory import downloader
