@@ -8,13 +8,15 @@ from pymongo_inmemory import _utils
 @pytest.fixture
 def server(request):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setblocking(0)
-    server.bind(("localhost", 12323))
-    server.listen(5)
 
+    # Add finalizer at the point of least possible failure
     def fin():
         server.close()
     request.addfinalizer(fin)
+
+    server.setblocking(0)
+    server.bind(("localhost", 12323))
+    server.listen(5)
     return server
 
 
