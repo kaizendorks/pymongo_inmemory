@@ -9,6 +9,8 @@ import tarfile
 import tempfile
 import urllib.request as request
 
+from ._utils import conf
+
 
 DOWNLOAD_URL_PATTERNS = {
     "Darwin": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz"
@@ -117,7 +119,9 @@ def _extract(version: str):
         logger.info("Extractiong finished.")
 
 
-def download(version: str = "4.0.10"):  # TODO: Get version automatically
+def download(version=None):
+    if version is None:
+        version = str(conf("mongo_version"))
     _mkdir_ifnot_exist("data")
     if os.path.isfile(os.path.join(bin_folder(), "mongod")):
         return

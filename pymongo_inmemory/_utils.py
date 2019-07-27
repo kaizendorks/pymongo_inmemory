@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 import socket
 from typing import Sequence
 
@@ -9,5 +10,23 @@ def find_open_port(sq: Sequence[int]) -> int:
                 return port
 
 
+DEFAULT_CONF = {
+    "mongo_version": "4.0.10"
+}
+
+
+def conf(option):
+    parser = ConfigParser()
+    parser.read("setup.cfg")
+    return parser.get(
+        "pymongo_inmemory",
+        option,
+        fallback=DEFAULT_CONF.get(option, None),
+        raw=True
+    )
+
+
 if __name__ == "__main__":
-    print(find_open_port([9001, 9002]))
+    # print(find_open_port([9001, 9002]))
+    # print(conf("mongo_version"))
+    pass
