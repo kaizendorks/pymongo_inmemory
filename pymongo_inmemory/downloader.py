@@ -1,4 +1,19 @@
-# -*- coding: utf8 -*-
+"""Downloader module downloads appropriate version of mongo server TAR file.
+The TAR file to download comes from MongoDB Communiti Edition doownload page:
+    https://www.mongodb.com/download-center/community
+
+However, it's not dynamically queried for now. Instead we have a predefined
+patterns for download URLs.
+
+Currently Windows is ignored.
+
+Definition of operating system
+Definition of version
+
+Environmental variables > setup.cfg > automatic detection. If it's not possible
+to determine, an error is thrown.
+"""
+
 import glob
 import logging
 import os
