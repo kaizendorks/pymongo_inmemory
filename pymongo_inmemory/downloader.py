@@ -13,9 +13,9 @@ from ._utils import conf
 
 
 DOWNLOAD_URL_PATTERNS = {
-    "Darwin": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{version}.tgz"
+    "Darwin": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz"
 }
-FILE_NAME_PATTERN = "mongodb_archive_{}.tgz"
+FILE_NAME_PATTERN = "mongodb_archive_{ver}.tgz"
 VERSIONS = {
     "Darwin": [
         "4.0.10",
@@ -54,9 +54,10 @@ def _dl_reporter(blocknum, block_size, total_size):
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
     total_size = total_size / 1024 / 1024  # MBs
-    logger.info("{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
-        percent_dled, size_dlded, total_size)
-    )
+    if 0 <= percent_dled % 10 <= 0.01:
+        logger.info("{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
+            percent_dled, size_dlded, total_size)
+        )
 
 
 def _copy_bins():
@@ -84,11 +85,11 @@ def _copy_bins():
 def _download_tar(version: str):
     logger = logging.getLogger("PYMONGOIM_DOWNLOAD")
     dl_folder = _download_folder()
-    dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(version=version)
+    dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(ver=version)
     if not os.path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
-    dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(version))
+    dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(ver=version))
     if os.path.isfile(dst_file):
         logger.debug((
             "There is already a downloaded file {}, "
@@ -105,7 +106,7 @@ def _download_tar(version: str):
 
 def _extract(version: str):
     logger = logging.getLogger("PYMONGOIM_EXTRACT")
-    tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(version))
+    tar_file = os.path.join(_download_folder(), FILE_NAME_PATTERN.format(ver=version))
     if not os.path.isfile(tar_file):
         logger.error("Archive file is not found, {}".format(tar_file))
         _download_tar(version)
