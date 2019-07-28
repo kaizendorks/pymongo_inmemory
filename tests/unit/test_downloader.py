@@ -18,12 +18,33 @@ def test_env_folders_overwrite_default_binfolder(monkeypatch):
     assert downloader.bin_folder() == "test_folder"
 
 
-def test_can_get_default_bin_folder():
+def test_default_bin_folder(monkeypatch, tmpdir):
+    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
     assert path.samefile(
         downloader.bin_folder(),
-        path.join(
-            path.dirname(__file__),
-            "..", "..",
-            "pymongo_inmemory", ".cache", "bin"
-        )
+        path.join(tmpdir, "bin")
+    )
+
+
+def test_default_dl_folder(monkeypatch, tmpdir):
+    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
+    assert path.samefile(
+        downloader._download_folder(),
+        path.join(tmpdir, "download")
+    )
+
+
+def test_default_extract_folder(monkeypatch, tmpdir):
+    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
+    assert path.samefile(
+        downloader._extract_folder(),
+        path.join(tmpdir, "extract")
+    )
+
+
+def test_make_folder(monkeypatch, tmpdir):
+    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
+    assert path.samefile(
+        downloader._mkdir_ifnot_exist("test"),
+        path.join(tmpdir, "test")
     )
