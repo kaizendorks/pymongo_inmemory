@@ -1,3 +1,4 @@
+import logging
 import os
 import subprocess
 
@@ -13,7 +14,11 @@ MONGOD_CONFIG = {
 
 class Mongod:
     def __init__(self):
+        self._logger = logging.getLogger("PYMONGOIM_MONGOD")
+
+        self._logger.info("Checking binary")
         download()
+
         self._proc = None
         self._boot = [
             os.path.join(bin_folder(), "mongod"),
@@ -40,26 +45,36 @@ class Mongod:
         self.stop()
 
     def start(self):
+        self._logger.info("Starting mongod...")
         self._proc = subprocess.Popen(self._boot)
         while not self.is_healthy():
             pass
+        self._logger.info("Started mongod.")
 
     def stop(self):
+        self._logger.info("Sending kill signal to mongod.")
         self._proc.terminate()
 
     def is_healthy(self):
         try:
+            self._logger.debug("Getting status")
             uptime = subprocess.check_output(self._healthcheck)
         except subprocess.CalledProcessError:
+            self._logger.debug("Status: Not running")
             return False
         else:
             if int(uptime) > 0:
+                self._logger.debug("Status: Running for {up} secs".format(
+                    up=str(uptime.decode()).strip()
+                ))
                 return True
             else:
+                self._logger.debug("Status: Just started.")
                 return False
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     with Mongod() as md:
         try:
             while True:
