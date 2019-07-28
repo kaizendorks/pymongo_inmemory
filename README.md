@@ -17,10 +17,13 @@ with MongoClient() as client:
 ```
 
 ## TODO
-* Cross platform support (currently only MacOS)
+* Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
+* If opsys and version is not defined, make downloader auto detect as much as possible, if not raise error
+* Add module level docs where needed. Also function level docs for public API
 * Publish to PIP
+* Add github docs, vuepress
 * Ability to define folders through config (env overwrites)
 * Wire ability to overwrite conf through env
 * Increase test coverage
-* Increase mypy coverage also fix broken parts
+* Add static type checking
 * Remove PIPE output from mongod
