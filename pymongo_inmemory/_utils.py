@@ -1,9 +1,8 @@
 from configparser import ConfigParser
 import socket
-from typing import Sequence
 
 
-def find_open_port(sq: Sequence[int]) -> int:
+def find_open_port(sq):
     for port in sq:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as soc:
             if 0 != soc.connect_ex(("localhost", port)):
