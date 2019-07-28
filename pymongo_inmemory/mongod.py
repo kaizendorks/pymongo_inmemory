@@ -27,9 +27,9 @@ class Mongod:
             "--quiet",
             "--eval", "db.serverStatus().uptime"
         ]
-        self.connection_string = (
-            f"mongodb://{MONGOD_CONFIG['local_address']}"
-            f":{MONGOD_CONFIG['port']}"
+        self.connection_string = "mongodb://{host}:{port}".format(
+            host=MONGOD_CONFIG['local_address'],
+            port=MONGOD_CONFIG['port']
         )
 
     def __enter__(self):
@@ -61,4 +61,8 @@ class Mongod:
 
 if __name__ == "__main__":
     with Mongod() as md:
-        pass
+        try:
+            while True:
+                pass
+        except KeyboardInterrupt:
+            pass
