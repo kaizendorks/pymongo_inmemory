@@ -193,6 +193,7 @@ def download(opsys=None, version=None):
         MongoDB version, should be one of these: 4.0, 3.6, 3.4, 3.2, 3.0
         Not all versions are available for all operating systems. Check this URL:
         https://www.mongodb.com/download-center/community
+
     Raises
     ------
     OperatingSystemNotFound: If download pattern can't be determined.
