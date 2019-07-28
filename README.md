@@ -18,7 +18,6 @@ with MongoClient() as client:
 
 ## TODO
 * Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
-* If opsys and version is not defined, make downloader auto detect as much as possible, if not raise error
 * Add module level docs where needed. Also function level docs for public API
 * Publish to PIP
 * Add github docs, vuepress

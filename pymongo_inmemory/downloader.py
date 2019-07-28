@@ -43,6 +43,7 @@ import shutil
 import tarfile
 import tempfile
 import urllib.request as request
+from urllib.error import HTTPError
 
 from ._utils import conf
 
@@ -77,6 +78,10 @@ VERSIONS = {
 
 
 class OperatingSystemNotFound(ValueError):
+    pass
+
+
+class CantDownload(Exception):
     pass
 
 
@@ -148,7 +153,15 @@ def _download_tar(dl_url, tar_file, dst_file):
 
     with tempfile.NamedTemporaryFile(delete=False) as temp:
         logger.debug("Starting download to temporary location {}".format(temp.name))
-        request.urlretrieve(dl_url, filename=temp.name, reporthook=_dl_reporter)
+        try:
+            request.urlretrieve(dl_url, filename=temp.name, reporthook=_dl_reporter)
+        except HTTPError:
+            raise CantDownload((
+                "Can't download {url}, "
+                "make sure MongoDB provides it. "
+                "Possibly the version is not provided for the operating system."
+            ).format(url=dl_url))
+
         logger.debug("Finished download.")
         shutil.copyfile(temp.name, dst_file)
         logger.debug("Copied file to {}".format(dst_file))
@@ -192,7 +205,7 @@ def download(opsys=None, version=None):
         _mapping = {"Darwin": "osx", "Linux": "linux"}
         opsys = _mapping.get(platform.system())
 
-    version = VERSIONS.get(version, "4.0")
+    version = VERSIONS.get(version, "4.0.10")
     dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)
 
     if dl_pattern is None:
