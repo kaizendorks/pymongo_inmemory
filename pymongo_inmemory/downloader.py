@@ -7,11 +7,31 @@ patterns for download URLs.
 
 Currently Windows is ignored.
 
-Definition of operating system
-Definition of version
+Operating systems can be one of these:
+    osx
+    linux
+    amazonlinux
+    amazonlinux2
+    debian7
+    debian8
+    debian9
+    rhel5
+    rhel6
+    rhel7
+    suse11
+    suse12
+    ubuntu14
+    ubuntu16
+    ubuntu18
+If OS can't be determined an exception is thrown.
 
-Environmental variables > setup.cfg > automatic detection. If it's not possible
-to determine, an error is thrown.
+Versions should be one of these, but not all versions are available for any
+operating system, so it might not be downloaded:
+    4.0
+    3.6
+    3.4
+    3.2
+    3.0
 """
 
 import glob
@@ -27,21 +47,37 @@ import urllib.request as request
 from ._utils import conf
 
 
-DOWNLOAD_URL_PATTERNS = {
-    "Darwin": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz"
-}
-FILE_NAME_PATTERN = "mongodb_archive_{ver}.tgz"
-VERSIONS = {
-    "Darwin": [
-        "4.0.10",
-        "3.6.13",
-        "3.4.21",
-        "3.2.22",
-        "3.0.15",
-    ]
-}
+TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
 CACHE_FOLDER = os.path.join(os.path.dirname(__file__), ".cache")
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
+DOWNLOAD_URL_PATTERNS = {
+    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
+    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{ver}.tgz",
+    "amazonlinux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",
+    "amazonlinux2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",
+    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",
+    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",
+    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",
+    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{ver}.tgz",
+    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{ver}.tgz",
+    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{ver}.tgz",
+    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{ver}.tgz",
+    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{ver}.tgz",
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",
+}
+VERSIONS = {
+    "4.0": "4.0.10",
+    "3.6": "3.6.13",
+    "3.4": "3.4.21",
+    "3.2": "3.2.22",
+    "3.0": "3.0.15",
+}
+
+
+class OperatingSystemNotFound(ValueError):
+    pass
 
 
 def _mkdir_ifnot_exist(folder_name):
@@ -130,15 +166,42 @@ def _extract(tar_file):
 
 
 def download(opsys=None, version=None):
+    """Download MongoDB binaries.
+
+    Parameters
+    ----------
+    opsys: str
+        Operating system. Should be one of these: osx, linux, amazonlinux, amazonlinux2,
+        debian7, debian8, debian9, rhel5, rhel6, rhel7, suse11, suse12, ubuntu14,
+        ubuntu16, ubuntu18
+        If `None`, then it'll try to determine based on `paltform.system()`, if can't
+        determined `OperatingSystemNotFound` will be raised
+    version: str
+        MongoDB version, should be one of these: 4.0, 3.6, 3.4, 3.2, 3.0
+        Not all versions are available for all operating systems. Check this URL:
+        https://www.mongodb.com/download-center/community
+    Raises
+    ------
+    OperatingSystemNotFound: If download pattern can't be determined.
+    """
     if version is None:
         version = str(conf("mongo_version"))
     if opsys is None:
         opsys = str(conf("operating_system"))
+    else:
+        _mapping = {"Darwin": "osx", "Linux": "linux"}
+        opsys = _mapping.get(platform.system())
 
-    dl_url = DOWNLOAD_URL_PATTERNS[platform.system()].format(ver=version)
+    version = VERSIONS.get(version, "4.0")
+    dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)
+
+    if dl_pattern is None:
+        raise OperatingSystemNotFound("Can't find download pattern.")
+
+    dl_url = dl_pattern.format(ver=version)
     dl_folder = _download_folder()
-    tar_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(ver=version))
-    dst_file = os.path.join(dl_folder, FILE_NAME_PATTERN.format(ver=version))
+    tar_file = os.path.join(dl_folder, TARFILE_PATTERN.format(ver=version))
+    dst_file = os.path.join(dl_folder, TARFILE_PATTERN.format(ver=version))
 
     _mkdir_ifnot_exist("data")
 
