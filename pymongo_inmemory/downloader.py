@@ -54,19 +54,19 @@ logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 DOWNLOAD_URL_PATTERNS = {
     "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
     "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{ver}.tgz",
-    "amazonlinux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",
-    "amazonlinux2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",
-    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",
-    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",
-    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",
+    "amazonlinux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",  # noqa: E501
+    "amazonlinux2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",  # noqa: E501
+    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",  # noqa: E501
+    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",  # noqa: E501
+    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",  # noqa: E501
     "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{ver}.tgz",
     "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{ver}.tgz",
     "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{ver}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{ver}.tgz",
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{ver}.tgz",
-    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",
-    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",
-    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",  # noqa: E501
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",  # noqa: E501
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",  # noqa: E501
 }
 VERSIONS = {
     "4.0": "4.0.10",
