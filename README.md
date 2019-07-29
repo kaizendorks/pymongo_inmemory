@@ -17,6 +17,7 @@ with MongoClient() as client:
 ```
 
 ## TODO
+* Move portfinding of Mongod to constructor to avoid possible port clashes between module load and object creation.
 * Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
 * Add atexit register for mongod clean up
 * Add module level docs where needed. Also function level docs for public API
