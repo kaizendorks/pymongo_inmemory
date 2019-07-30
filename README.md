@@ -2,6 +2,15 @@
 A mongo mocking library with MongoDB running in memory.
 
 ## Usage
+Insert a new section to your projwects `setup.cfg` for operating system and
+mongo version:
+```toml
+[pymongo_inmemory]
+mongo_version = 4.0
+operating_system = osx
+```
+
+then use the in-memory client insstead of original one:
 ```python
 from pymongo_inmemory import MongoClient
 
