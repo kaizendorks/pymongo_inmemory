@@ -1,9 +1,9 @@
-from distutils import find_packages, setup
+from setuptools import setup, find_packages
 
 from pymongo_inmemory import __version__
 
 required = [
-    "pymongo"
+    "setuptools", "pymongo"
 ]
 
 setup(
@@ -13,6 +13,6 @@ setup(
     author="Kaizen Dorks",
     author_email="kaizendorks@gmail.com",
     license="MIT",
-    packages=find_packages(exclude=["tests", "tests.*", "tasks", "tasks.*"]),
+    packages=find_packages(exclude=["tests", "tests.*", ".vscode"]),
     install_requires=required
 )
