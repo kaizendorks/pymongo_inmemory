@@ -9,3 +9,5 @@ __pycache__/
 .env
 settings.json
 *.egg-info
+build/
+dist/

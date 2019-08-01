@@ -30,7 +30,6 @@ with MongoClient() as client:
 * Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
 * Add atexit register for mongod clean up
 * Add module level docs where needed. Also function level docs for public API
-* Publish to PIP
 * Add github docs, vuepress
 * Ability to define folders through config (env overwrites)
 * Wire ability to overwrite conf through env

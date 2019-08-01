@@ -8,6 +8,9 @@ flake8 = "*"
 mypy = "*"
 pytest = "*"
 pytest-pythonpath = "*"
+twine = "*"
+wheel = "*"
+setuptools = "*"
 
 [packages]
 pymongo = "*"
