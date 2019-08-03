@@ -7,20 +7,33 @@ This module can be used for spinning up an ephemeral MongoDB instance:
 import atexit
 import logging
 import os
+import signal
 import subprocess
 
 from ._utils import find_open_port
 from .downloader import CACHE_FOLDER, bin_folder, download
 
+logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
 _popen_objs = []
 
 
 @atexit.register
 def cleanup():
+    logger.info("Cleaning created processes.")
     for o in _popen_objs:
         if o.poll() is None:
+            logger.debug("Found {}".format(o.pid))
             o.terminate()
+
+
+def clean_before_kill(signum, stack):
+    logger.warning("Received kill signal.")
+    cleanup()
+    exit()
+
+
+signal.signal(signal.SIGTERM, clean_before_kill)
 
 
 class MongodConfig:
@@ -46,9 +59,7 @@ class Mongod:
     with `atexit` module to ensure clean up.
     """
     def __init__(self):
-        self._logger = logging.getLogger("PYMONGOIM_MONGOD")
-
-        self._logger.info("Checking binary")
+        logger.info("Checking binary")
         download()
 
         self._proc = None
@@ -68,7 +79,7 @@ class Mongod:
         self.stop()
 
     def start(self):
-        self._logger.info("Starting mongod...")
+        logger.info("Starting mongod...")
         mongod_config = MongodConfig()
         self._mongod_port = mongod_config.port
         self._mongod_ip = mongod_config.local_address
@@ -83,11 +94,11 @@ class Mongod:
         _popen_objs.append(self._proc)
         while not self.is_healthy:
             pass
-        self._logger.info("Started mongod.")
-        self._logger.info("Connect with: {cs}".format(cs=self.connection_string))
+        logger.info("Started mongod.")
+        logger.info("Connect with: {cs}".format(cs=self.connection_string))
 
     def stop(self):
-        self._logger.info("Sending kill signal to mongod.")
+        logger.info("Sending kill signal to mongod.")
         self._proc.terminate()
 
     @property
@@ -103,19 +114,19 @@ class Mongod:
     @property
     def is_healthy(self):
         try:
-            self._logger.debug("Getting status")
+            logger.debug("Getting status")
             uptime = subprocess.check_output(self._healthcheck)
         except subprocess.CalledProcessError:
-            self._logger.debug("Status: Not running")
+            logger.debug("Status: Not running")
             return False
         else:
             if int(uptime) > 0:
-                self._logger.debug("Status: Running for {up} secs".format(
+                logger.debug("Status: Running for {up} secs".format(
                     up=str(uptime.decode()).strip()
                 ))
                 return True
             else:
-                self._logger.debug("Status: Just started.")
+                logger.debug("Status: Just started.")
                 return False
 
 
