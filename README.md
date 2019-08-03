@@ -26,13 +26,11 @@ with MongoClient() as client:
 ```
 
 ## TODO
-* Move portfinding of Mongod to constructor to avoid possible port clashes between module load and object creation.
 * Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
-* Add atexit register for mongod clean up
 * Add module level docs where needed. Also function level docs for public API
 * Add github docs, vuepress
 * Ability to define folders through config (env overwrites)
 * Wire ability to overwrite conf through env
 * Increase test coverage
 * Add static type checking
-* Remove PIPE output from mongod
+* Add ability change where to pipe output from mongod
