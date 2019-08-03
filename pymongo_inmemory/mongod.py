@@ -131,6 +131,7 @@ class Mongod:
 
 
 if __name__ == "__main__":
+    # This part is used for integrity tests too.
     logging.basicConfig(level=logging.DEBUG)
     with Mongod() as md:
         try:
