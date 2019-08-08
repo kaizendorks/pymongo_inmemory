@@ -1,16 +1,16 @@
 # pymongo_inmemory
-A mongo mocking library with MongoDB running in memory.
+A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## Usage
-Insert a new section to your projwects `setup.cfg` for operating system and
-mongo version:
-```toml
+Insert a new section to your project's `setup.cfg` for the operating system and
+mongo version you want to spin up:
+```ini
 [pymongo_inmemory]
 mongo_version = 4.0
 operating_system = osx
 ```
 
-then use the in-memory client insstead of original one:
+then use the `pymongo_inmemory` client instead of original one:
 ```python
 from pymongo_inmemory import MongoClient
 
@@ -25,12 +25,18 @@ with MongoClient() as client:
     # do stuff
 ```
 
-## TODO
-* Clean up and centralize config acquisition, env var>pim.ini>setup.cfg
-* Add module level docs where needed. Also function level docs for public API
-* Add github docs, vuepress
-* Ability to define folders through config (env overwrites)
-* Wire ability to overwrite conf through env
-* Increase test coverage
-* Add static type checking
-* Add ability change where to pipe output from mongod
+## Development
+Project is set up to develop with [Pipenv](https://github.com/pypa/pipenv).
+
+After installing Pipenv and cloning the repo, create the shell and install all
+package requirements:
+
+```bash
+$> pipenv shell
+$> pipenv install
+```
+Run the tests:
+```bash
+$> py.test
+$> bash tests/integrity/test_integrity.sh
+```
