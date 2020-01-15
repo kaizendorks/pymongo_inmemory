@@ -204,7 +204,7 @@ def download(opsys=None, version=None):
     if opsys is None:
         opsys = str(conf("operating_system"))
     else:
-        _mapping = {"Darwin": "osx", "Linux": "linux"}
+        _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
         opsys = _mapping.get(platform.system())
 
     version = VERSIONS.get(version, "4.0.10")
