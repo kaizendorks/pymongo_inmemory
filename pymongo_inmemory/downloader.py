@@ -67,6 +67,7 @@ DOWNLOAD_URL_PATTERNS = {
     "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",  # noqa: E501
     "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",  # noqa: E501
     "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",  # noqa: E501
+    "windows": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",  # noqa: E501
 }
 VERSIONS = {
     "4.0": "4.0.10",
