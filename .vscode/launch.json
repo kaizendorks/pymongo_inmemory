@@ -9,6 +9,17 @@
             "type": "python",
             "request": "launch",
             "module": "pymongo_inmemory.downloader"
+        },
+        {
+            "name": "PyTest",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "module": "pytest",
+            "args": [
+                "-sv"
+            ]
         }
     ]
 }
