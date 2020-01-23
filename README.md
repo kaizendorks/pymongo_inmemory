@@ -41,7 +41,6 @@ Create your own `setup.cfg` file from `setup.cfg-template`.
 Run the tests:
 ```bash
 $> pytest
-$> bash tests/integrity/test_integrity.sh
 ```
 
 If on NIX systems you can run further tests:
