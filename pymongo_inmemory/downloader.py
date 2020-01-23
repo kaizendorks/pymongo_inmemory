@@ -35,6 +35,7 @@ operating system, so it might not be downloaded:
 """
 
 import glob
+import zipfile
 import logging
 import os
 import platform
@@ -135,6 +136,10 @@ class CantDownload(Exception):
     pass
 
 
+class InvalidDownloadedFile(Exception):
+    pass
+
+
 def _mkdir_ifnot_exist(folder_name):
     if not os.path.isdir(CACHE_FOLDER):
         os.mkdir(CACHE_FOLDER)
@@ -187,7 +192,7 @@ def _copy_bins():
         logger.debug("Copied {}".format(binfile_name))
 
 
-def _download_tar(dl_url, dled_file, dst_file):
+def _download_file(dl_url, dled_file, dst_file):
     dl_folder = _download_folder()
 
     if not os.path.isdir(dl_folder):
@@ -217,13 +222,33 @@ def _download_tar(dl_url, dled_file, dst_file):
         logger.debug("Copied file to {}".format(dst_file))
 
 
+
 def _extract(dled_file):
     extract_folder = _extract_folder()
-    with tarfile.open(dled_file, "r") as t:
+    if tarfile.is_tarfile(dled_file):
+        _extract_tar(dled_file, extract_folder)
+    elif zipfile.is_zipfile(dled_file):
+        _extract_zip(dled_file, extract_folder)
+    else:
+        raise InvalidDownloadedFile("Expecting either a .tar or a .zip file.")
+
+
+def _extract_tar(tar_file, extract_folder):
+    with tarfile.open(tar_file, "r") as t:
         logger.info("Starting extraction.")
         for f in t.getnames():
             logger.debug("Extracting {} to {}".format(f, extract_folder))
             t.extract(f, extract_folder)
+            logger.debug("Done extracting {}".format(f))
+        logger.info("Extractiong finished.")
+
+
+def _extract_zip(zip_file, extract_folder):
+    with zipfile.ZipFile(zip_file) as z:
+        logger.info("Starting extraction.")
+        for f in z.namelist():
+            logger.debug("Extracting {} to {}".format(f, extract_folder))
+            z.extract(f, extract_folder)
             logger.debug("Done extracting {}".format(f))
         logger.info("Extractiong finished.")
 
@@ -270,11 +295,18 @@ def download(opsys=None, version=None):
 
     _mkdir_ifnot_exist("data")
 
-    if os.path.isfile(os.path.join(bin_folder(), "mongod")):
+    if (
+        os.path.isfile(os.path.join(bin_folder(), "mongod")) or
+        os.path.isfile(os.path.join(bin_folder(), "mongod.exe"))
+    ):
         return
+
     if not os.path.isfile(dled_file):
         logger.info("Archive file is not found, {}".format(dled_file))
-        _download_tar(dl_url, dled_file, dst_file)
+        _download_file(dl_url, dled_file, dst_file)
+    else:
+        # There is a downloaded file and mongod is missing, reextract
+        logger.info("Extracting from the archive, {}".format(dled_file))
         _extract(dled_file)
         _copy_bins()
 
