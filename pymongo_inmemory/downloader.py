@@ -49,25 +49,73 @@ from ._utils import conf
 
 
 TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
+ZIPFILE_PATTERN = "mongodb_archive_{ver}.zip"
 CACHE_FOLDER = os.path.join(os.path.dirname(__file__), ".cache")
-logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 DOWNLOAD_URL_PATTERNS = {
-    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
-    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{ver}.tgz",
-    "amazonlinux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",  # noqa: E501
-    "amazonlinux2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",  # noqa: E501
-    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",  # noqa: E501
-    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",  # noqa: E501
-    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",  # noqa: E501
-    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{ver}.tgz",
-    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{ver}.tgz",
-    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{ver}.tgz",
-    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{ver}.tgz",
-    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{ver}.tgz",
-    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",  # noqa: E501
-    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",  # noqa: E501
-    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",  # noqa: E501
-    "windows": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",  # noqa: E501
+    "osx": {
+        "url": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "linux": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "amazonlinux": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "amazonlinux2": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "debian7": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "debian8": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "debian9": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "rhel5": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "rhel6": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "rhel7": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "suse11": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "suse12": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "ubuntu14": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "ubuntu16": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "ubuntu18": {
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",
+        "file_pattern": TARFILE_PATTERN,
+    },
+    "windows": {
+        "url": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",
+        "file_pattern": ZIPFILE_PATTERN,
+    },
 }
 VERSIONS = {
     "4.0": "4.0.10",
@@ -76,6 +124,7 @@ VERSIONS = {
     "3.2": "3.2.22",
     "3.0": "3.0.15",
 }
+logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
 
 class OperatingSystemNotFound(ValueError):
@@ -138,7 +187,7 @@ def _copy_bins():
         logger.debug("Copied {}".format(binfile_name))
 
 
-def _download_tar(dl_url, tar_file, dst_file):
+def _download_tar(dl_url, dled_file, dst_file):
     dl_folder = _download_folder()
 
     if not os.path.isdir(dl_folder):
@@ -168,9 +217,9 @@ def _download_tar(dl_url, tar_file, dst_file):
         logger.debug("Copied file to {}".format(dst_file))
 
 
-def _extract(tar_file):
+def _extract(dled_file):
     extract_folder = _extract_folder()
-    with tarfile.open(tar_file, "r") as t:
+    with tarfile.open(dled_file, "r") as t:
         logger.info("Starting extraction.")
         for f in t.getnames():
             logger.debug("Extracting {} to {}".format(f, extract_folder))
@@ -208,24 +257,25 @@ def download(opsys=None, version=None):
         opsys = _mapping.get(platform.system())
 
     version = VERSIONS.get(version, "4.0.10")
-    dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)
+    dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["url"]
+    dled_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
 
     if dl_pattern is None:
         raise OperatingSystemNotFound("Can't find download pattern.")
 
     dl_url = dl_pattern.format(ver=version)
     dl_folder = _download_folder()
-    tar_file = os.path.join(dl_folder, TARFILE_PATTERN.format(ver=version))
-    dst_file = os.path.join(dl_folder, TARFILE_PATTERN.format(ver=version))
+    dled_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
+    dst_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
 
     _mkdir_ifnot_exist("data")
 
     if os.path.isfile(os.path.join(bin_folder(), "mongod")):
         return
-    if not os.path.isfile(tar_file):
-        logger.info("Archive file is not found, {}".format(tar_file))
-        _download_tar(dl_url, tar_file, dst_file)
-        _extract(tar_file)
+    if not os.path.isfile(dled_file):
+        logger.info("Archive file is not found, {}".format(dled_file))
+        _download_tar(dl_url, dled_file, dst_file)
+        _extract(dled_file)
         _copy_bins()
 
 
