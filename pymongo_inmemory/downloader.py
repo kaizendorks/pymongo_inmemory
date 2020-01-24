@@ -288,7 +288,10 @@ def download(opsys=None, version=None):
 
     dl_url = dl_pattern.format(ver=version)
     dl_folder = _download_folder()
-    downloaded_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
+    downloaded_file = os.path.join(
+        dl_folder,
+        downloaded_file_pattern.format(ver=version)
+    )
     dst_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
 
     _mkdir_ifnot_exist("data")
