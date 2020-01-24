@@ -284,12 +284,12 @@ def download(opsys=None, version=None):
 
     version = VERSIONS.get(version, "4.0.10")
     dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["url"]
-    dled_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
+    downloaded_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
 
     dl_url = dl_pattern.format(ver=version)
     dl_folder = _download_folder()
-    downloaded_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
-    dst_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
+    downloaded_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
+    dst_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
 
     _mkdir_ifnot_exist("data")
 
