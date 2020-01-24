@@ -307,8 +307,8 @@ def download(opsys=None, version=None):
     else:
         # There is a downloaded file and mongod is missing, reextract
         logger.info("Extracting from the archive, {}".format(dled_file))
-        _extract(dled_file)
-        _copy_bins()
+    _extract(dled_file)
+    _copy_bins()
 
 
 if __name__ == "__main__":
