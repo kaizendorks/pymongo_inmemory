@@ -28,3 +28,10 @@ def test_find_open_port(monkeypatch):
     assert _utils.find_open_port([123, 124]) == 124
     assert _utils.find_open_port([122, 123]) == 122
     assert _utils.find_open_port([123, 125, 122]) == 122
+
+
+def test_environment_var_option(monkeypatch):
+    monkeypatch.setenv("PYMONGOIM__SOME_VALUE", "42")
+    assert _utils.conf("some_value") == "42"
+    assert _utils.conf("SOME_VALUE") == "42"
+    assert _utils.conf("SOME_OTHER_VALUE") == None

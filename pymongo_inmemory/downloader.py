@@ -23,6 +23,7 @@ Operating systems can be one of these:
     ubuntu14
     ubuntu16
     ubuntu18
+    windows
 If OS can't be determined an exception is thrown.
 
 Versions should be one of these, but not all versions are available for any
@@ -150,15 +151,15 @@ def _mkdir_ifnot_exist(folder_name):
 
 
 def _download_folder():
-    return os.environ.get("PYMONGOIM__DOWNLOAD_FOLDER", _mkdir_ifnot_exist("download"))
+    return conf("download_folder", _mkdir_ifnot_exist("download"))
 
 
 def _extract_folder():
-    return os.environ.get("PYMONGOIM__EXTRACT_FOLDER", _mkdir_ifnot_exist("extract"))
+    return conf("extract_folder", _mkdir_ifnot_exist("extract"))
 
 
 def bin_folder():
-    return os.environ.get("PYMONGOIM__BIN_FOLDER", _mkdir_ifnot_exist("bin"))
+    return conf("bin_folder", _mkdir_ifnot_exist("bin"))
 
 
 def _dl_reporter(blocknum, block_size, total_size):
@@ -260,7 +261,7 @@ def download(opsys=None, version=None):
     opsys: str
         Operating system. Should be one of these: osx, linux, amazonlinux, amazonlinux2,
         debian7, debian8, debian9, rhel5, rhel6, rhel7, suse11, suse12, ubuntu14,
-        ubuntu16, ubuntu18
+        ubuntu16, ubuntu18, windows
         If `None`, then it'll try to determine based on `paltform.system()`, if can't
         determined `OperatingSystemNotFound` will be raised
     version: str
