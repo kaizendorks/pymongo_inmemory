@@ -192,7 +192,7 @@ def _copy_bins():
         logger.debug("Copied {}".format(binfile_name))
 
 
-def _download_file(dl_url, dled_file, dst_file):
+def _download_file(dl_url, dst_file):
     dl_folder = _download_folder()
 
     if not os.path.isdir(dl_folder):
@@ -222,12 +222,12 @@ def _download_file(dl_url, dled_file, dst_file):
         logger.debug("Copied file to {}".format(dst_file))
 
 
-def _extract(dled_file):
+def _extract(downloaded_file):
     extract_folder = _extract_folder()
-    if tarfile.is_tarfile(dled_file):
-        _extract_tar(dled_file, extract_folder)
-    elif zipfile.is_zipfile(dled_file):
-        _extract_zip(dled_file, extract_folder)
+    if tarfile.is_tarfile(downloaded_file):
+        _extract_tar(downloaded_file, extract_folder)
+    elif zipfile.is_zipfile(downloaded_file):
+        _extract_zip(downloaded_file, extract_folder)
     else:
         raise InvalidDownloadedFile("Expecting either a .tar or a .zip file.")
 
@@ -275,21 +275,20 @@ def download(opsys=None, version=None):
     if version is None:
         version = str(conf("mongo_version"))
     if opsys is None:
-        opsys = str(conf("operating_system"))
+        opsys = conf("operating_system")
         if opsys is None:
             _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
             opsys = _mapping.get(platform.system())
+            if opsys is None:
+                raise OperatingSystemNotFound("Can't find operating system.")
 
     version = VERSIONS.get(version, "4.0.10")
     dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["url"]
     dled_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
 
-    if dl_pattern is None:
-        raise OperatingSystemNotFound("Can't find download pattern.")
-
     dl_url = dl_pattern.format(ver=version)
     dl_folder = _download_folder()
-    dled_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
+    downloaded_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
     dst_file = os.path.join(dl_folder, dled_file_pattern.format(ver=version))
 
     _mkdir_ifnot_exist("data")
@@ -300,13 +299,13 @@ def download(opsys=None, version=None):
     ):
         return
 
-    if not os.path.isfile(dled_file):
-        logger.info("Archive file is not found, {}".format(dled_file))
-        _download_file(dl_url, dled_file, dst_file)
+    if not os.path.isfile(downloaded_file):
+        logger.info("Archive file is not found, {}".format(downloaded_file))
+        _download_file(dl_url, dst_file)
     else:
         # There is a downloaded file and mongod is missing, reextract
-        logger.info("Extracting from the archive, {}".format(dled_file))
-    _extract(dled_file)
+        logger.info("Extracting from the archive, {}".format(downloaded_file))
+    _extract(downloaded_file)
     _copy_bins()
 
 
