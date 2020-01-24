@@ -70,15 +70,15 @@ DOWNLOAD_URL_PATTERNS = {
         "file_pattern": TARFILE_PATTERN,
     },
     "debian7": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "debian8": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "debian9": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "rhel5": {
@@ -102,19 +102,19 @@ DOWNLOAD_URL_PATTERNS = {
         "file_pattern": TARFILE_PATTERN,
     },
     "ubuntu14": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "ubuntu16": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "ubuntu18": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",  # noqa E501
         "file_pattern": TARFILE_PATTERN,
     },
     "windows": {
-        "url": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",
+        "url": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",  # noqa E501
         "file_pattern": ZIPFILE_PATTERN,
     },
 }
@@ -220,7 +220,6 @@ def _download_file(dl_url, dled_file, dst_file):
         logger.debug("Finished download.")
         shutil.copyfile(temp.name, dst_file)
         logger.debug("Copied file to {}".format(dst_file))
-
 
 
 def _extract(dled_file):
