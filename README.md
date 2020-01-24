@@ -1,5 +1,12 @@
+[![PyPI version](https://badge.fury.io/py/pymongo-inmemory.svg)](https://badge.fury.io/py/pymongo-inmemory)
+
 # pymongo_inmemory
 A mongo mocking library with an ephemeral MongoDB running in memory.
+
+## Installation
+```bash
+pip install pymongo-inmemory
+```
 
 ## Usage
 Insert a new section to your project's `setup.cfg` for the operating system and
