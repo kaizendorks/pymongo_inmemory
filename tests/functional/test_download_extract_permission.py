@@ -1,8 +1,10 @@
 import os
 import shutil
 import stat
+import sys
 import tarfile
 import urllib.request as request
+import warnings
 
 import pytest
 
@@ -44,8 +46,14 @@ def test_downloader(make_mongo_payload, urlretrieve_patcher, monkeypatch, tmpdir
     urlretrieve = urlretrieve_patcher(tmpdir / "test_archive.tar")
     monkeypatch.setattr(request, "urlretrieve", urlretrieve)
 
-    downloader.download()
+    downloader.download(opsys="osx")
     expected_mongod_path = tmpdir / ".cache" / "bin" / "mongod"
     assert os.path.isfile(expected_mongod_path)
-    st = os.stat(expected_mongod_path)
-    assert stat.filemode(st.st_mode) == "-r-xr-xr-x"
+
+    # chmod can only create read-only files on windows,
+    # so this assertion fails even though code is doing its job
+    if sys.platform.startswith("win"):
+        warnings.warn("Skipping file permission assertion on Windows")
+    else:
+        st = os.stat(expected_mongod_path)
+        assert stat.filemode(st.st_mode) == "-r-xr-xr-x"

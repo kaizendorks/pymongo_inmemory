@@ -8,12 +8,11 @@
 echo "Starting clean up test."
 
 WAIT_TO_KILL=30
-PYTHON=$(which python3)
 
 MONGOD_BEFORE=$(pgrep mongod)
 echo "All mongod processes running before we kick off: $MONGOD_BEFORE"
 
-PYTHON -m pymongo_inmemory.mongod > /dev/null &
+$(which python3) -m pymongo_inmemory.mongod > /dev/null &
 PYTHON_PROCESS_ID=$!
 echo "Started python process with PID $PYTHON_PROCESS_ID. Waiting to kill in $WAIT_TO_KILL seconds."
 sleep $WAIT_TO_KILL

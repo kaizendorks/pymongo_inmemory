@@ -1,0 +1,9 @@
+[flake8]
+max-line-length = 89
+
+[tool:pytest]
+python_paths = .
+
+[pymongo_inmemory]
+mongo_version = DESIRED_MONGO_VERSION
+operating_system = YOUR_OPERATING_SYSTEM

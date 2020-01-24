@@ -1,5 +1,7 @@
 import os.path as path
 
+import pytest
+
 from pymongo_inmemory import downloader
 
 
@@ -48,3 +50,11 @@ def test_make_folder(monkeypatch, tmpdir):
         downloader._mkdir_ifnot_exist("test"),
         path.join(tmpdir, "test")
     )
+
+
+def test_fails_if_os_unknown(monkeypatch):
+    def system():
+        return "Unknown"
+    monkeypatch.setattr(downloader.platform, "system", system)
+    with pytest.raises(downloader.OperatingSystemNotFound):
+        downloader.download()

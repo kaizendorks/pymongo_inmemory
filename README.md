@@ -33,10 +33,17 @@ package requirements:
 
 ```bash
 $> pipenv shell
-$> pipenv install
+$> pipenv install --dev
 ```
+
+Create your own `setup.cfg` file from `setup.cfg-template`.
+
 Run the tests:
 ```bash
-$> py.test
+$> pytest
+```
+
+If on NIX systems you can run further tests:
+```bash
 $> bash tests/integrity/test_integrity.sh
 ```
