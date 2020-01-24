@@ -16,7 +16,7 @@ keywords = ["mongodb", "testing", "pymongo"]
 setup(
     name="pymongo_inmemory",
     version=".".join(__version__),
-    description="Pymongo Mocking Tool with in memory MongoDB running.",
+    description="A mongo mocking library with an ephemeral MongoDB running in memory.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kaizendorks/pymongo_inmemory",
