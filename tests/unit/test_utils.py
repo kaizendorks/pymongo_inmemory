@@ -34,4 +34,4 @@ def test_environment_var_option(monkeypatch):
     monkeypatch.setenv("PYMONGOIM__SOME_VALUE", "42")
     assert _utils.conf("some_value") == "42"
     assert _utils.conf("SOME_VALUE") == "42"
-    assert _utils.conf("SOME_OTHER_VALUE") == None
+    assert _utils.conf("SOME_OTHER_VALUE") is None
