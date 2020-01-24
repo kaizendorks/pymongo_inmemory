@@ -54,3 +54,5 @@ If on NIX systems you can run further tests:
 ```bash
 $> bash tests/integrity/test_integrity.sh
 ```
+
+See how you can wet your feet, check out [good first issues](https://github.com/kaizendorks/pymongo_inmemory/contribute).
