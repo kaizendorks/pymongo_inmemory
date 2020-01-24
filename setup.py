@@ -32,6 +32,7 @@ setup(
         "Intended Audience :: Developers",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
         "Topic :: Database :: Database Engines/Servers",
         "Topic :: Software Development :: Testing",
         "Topic :: Utilities",
