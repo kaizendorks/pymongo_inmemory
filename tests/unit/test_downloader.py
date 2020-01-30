@@ -55,6 +55,10 @@ def test_make_folder(monkeypatch, tmpdir):
 def test_fails_if_os_unknown(monkeypatch):
     def system():
         return "Unknown"
+
+    def conf(*args, **kwargs):
+        return
     monkeypatch.setattr(downloader.platform, "system", system)
+    monkeypatch.setattr(downloader, "conf", conf)
     with pytest.raises(downloader.OperatingSystemNotFound):
         downloader.download()
