@@ -1,0 +1,23 @@
+name: Run tests for lints, units and functions
+on: [push]
+
+jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install poetry
+      uses: dschep/install-poetry-action@v1.3
+      with:
+        version: 1.0.5
+    - name: Lint test
+      run: |
+        poetry run flake8
+    - name: Unit and functional tests
+      run: |
+        poetry run pytest
