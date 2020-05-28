@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pymongo_inmemory"
+version = "0.1.3"
+description = "A mongo mocking library with an ephemeral MongoDB running in memory."
+authors = [
+    "Kaizen Dorks <kaizendorks@gmail.com>",
+    "Ertugrul Karademir <ekarademir@gmail.com>",
+    "Daniel Jimenez Garcia",
+    "Ruben Vasconcelos",
+]
+
+[tool.poetry.dependencies]
+pymongo = "*"
+
+[tool.poetry.dev-dependencies]
+flake8 = "*"
+mypy = "*"
+pytest = "*"
+pytest-pythonpath = "*"
+twine = "*"
+wheel = "*"
+setuptools = "*"
