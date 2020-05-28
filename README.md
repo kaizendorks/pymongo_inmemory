@@ -43,8 +43,6 @@ $> poetry install
 $> poetry shell
 ```
 
-Create your own `setup.cfg` file from `setup.cfg-template`.
-
 Run the tests:
 ```bash
 $> pytest
