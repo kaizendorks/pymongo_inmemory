@@ -15,6 +15,9 @@ jobs:
       uses: dschep/install-poetry-action@v1.3
       with:
         version: 1.0.5
+    - name: Install dependencies
+      run: |
+        poetry install
     - name: Lint test
       run: |
         poetry run flake8
