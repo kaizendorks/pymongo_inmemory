@@ -33,14 +33,14 @@ with MongoClient() as client:
 ```
 
 ## Development
-Project is set up to develop with [Pipenv](https://github.com/pypa/pipenv).
+Project is set up to develop with [poetry](https://python-poetry.org/).
 
 After installing Pipenv and cloning the repo, create the shell and install all
 package requirements:
 
 ```bash
-$> pipenv shell
-$> pipenv install --dev
+$> poetry install
+$> poetry shell
 ```
 
 Create your own `setup.cfg` file from `setup.cfg-template`.
