@@ -11,4 +11,3 @@ settings.json
 *.egg-info
 build/
 dist/
-setup.cfg
