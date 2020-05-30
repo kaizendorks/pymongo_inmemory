@@ -13,6 +13,9 @@ class MongoClient(pymongo.MongoClient):
         self._mongod.stop()
         super().close()
 
+    def pim_mongodump(self, *args, **kwargs):
+        return self._mongod.mongodump(*args, **kwargs)
+
 
 if __name__ == "__main__":
     import logging

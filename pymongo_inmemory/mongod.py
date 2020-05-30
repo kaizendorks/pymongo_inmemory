@@ -62,12 +62,8 @@ class Mongod:
         logger.info("Checking binary")
         download()
 
+        self._bin_folder = bin_folder()
         self._proc = None
-        self._healthcheck = [
-            os.path.join(bin_folder(), "mongo"),
-            "--quiet",
-            "--eval", "db.serverStatus().uptime"
-        ]
         self._mongod_port = None
         self._mongod_ip = None
 
@@ -79,17 +75,19 @@ class Mongod:
         self.stop()
 
     def start(self):
-        logger.info("Starting mongod...")
         mongod_config = MongodConfig()
         self._mongod_port = mongod_config.port
         self._mongod_ip = mongod_config.local_address
+
+        logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
-            os.path.join(bin_folder(), "mongod"),
+            os.path.join(self._bin_folder, "mongod"),
             "--dbpath", mongod_config.data_folder,
             "--port", self._mongod_port,
             "--bind_ip", self._mongod_ip,
             "--storageEngine", mongod_config.engine,
         ]
+        logger.debug(boot_command)
         self._proc = subprocess.Popen(boot_command)
         _popen_objs.append(self._proc)
         while not self.is_healthy:
@@ -113,9 +111,15 @@ class Mongod:
 
     @property
     def is_healthy(self):
+        healthcheck = [
+            os.path.join(self._bin_folder, "mongo"),
+            self.connection_string,
+            "--quiet",
+            "--eval", "db.serverStatus().uptime"
+        ]
         try:
             logger.debug("Getting status")
-            uptime = subprocess.check_output(self._healthcheck)
+            uptime = subprocess.check_output(healthcheck)
         except subprocess.CalledProcessError:
             logger.debug("Status: Not running")
             return False
@@ -128,6 +132,18 @@ class Mongod:
             else:
                 logger.debug("Status: Just started.")
                 return False
+
+    def mongodump(self, database, collection):
+        dump_command = [
+            os.path.join(self._bin_folder, "mongodump"),
+            "--host", self._mongod_ip,
+            "--port", self._mongod_port,
+            "--out", "-",
+            "--db", database,
+            "--collection", collection,
+        ]
+        proc = subprocess.run(dump_command, stdout=subprocess.PIPE)
+        return proc.stdout
 
 
 if __name__ == "__main__":
