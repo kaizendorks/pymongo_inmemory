@@ -9,9 +9,10 @@ import logging
 import os
 import signal
 import subprocess
+from tempfile import TemporaryDirectory
 
 from ._utils import find_open_port
-from .downloader import CACHE_FOLDER, bin_folder, download
+from .downloader import bin_folder, download
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
@@ -40,10 +41,6 @@ class MongodConfig:
     def __init__(self):
         self.local_address = "127.0.0.1"
         self.engine = "ephemeralForTest"
-
-    @property
-    def data_folder(self):
-        return os.path.join(CACHE_FOLDER, "data")
 
     @property
     def port(self):
@@ -78,11 +75,19 @@ class Mongod:
         mongod_config = MongodConfig()
         self._mongod_port = mongod_config.port
         self._mongod_ip = mongod_config.local_address
+        self.data_folder = TemporaryDirectory(prefix="pymongoim")
+
+        while self.is_locked:
+            logger.warn((
+                "Lock file found, possibly another mock server is running. "
+                "Changing the data folder."
+            ))
+            self.data_folder = TemporaryDirectory(prefix="pymongoim")
 
         logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
             os.path.join(self._bin_folder, "mongod"),
-            "--dbpath", mongod_config.data_folder,
+            "--dbpath", self.data_folder.name,
             "--port", self._mongod_port,
             "--bind_ip", self._mongod_ip,
             "--storageEngine", mongod_config.engine,
@@ -98,6 +103,7 @@ class Mongod:
     def stop(self):
         logger.info("Sending kill signal to mongod.")
         self._proc.terminate()
+        self.data_folder.cleanup()
 
     @property
     def connection_string(self):
@@ -108,6 +114,10 @@ class Mongod:
             )
         else:
             return None
+
+    @property
+    def is_locked(self):
+        return os.path.exists(os.path.join(self.data_folder.name, "mongod.lock"))
 
     @property
     def is_healthy(self):
