@@ -11,6 +11,12 @@
             "module": "examples.able_to_connect"
         },
         {
+            "name": "Examples: several_clients",
+            "type": "python",
+            "request": "launch",
+            "module": "examples.several_clients"
+        },
+        {
             "name": "Downloader Module",
             "type": "python",
             "request": "launch",
