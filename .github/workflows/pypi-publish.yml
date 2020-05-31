@@ -1,0 +1,35 @@
+name: Publish New Release to PyPI
+on:
+  release:
+    types: [created]
+
+jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install poetry
+      uses: dschep/install-poetry-action@v1.3
+      with:
+        version: 1.0.5
+    - name: Install dependencies
+      run: |
+        poetry install
+    - name: Lint test
+      run: |
+        poetry run flake8
+    - name: Unit and functional tests
+      run: |
+        poetry run pytest
+    - name: Build
+      run: |
+        poetry build
+    - name: Publish
+      run: |
+        poetry publish -u __token__ -p ${{ secrets.PYMONGOIM_PYPI_TOKEN }}
+
