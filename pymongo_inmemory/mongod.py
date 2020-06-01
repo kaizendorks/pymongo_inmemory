@@ -9,9 +9,10 @@ import logging
 import os
 import signal
 import subprocess
+from tempfile import TemporaryDirectory
 
 from ._utils import find_open_port
-from .downloader import CACHE_FOLDER, bin_folder, download
+from .downloader import bin_folder, download
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
@@ -42,10 +43,6 @@ class MongodConfig:
         self.engine = "ephemeralForTest"
 
     @property
-    def data_folder(self):
-        return os.path.join(CACHE_FOLDER, "data")
-
-    @property
     def port(self):
         return str(find_open_port(range(27017, 28000)))
 
@@ -62,12 +59,8 @@ class Mongod:
         logger.info("Checking binary")
         download()
 
+        self._bin_folder = bin_folder()
         self._proc = None
-        self._healthcheck = [
-            os.path.join(bin_folder(), "mongo"),
-            "--quiet",
-            "--eval", "db.serverStatus().uptime"
-        ]
         self._mongod_port = None
         self._mongod_ip = None
 
@@ -79,17 +72,27 @@ class Mongod:
         self.stop()
 
     def start(self):
-        logger.info("Starting mongod...")
         mongod_config = MongodConfig()
         self._mongod_port = mongod_config.port
         self._mongod_ip = mongod_config.local_address
+        self.data_folder = TemporaryDirectory(prefix="pymongoim")
+
+        while self.is_locked:
+            logger.warn((
+                "Lock file found, possibly another mock server is running. "
+                "Changing the data folder."
+            ))
+            self.data_folder = TemporaryDirectory(prefix="pymongoim")
+
+        logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
-            os.path.join(bin_folder(), "mongod"),
-            "--dbpath", mongod_config.data_folder,
+            os.path.join(self._bin_folder, "mongod"),
+            "--dbpath", self.data_folder.name,
             "--port", self._mongod_port,
             "--bind_ip", self._mongod_ip,
             "--storageEngine", mongod_config.engine,
         ]
+        logger.debug(boot_command)
         self._proc = subprocess.Popen(boot_command)
         _popen_objs.append(self._proc)
         while not self.is_healthy:
@@ -100,6 +103,7 @@ class Mongod:
     def stop(self):
         logger.info("Sending kill signal to mongod.")
         self._proc.terminate()
+        self.data_folder.cleanup()
 
     @property
     def connection_string(self):
@@ -112,10 +116,20 @@ class Mongod:
             return None
 
     @property
+    def is_locked(self):
+        return os.path.exists(os.path.join(self.data_folder.name, "mongod.lock"))
+
+    @property
     def is_healthy(self):
+        healthcheck = [
+            os.path.join(self._bin_folder, "mongo"),
+            self.connection_string,
+            "--quiet",
+            "--eval", "db.serverStatus().uptime"
+        ]
         try:
             logger.debug("Getting status")
-            uptime = subprocess.check_output(self._healthcheck)
+            uptime = subprocess.check_output(healthcheck)
         except subprocess.CalledProcessError:
             logger.debug("Status: Not running")
             return False
@@ -128,6 +142,18 @@ class Mongod:
             else:
                 logger.debug("Status: Just started.")
                 return False
+
+    def mongodump(self, database, collection):
+        dump_command = [
+            os.path.join(self._bin_folder, "mongodump"),
+            "--host", self._mongod_ip,
+            "--port", self._mongod_port,
+            "--out", "-",
+            "--db", database,
+            "--collection", collection,
+        ]
+        proc = subprocess.run(dump_command, stdout=subprocess.PIPE)
+        return proc.stdout
 
 
 if __name__ == "__main__":

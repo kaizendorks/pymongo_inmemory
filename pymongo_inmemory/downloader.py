@@ -295,8 +295,6 @@ def download(opsys=None, version=None):
     )
     dst_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
 
-    _mkdir_ifnot_exist("data")
-
     if (
         os.path.isfile(os.path.join(bin_folder(), "mongod")) or
         os.path.isfile(os.path.join(bin_folder(), "mongod.exe"))
