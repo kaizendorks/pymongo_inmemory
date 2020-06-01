@@ -12,6 +12,7 @@ maintainers = [
 ]
 readme = "README.md"
 license="MIT"
+homepage = "https://github.com/kaizendorks/pymongo_inmemory"
 repository = "https://github.com/kaizendorks/pymongo_inmemory"
 keywords = ["mongodb", "testing", "pymongo"]
 classifiers = [
@@ -26,8 +27,15 @@ classifiers = [
     "Topic :: Software Development :: Testing",
     "Topic :: Utilities",
 ]
+include = [
+    "LICENSE",
+]
+
+[tool.poetry.urls]
+"Bug Reports" = "https://github.com/kaizendorks/pymongo_inmemory/issues"
 
 [tool.poetry.dependencies]
+python = "^3.4"
 pymongo = "*"
 
 [tool.poetry.dev-dependencies]
@@ -38,3 +46,7 @@ pytest-pythonpath = "*"
 twine = "*"
 wheel = "*"
 setuptools = "*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
