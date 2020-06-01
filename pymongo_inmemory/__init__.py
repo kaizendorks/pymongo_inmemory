@@ -8,5 +8,3 @@ __all__ = [
     "MongoClient",
     "Mongod",
 ]
-
-__version__ = ("0", "1", "3", "dev")
