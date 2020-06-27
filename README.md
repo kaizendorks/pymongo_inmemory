@@ -36,7 +36,7 @@ with MongoClient() as client:
 ## Supported Python version
 Since `pytest` uses [`LocalPath`](https://py.readthedocs.io/en/latest/path.html) for path related
 operations and on python versions older than 3.6 `LocalPath` does not behave well with all path
-related operations. Hence we are setting **Python 3.6.10** in our development.
+related operations, we are setting **Python 3.6.10** in our development.
 
 Technically, this also limits the minimum Python version of tested features. However theer shouldn't
 be a hard limitation to use Python 3.5. We recommend upgrading older Python versions than that.
