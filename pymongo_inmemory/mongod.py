@@ -84,10 +84,13 @@ class Mongod:
             ))
             self.data_folder = TemporaryDirectory(prefix="pymongoim")
 
+        self.log_path = os.path.join(self.data_folder.name, "mongod.log")
+
         logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
             os.path.join(self._bin_folder, "mongod"),
             "--dbpath", self.data_folder.name,
+            "--logpath", self.log_path,
             "--port", self._mongod_port,
             "--bind_ip", self._mongod_ip,
             "--storageEngine", mongod_config.engine,
@@ -154,6 +157,10 @@ class Mongod:
         ]
         proc = subprocess.run(dump_command, stdout=subprocess.PIPE)
         return proc.stdout
+
+    def logs(self):
+        with open(self.log_path, "r") as logfile:
+            return logfile.readlines()
 
 
 if __name__ == "__main__":
