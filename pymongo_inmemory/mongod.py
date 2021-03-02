@@ -11,7 +11,7 @@ import signal
 import subprocess
 from tempfile import TemporaryDirectory
 
-from ._utils import find_open_port
+from ._utils import find_open_port, conf
 from .downloader import bin_folder, download
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
@@ -44,7 +44,12 @@ class MongodConfig:
 
     @property
     def port(self):
-        return str(find_open_port(range(27017, 28000)))
+        set_port = conf('mongod_port')
+        if set_port is None:
+            return str(find_open_port(range(27017, 28000)))
+        else:
+            logger.warn("Using Mongod port set by user: {}".format(set_port))
+            return set_port
 
 
 class Mongod:
