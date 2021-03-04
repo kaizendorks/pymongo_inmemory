@@ -25,7 +25,7 @@ There are several ways you can configure `pymongo_inmemory`.
 version you want to spin up:
     ```ini
     [pymongo_inmemory]
-    mongo_version = 4.0
+    mongo_version = 4.0.10
     mongod_port = 27019
     ```
 2. Define an ALL_CAPS environment variable with prefix `PYMONGOIM__` (attention to trailing double
