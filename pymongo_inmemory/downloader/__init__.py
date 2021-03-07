@@ -47,12 +47,12 @@ import tempfile
 import urllib.request as request
 from urllib.error import HTTPError
 
-from ._utils import conf
+from .._utils import conf
 
 
 TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
 ZIPFILE_PATTERN = "mongodb_archive_{ver}.zip"
-CACHE_FOLDER = os.path.join(os.path.dirname(__file__), ".cache")
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", ".cache")
 DOWNLOAD_URL_PATTERNS = {
     "osx": {
         "url": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
@@ -284,10 +284,12 @@ def download(opsys=None, version=None):
                 raise OperatingSystemNotFound("Can't find operating system.")
 
     version = VERSIONS.get(version, "4.0.10")
+    logger.debug("Downloading MongoD vesion {}".format(version))
     dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["url"]
     downloaded_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
 
     dl_url = dl_pattern.format(ver=version)
+    logger.debug("Downloading MongoD from {}".format(dl_url))
     dl_folder = _download_folder()
     downloaded_file = os.path.join(
         dl_folder,
@@ -309,8 +311,3 @@ def download(opsys=None, version=None):
         logger.info("Extracting from the archive, {}".format(downloaded_file))
     _extract(downloaded_file)
     _copy_bins()
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    download()
