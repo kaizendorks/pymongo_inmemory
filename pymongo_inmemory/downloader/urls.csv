@@ -1,4 +1,3 @@
-major,minor,patch,os,os_version,url
 4,4,4,amazonlinux,2,https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-4.4.4.tgz
 4,4,4,amazonlinux,1,https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-4.4.4.tgz
 4,4,4,debian,9,https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-4.4.4.tgz

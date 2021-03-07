@@ -1,3 +1,4 @@
+from os import utime
 import socket
 
 from pymongo_inmemory import _utils
@@ -35,3 +36,11 @@ def test_environment_var_option(monkeypatch):
     assert _utils.conf("some_value") == "42"
     assert _utils.conf("SOME_VALUE") == "42"
     assert _utils.conf("SOME_OTHER_VALUE") is None
+
+
+def test_make_semver():
+    expected = _utils.make_semver("1.2.3")
+    assert expected == _utils.SemVer("1", "2", "3")
+    assert expected.major == "1"
+    assert expected.minor == "2"
+    assert expected.patch == "3"

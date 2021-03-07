@@ -1,6 +1,10 @@
 from configparser import ConfigParser
+from collections import namedtuple
 import os
 import socket
+
+
+SemVer = namedtuple("SemVer", ["major", "minor", "patch"])
 
 
 def find_open_port(sq):
@@ -30,6 +34,10 @@ def _check_cfg(option, filename, fallback=None):
         fallback=fallback,
         raw=True
     )
+
+
+def make_semver(version: str):
+    return SemVer(*version.split("."))
 
 
 def conf(option, fallback=None):
