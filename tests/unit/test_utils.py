@@ -40,7 +40,7 @@ def test_environment_var_option(monkeypatch):
 
 def test_make_semver():
     expected = _utils.make_semver("1.2.3")
-    assert expected == _utils.SemVer("1", "2", "3")
-    assert expected.major == "1"
-    assert expected.minor == "2"
-    assert expected.patch == "3"
+    assert expected == _utils.SemVer(1, 2, 3)
+    assert expected.major == 1
+    assert expected.minor == 2
+    assert expected.patch == 3

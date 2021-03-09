@@ -37,7 +37,7 @@ def _check_cfg(option, filename, fallback=None):
 
 
 def make_semver(version: str):
-    return SemVer(*version.split("."))
+    return SemVer(*[int(x) for x in version.split(".")])
 
 
 def conf(option, fallback=None):
