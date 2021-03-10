@@ -45,6 +45,12 @@ def make_url_tree(lines):
 
 
 def _closest_uptodate_version_branch(url_tree, major=None, minor=None, patch=None):
+    """
+    - Given `major.minor.patch` version:
+        - Starting from `major` to `patch`
+        - If there is an exact match take it
+        - If there isn't, take the highest and go on with the highest
+    """
     if major not in url_tree.keys():
         major = max(url_tree.keys())
         minor = max(url_tree[major].keys())
@@ -61,7 +67,6 @@ def _closest_uptodate_version_branch(url_tree, major=None, minor=None, patch=Non
 
 def best_url(url_tree, version=None, os_name=None, os_ver=None):
     """
-    - if a version is given find closest match that is at least higher version
     - if os_name is not given assume Linux
     - if os_name not found raise exception
     - if os_version is not given or not found find highest version

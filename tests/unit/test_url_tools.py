@@ -138,18 +138,40 @@ def test_make_url_tree():
 
 
 def test_closest_version_branch():
+    """
+    - Given `major.minor.patch` version:
+        - Starting from `major` to `patch`
+        - If there is an exact match it should take it
+        - If there isn't, it should take the highest and go on with the highest
+    """
     url_tree = utools.make_url_tree(FIXTURE)
-    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 0) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 6) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 0) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 42) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_uptodate_version_branch(url_tree, 4) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 42) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 5) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_uptodate_version_branch(url_tree, 3, 5) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_uptodate_version_branch(url_tree, 3) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_uptodate_version_branch(url_tree, 3, 0, 5) == EXPECTED_TREE[3][0][42]
-    assert utools._closest_uptodate_version_branch(url_tree, 3, 0) == EXPECTED_TREE[3][0][42]
-    assert utools._closest_uptodate_version_branch(url_tree, 1, 2, 0) == EXPECTED_TREE[1][3][4]
-    assert utools._closest_uptodate_version_branch(url_tree, 1) == EXPECTED_TREE[1][3][4]
-    assert utools._closest_uptodate_version_branch(url_tree) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 0) == EXPECTED_TREE[4][0][0], "Has to find the exact match"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 6) == EXPECTED_TREE[4][0][0], "Expecting a later `patch` but it doesn't exist, find highest patch"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 0) == EXPECTED_TREE[4][0][0], "Expecting a later `minor` but it doesn't exist, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 42) == EXPECTED_TREE[4][0][0], "Expecting a later `minor.patch` but it doesn't exist, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 4) == EXPECTED_TREE[4][0][0], "Giving a `major`, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 42) == EXPECTED_TREE[3][5][6], "Has to find the exact match with a lower version too"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 5) == EXPECTED_TREE[3][5][6], "Expecting an older `minor` but it doesn't exist, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5) == EXPECTED_TREE[3][5][6], "Giving a `major.minor`, find the highest `patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3) == EXPECTED_TREE[3][5][6], "Giving a `major` for a lower version, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 0, 5) == EXPECTED_TREE[3][0][42], "Expecting an older `patch` but it doesn't exist, find the highest `patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 1, 5) == EXPECTED_TREE[3][5][6], "Expecting a later `minor` but it doesn't exist, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 0) == EXPECTED_TREE[3][0][42], "Giving a `major.minor` for a lower version, find the highest `patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 1, 2, 0) == EXPECTED_TREE[1][3][4], "Expecting an older `minor.patch` but it doesn't exist, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree, 1) == EXPECTED_TREE[1][3][4], "Giving a `major` for an even lower version, find the highest `minor.patch`"
+
+    assert utools._closest_uptodate_version_branch(url_tree) == EXPECTED_TREE[4][0][0], "No version given, find the highest version"
+
