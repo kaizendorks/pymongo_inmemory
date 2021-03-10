@@ -48,84 +48,13 @@ import urllib.request as request
 from urllib.error import HTTPError
 
 from .._utils import conf
+from ._url_tools import best_url
 
 
 TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
 ZIPFILE_PATTERN = "mongodb_archive_{ver}.zip"
 CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", ".cache")
-DOWNLOAD_URL_PATTERNS = {
-    "osx": {
-        "url": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "linux": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "amazonlinux": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "amazonlinux2": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "debian7": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "debian8": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "debian9": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "rhel5": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "rhel6": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "rhel7": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "suse11": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "suse12": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{ver}.tgz",
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "ubuntu14": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "ubuntu16": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "ubuntu18": {
-        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{ver}.tgz",  # noqa E501
-        "file_pattern": TARFILE_PATTERN,
-    },
-    "windows": {
-        "url": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{ver}.zip",  # noqa E501
-        "file_pattern": ZIPFILE_PATTERN,
-    },
-}
-VERSIONS = {
-    "4.0": "4.0.10",
-    "3.6": "3.6.13",
-    "3.4": "3.4.21",
-    "3.2": "3.2.22",
-    "3.0": "3.0.15",
-}
+
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
 
@@ -255,19 +184,18 @@ def _extract_zip(zip_file, extract_folder):
 
 def download(opsys=None, version=None):
     """Download MongoDB binaries.
+    Available versions are collected form this URL:
+    https://www.mongodb.com/download-center/community/releases
+    and this one:
+    https://www.mongodb.com/download-center/community/releases/archive
 
     Parameters
     ----------
     opsys: str
-        Operating system. Should be one of these: osx, linux, amazonlinux, amazonlinux2,
-        debian7, debian8, debian9, rhel5, rhel6, rhel7, suse11, suse12, ubuntu14,
-        ubuntu16, ubuntu18, windows
         If `None`, then it'll try to determine based on `paltform.system()`, if can't
         determined `OperatingSystemNotFound` will be raised
     version: str
-        MongoDB version, should be one of these: 4.0, 3.6, 3.4, 3.2, 3.0
-        Not all versions are available for all operating systems. Check this URL:
-        https://www.mongodb.com/download-center/community
+        Not all versions are available for all operating systems.
 
     Raises
     ------
@@ -281,14 +209,16 @@ def download(opsys=None, version=None):
             _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
             opsys = _mapping.get(platform.system())
             if opsys is None:
-                raise OperatingSystemNotFound("Can't find operating system.")
+                raise OperatingSystemNotFound("Can't determine operating system.")
+    if opsys == "linux":
+        logger.warn((
+            "Starting from MongoDB 4.2 "
+            "there isn't a generic Linux version of MongoDB"
+            ))
 
-    version = VERSIONS.get(version, "4.0.10")
-    logger.debug("Downloading MongoD vesion {}".format(version))
-    dl_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["url"]
-    downloaded_file_pattern = DOWNLOAD_URL_PATTERNS.get(opsys)["file_pattern"]
+    dl_url = best_url(opsys, version)
+    downloaded_file_pattern = ZIPFILE_PATTERN if opsys == 'windows' else TARFILE_PATTERN
 
-    dl_url = dl_pattern.format(ver=version)
     logger.debug("Downloading MongoD from {}".format(dl_url))
     dl_folder = _download_folder()
     downloaded_file = os.path.join(

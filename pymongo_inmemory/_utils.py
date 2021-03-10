@@ -37,10 +37,22 @@ def _check_cfg(option, filename, fallback=None):
 
 
 def make_semver(version: str):
-    return SemVer(*[int(x) for x in version.split(".")])
+    parts = [int(x) for x in version.split(".")]
+    if len(parts) >= 3:
+        major, minor, patch = parts[:3]
+    elif len(parts) == 2:
+        major, minor = parts
+        patch = None
+    elif len(parts) == 1:
+        major = parts[0]
+        minor = patch = None
+    else:
+        major = minor = patch = None
+
+    return SemVer(major, minor, patch)
 
 
-def conf(option, fallback=None):
+def conf(option, fallback=None, optional=True):
     """Retrieve asked `option` if possible. There are number of places that are checked.
     In the order of precedence,
     1. Environment variables
@@ -62,7 +74,7 @@ def conf(option, fallback=None):
     -------
     any or None: If there is a value, it'll return it otherwise it'll return `None`.
     """
-    return _check_environment_vars(
+    value = _check_environment_vars(
         option,
         fallback=_check_cfg(
             option, "setup.cfg",
@@ -72,3 +84,11 @@ def conf(option, fallback=None):
             )
         )
     )
+
+    if value is None and not optional:
+        raise ValueError(
+            (
+                "Can't determine the value of {} "
+                "and it is not an optional parameter.").format(option))
+
+    return value

@@ -100,7 +100,8 @@ def _url_leaf(version_branch, os_name, os_ver=None):
     return os_leaves[os_ver]
 
 
-def best_url(url_tree, os_name, version=None, os_ver=None):
+def best_url(os_name, version=None, os_ver=None):
+    url_tree = make_url_tree(read_urls_file(URLS_FILE))
     if version is not None:
         version_branch = _closest_uptodate_version_branch(
             url_tree, *make_semver(version)
@@ -109,4 +110,3 @@ def best_url(url_tree, os_name, version=None, os_ver=None):
         version_branch = _closest_uptodate_version_branch(url_tree)
 
     return _url_leaf(version_branch, os_name, os_ver)
-
