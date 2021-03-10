@@ -1,6 +1,6 @@
 # flake8: noqa E501
 
-from pprint import pprint
+import pytest
 
 import pymongo_inmemory.downloader._url_tools as utools
 
@@ -146,32 +146,43 @@ def test_closest_version_branch():
     """
     url_tree = utools.make_url_tree(FIXTURE)
     assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 0) == EXPECTED_TREE[4][0][0], "Has to find the exact match"
-
     assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 6) == EXPECTED_TREE[4][0][0], "Expecting a later `patch` but it doesn't exist, find highest patch"
-
     assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 0) == EXPECTED_TREE[4][0][0], "Expecting a later `minor` but it doesn't exist, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 42) == EXPECTED_TREE[4][0][0], "Expecting a later `minor.patch` but it doesn't exist, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 4) == EXPECTED_TREE[4][0][0], "Giving a `major`, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 42) == EXPECTED_TREE[3][5][6], "Has to find the exact match with a lower version too"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 5) == EXPECTED_TREE[3][5][6], "Expecting an older `minor` but it doesn't exist, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 5) == EXPECTED_TREE[3][5][6], "Giving a `major.minor`, find the highest `patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3) == EXPECTED_TREE[3][5][6], "Giving a `major` for a lower version, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 0, 5) == EXPECTED_TREE[3][0][42], "Expecting an older `patch` but it doesn't exist, find the highest `patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 1, 5) == EXPECTED_TREE[3][5][6], "Expecting a later `minor` but it doesn't exist, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 3, 0) == EXPECTED_TREE[3][0][42], "Giving a `major.minor` for a lower version, find the highest `patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 1, 2, 0) == EXPECTED_TREE[1][3][4], "Expecting an older `minor.patch` but it doesn't exist, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree, 1) == EXPECTED_TREE[1][3][4], "Giving a `major` for an even lower version, find the highest `minor.patch`"
-
     assert utools._closest_uptodate_version_branch(url_tree) == EXPECTED_TREE[4][0][0], "No version given, find the highest version"
 
+
+def test_url_leaf():
+    """
+    - If `os_name` is not given, should assume Linux
+    - If `os_name` not found should raise exception
+    - If `os_version` is not given or not found, should find highest version
+    - If only one OS version is there then should return that version
+    """
+    url_tree = utools.make_url_tree(FIXTURE)
+    version_branch = utools._closest_uptodate_version_branch(url_tree, 3, 0, 42)
+    assert utools._url_leaf(version_branch) == EXPECTED_TREE[3][0][42]["linux"]["generic"], "OS is not given, should find Linux:Generic"
+    assert utools._url_leaf(version_branch, "suse") == EXPECTED_TREE[3][0][42]["suse"]["2"], "OS is SuSE, should find latest SuSE"
+    assert utools._url_leaf(version_branch, "amazon", "1") == EXPECTED_TREE[3][0][42]["amazon"]["1"], "Both OS and OS version exists, should find the URL."
+    with pytest.raises(utools.OperatingSystemNameNotFound):
+        utools._url_leaf(version_branch, "osx")
+    with pytest.raises(utools.OperatingSystemVersionNotFound):
+        utools._url_leaf(version_branch, "suse", "4")
+
+    version_branch = utools._closest_uptodate_version_branch(url_tree, 4, 0, 0)
+    with pytest.raises(utools.OperatingSystemNameNotFound):
+        utools._url_leaf(version_branch)
+
+    version_branch = utools._closest_uptodate_version_branch(url_tree, 1, 3, 4)
+    assert utools._url_leaf(version_branch, "suse") == EXPECTED_TREE[1][3][4]["suse"]["2"], "OS is SuSE, should find latest SuSE for that MongoDB version"
+    assert utools._url_leaf(version_branch, "windows") == EXPECTED_TREE[1][3][4]["windows"]["generic"], "If only one version is there should give that version."

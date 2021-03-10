@@ -7,6 +7,15 @@ from .._utils import make_semver
 
 URLS_FILE = urls_file = path.join(path.dirname(__file__), "urls.csv")
 
+
+class OperatingSystemNameNotFound(ValueError):
+    pass
+
+
+class OperatingSystemVersionNotFound(ValueError):
+    pass
+
+
 UrlLineItem = namedtuple("UrlLineItem", [
     "major",
     "minor",
@@ -65,13 +74,17 @@ def _closest_uptodate_version_branch(url_tree, major=None, minor=None, patch=Non
     return url_tree[major][minor][patch]
 
 
-def best_url(url_tree, version=None, os_name=None, os_ver=None):
+def _url_leaf(version_branch, os_name=None, os_ver=None):
     """
     - if os_name is not given assume Linux
     - if os_name not found raise exception
     - if os_version is not given or not found find highest version
     - if only one os version is there then return that version
     """
+    pass
+
+
+def best_url(url_tree, version=None, os_name=None, os_ver=None):
     if version is not None:
         version_branch = _closest_uptodate_version_branch(
             url_tree, *make_semver(version)
