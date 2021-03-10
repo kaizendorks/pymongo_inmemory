@@ -164,25 +164,21 @@ def test_closest_version_branch():
 
 def test_url_leaf():
     """
-    - If `os_name` is not given, should assume Linux
     - If `os_name` not found should raise exception
-    - If `os_version` is not given or not found, should find highest version
+    - If `os_version` is not given, should find highest version
+    - If `os_version` is not found, should raise exception
     - If only one OS version is there then should return that version
     """
     url_tree = utools.make_url_tree(FIXTURE)
     version_branch = utools._closest_uptodate_version_branch(url_tree, 3, 0, 42)
-    assert utools._url_leaf(version_branch) == EXPECTED_TREE[3][0][42]["linux"]["generic"], "OS is not given, should find Linux:Generic"
+    assert utools._url_leaf(version_branch, "linux") == EXPECTED_TREE[3][0][42]["linux"]["generic"], "OS is not given, should find Linux:Generic"
     assert utools._url_leaf(version_branch, "suse") == EXPECTED_TREE[3][0][42]["suse"]["2"], "OS is SuSE, should find latest SuSE"
-    assert utools._url_leaf(version_branch, "amazon", "1") == EXPECTED_TREE[3][0][42]["amazon"]["1"], "Both OS and OS version exists, should find the URL."
+    assert utools._url_leaf(version_branch, "amazon", "3") == EXPECTED_TREE[3][0][42]["amazon"]["3"], "Both OS and OS version exists, should find the URL."
     with pytest.raises(utools.OperatingSystemNameNotFound):
         utools._url_leaf(version_branch, "osx")
     with pytest.raises(utools.OperatingSystemVersionNotFound):
         utools._url_leaf(version_branch, "suse", "4")
 
-    version_branch = utools._closest_uptodate_version_branch(url_tree, 4, 0, 0)
-    with pytest.raises(utools.OperatingSystemNameNotFound):
-        utools._url_leaf(version_branch)
-
     version_branch = utools._closest_uptodate_version_branch(url_tree, 1, 3, 4)
-    assert utools._url_leaf(version_branch, "suse") == EXPECTED_TREE[1][3][4]["suse"]["2"], "OS is SuSE, should find latest SuSE for that MongoDB version"
+    assert utools._url_leaf(version_branch, "suse") == EXPECTED_TREE[1][3][4]["suse"]["1"], "OS is SuSE, should find latest SuSE for that MongoDB version"
     assert utools._url_leaf(version_branch, "windows") == EXPECTED_TREE[1][3][4]["windows"]["generic"], "If only one version is there should give that version."

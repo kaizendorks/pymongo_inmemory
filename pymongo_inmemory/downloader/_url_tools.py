@@ -74,17 +74,33 @@ def _closest_uptodate_version_branch(url_tree, major=None, minor=None, patch=Non
     return url_tree[major][minor][patch]
 
 
-def _url_leaf(version_branch, os_name=None, os_ver=None):
-    """
-    - if os_name is not given assume Linux
-    - if os_name not found raise exception
-    - if os_version is not given or not found find highest version
-    - if only one os version is there then return that version
-    """
-    pass
+def _url_leaf(version_branch, os_name, os_ver=None):
+    # If `os_name` not found raise exception
+    if os_name not in version_branch.keys():
+        raise OperatingSystemNameNotFound(
+            "Can't find a MongoDB for {} for this version".format(os_name))
+
+    os_leaves = version_branch[os_name]
+
+    # If there is only one version return that version
+    if len(os_leaves) == 1:
+        return list(os_leaves.values())[0]
+
+    # If `os_version` is not given find highest version
+    if os_ver is None:
+        # `generic` is higher than numeric versions
+        os_ver = max(os_leaves.keys())
+
+    # If `os_version` is not found raise exception
+    if os_ver not in os_leaves.keys():
+        raise OperatingSystemVersionNotFound(
+            "Can't find a MongoDB for {} {}, available OS versions: {}".format(
+                os_name, os_ver, os_leaves.keys()))
+
+    return os_leaves[os_ver]
 
 
-def best_url(url_tree, version=None, os_name=None, os_ver=None):
+def best_url(url_tree, os_name, version=None, os_ver=None):
     if version is not None:
         version_branch = _closest_uptodate_version_branch(
             url_tree, *make_semver(version)
@@ -92,10 +108,5 @@ def best_url(url_tree, version=None, os_name=None, os_ver=None):
     else:
         version_branch = _closest_uptodate_version_branch(url_tree)
 
-    print(version_branch)
+    return _url_leaf(version_branch, os_name, os_ver)
 
-
-if __name__ == "__main__":
-    lines = read_urls_file(URLS_FILE)
-    url_tree = make_url_tree(lines)
-    best_url(url_tree)
