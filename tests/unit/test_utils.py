@@ -1,4 +1,3 @@
-from os import utime
 import socket
 
 from pymongo_inmemory import _utils

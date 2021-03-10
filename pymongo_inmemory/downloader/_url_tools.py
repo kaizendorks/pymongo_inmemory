@@ -1,6 +1,5 @@
 from collections import namedtuple
 import csv
-from math import inf
 from os import path
 
 from .._utils import make_semver
@@ -45,7 +44,7 @@ def make_url_tree(lines):
     return url_tree
 
 
-def _closest_version_branch(url_tree, major=None, minor=None, patch=None):
+def _closest_uptodate_version_branch(url_tree, major=None, minor=None, patch=None):
     if major not in url_tree.keys():
         major = max(url_tree.keys())
         minor = max(url_tree[major].keys())
@@ -60,7 +59,7 @@ def _closest_version_branch(url_tree, major=None, minor=None, patch=None):
     return url_tree[major][minor][patch]
 
 
-def closest_url(url_tree, version=None, os_name=None, os_ver=None):
+def best_url(url_tree, version=None, os_name=None, os_ver=None):
     """
     - if a version is given find closest match that is at least higher version
     - if os_name is not given assume Linux
@@ -69,9 +68,11 @@ def closest_url(url_tree, version=None, os_name=None, os_ver=None):
     - if only one os version is there then return that version
     """
     if version is not None:
-        version_branch = _closest_version_branch(url_tree, *make_semver(version))
+        version_branch = _closest_uptodate_version_branch(
+            url_tree, *make_semver(version)
+        )
     else:
-        version_branch = _closest_version_branch(url_tree)
+        version_branch = _closest_uptodate_version_branch(url_tree)
 
     print(version_branch)
 
@@ -79,4 +80,4 @@ def closest_url(url_tree, version=None, os_name=None, os_ver=None):
 if __name__ == "__main__":
     lines = read_urls_file(URLS_FILE)
     url_tree = make_url_tree(lines)
-    closest_url(url_tree)
+    best_url(url_tree)

@@ -1,3 +1,5 @@
+# flake8: noqa E501
+
 from pprint import pprint
 
 import pymongo_inmemory.downloader._url_tools as utools
@@ -137,17 +139,17 @@ def test_make_url_tree():
 
 def test_closest_version_branch():
     url_tree = utools.make_url_tree(FIXTURE)
-    assert utools._closest_version_branch(url_tree, 4, 0, 0) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_version_branch(url_tree, 4, 0, 6) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_version_branch(url_tree, 4, 5, 0) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_version_branch(url_tree, 4, 5, 42) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_version_branch(url_tree, 4) == EXPECTED_TREE[4][0][0]
-    assert utools._closest_version_branch(url_tree, 3, 5, 42) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_version_branch(url_tree, 3, 5, 5) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_version_branch(url_tree, 3, 5) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_version_branch(url_tree, 3) == EXPECTED_TREE[3][5][6]
-    assert utools._closest_version_branch(url_tree, 3, 0, 5) == EXPECTED_TREE[3][0][42]
-    assert utools._closest_version_branch(url_tree, 3, 0) == EXPECTED_TREE[3][0][42]
-    assert utools._closest_version_branch(url_tree, 1, 2, 0) == EXPECTED_TREE[1][3][4]
-    assert utools._closest_version_branch(url_tree, 1) == EXPECTED_TREE[1][3][4]
-    assert utools._closest_version_branch(url_tree) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 0) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 0, 6) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 0) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4, 5, 42) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 4) == EXPECTED_TREE[4][0][0]
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 42) == EXPECTED_TREE[3][5][6]
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5, 5) == EXPECTED_TREE[3][5][6]
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 5) == EXPECTED_TREE[3][5][6]
+    assert utools._closest_uptodate_version_branch(url_tree, 3) == EXPECTED_TREE[3][5][6]
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 0, 5) == EXPECTED_TREE[3][0][42]
+    assert utools._closest_uptodate_version_branch(url_tree, 3, 0) == EXPECTED_TREE[3][0][42]
+    assert utools._closest_uptodate_version_branch(url_tree, 1, 2, 0) == EXPECTED_TREE[1][3][4]
+    assert utools._closest_uptodate_version_branch(url_tree, 1) == EXPECTED_TREE[1][3][4]
+    assert utools._closest_uptodate_version_branch(url_tree) == EXPECTED_TREE[4][0][0]
