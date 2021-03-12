@@ -17,16 +17,16 @@ URLS = {
         "patches": list(range(13)),
         "os_names": {
             "windows": {
-                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip"
+                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
             },
             "sunos": {
-                "5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz"
+                "5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
             },
             "osx": {
-                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
             },
             "linux": {
-                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
             }
         }
     },
@@ -34,17 +34,17 @@ URLS = {
         "patches": list(range(16)),
         "os_names": {
             "windows": {
-                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip"
+                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",
             },
             "ubuntu": {
                 "14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
-                "12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz"
+                "12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",
             },
             "suse": {
-                "11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz"
+                "11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
             },
             "sunos": {
-                "5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz"
+                "5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
             },
             "rhel": {
                 "5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
@@ -52,16 +52,16 @@ URLS = {
                 "7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
             },
             "osx": {
-                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
             },
             "linux": {
-                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
             },
             "debian": {
-                "7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz"
+                "7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
             },
             "amazon": {
-                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz"
+                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
             }
         }
     },
@@ -69,14 +69,14 @@ URLS = {
         "patches": list(range(23)),
         "os_names": {
             "windows": {
-                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-{}.zip"
+                "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-{}.zip",
             },
             "ubuntu": {
                 "16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
-                "14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz"
+                "14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
             },
             "suse": {
-                "12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
+                "12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
             },
             "rhel": {
                 "5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
@@ -84,28 +84,29 @@ URLS = {
                 "7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
             },
             "osx": {
-                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
             },
             "linux": {
-                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
             },
             "debian": {
-                "8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz"
+                "8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
             },
             "amazon": {
-                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz"
+                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
             }
         }
     },
-    MajorMinor(3, 2): {
-        "patches": list(range(8)) + list(range(9, 25)),
+    MajorMinor(3, 6): {
+        "patches": list(range(23)),
         "os_names": {
             "windows": {
                 "generic": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-{}.zip"
             },
             "ubuntu": {
+                "18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
                 "16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
-                "14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz"
+                "14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
             },
             "suse": {
                 "12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
@@ -116,16 +117,18 @@ URLS = {
                 "7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
             },
             "osx": {
-                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
             },
             "linux": {
-                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz"
+                "generic": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
             },
             "debian": {
-                "8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz"
+                "8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
+                "9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
             },
             "amazon": {
-                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz"
+                "1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                "2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
             }
         }
     },
