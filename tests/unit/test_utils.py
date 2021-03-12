@@ -55,3 +55,9 @@ def test_make_semver():
     assert expected.major == 4
     assert expected.minor == 1
     assert expected.patch is None
+
+    expected = _utils.make_semver()
+    assert expected == _utils.SemVer(None, None, None)
+    assert expected.major is None
+    assert expected.minor is None
+    assert expected.patch is None

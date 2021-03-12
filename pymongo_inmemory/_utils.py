@@ -36,7 +36,10 @@ def _check_cfg(option, filename, fallback=None):
     )
 
 
-def make_semver(version: str):
+def make_semver(version=None):
+    if version is None:
+        return SemVer(None, None, None)
+
     parts = [int(x) for x in version.split(".")]
     if len(parts) >= 3:
         major, minor, patch = parts[:3]

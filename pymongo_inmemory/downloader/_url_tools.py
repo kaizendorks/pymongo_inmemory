@@ -1,6 +1,8 @@
 # flake8: noqa E501
 from collections import namedtuple
 
+from .._utils import make_semver, SemVer
+
 
 class OperatingSystemNameNotFound(ValueError):
     pass
@@ -243,5 +245,23 @@ URLS = {
     },
 }
 
-class URLChooser:
-    pass
+def best_url(os_name, version=None, os_ver=None, url_tree=None):
+    if url_tree is None:
+        url_tree = URLS
+
+    major, minor, patch = make_semver(version)
+    if major is None:
+        major = max(url_tree.keys())
+        minor = max(url_tree[major].keys())
+        patch = max(url_tree[major][minor]["patches"])
+    elif minor is None:
+        minor = max(url_tree[major].keys())
+        patch = max(url_tree[major][minor]["patches"])
+    elif patch is None:
+        patch = max(url_tree[major][minor]["patches"])
+
+    os_ver = str(os_ver)
+    os_name = str(os_name)
+
+
+
