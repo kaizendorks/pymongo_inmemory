@@ -119,3 +119,22 @@ EXPECTED_TREE = {
 }
 
 
+
+def test_best_url():
+    """
+    - Given `major.minor.patch` version:
+        - Starting from `major` to `patch`
+        - If there is an exact match it should take it
+        - If there isn't, it should take the highest and go on with the highest
+    """
+    url_tree = EXPECTED_TREE
+    assert utools.best_url("linux") == EXPECTED_TREE[3][0][42]["linux"]["generic"], "OS is not given, should find Linux:Generic"
+    assert utools.best_url("suse") == EXPECTED_TREE[3][0][42]["suse"]["2"], "OS is SuSE, should find latest SuSE"
+    assert utools.best_url("amazon", "3") == EXPECTED_TREE[3][0][42]["amazon"]["3"], "Both OS and OS version exists, should find the URL."
+    with pytest.raises(utools.OperatingSystemNameNotFound):
+        utools.best_url("osx")
+    with pytest.raises(utools.OperatingSystemVersionNotFound):
+        utools.best_url("suse", "4")
+
+    assert utools.best_url("suse") == EXPECTED_TREE[1][3][4]["suse"]["1"], "OS is SuSE, should find latest SuSE for that MongoDB version"
+    assert utools.best_url("windows") == EXPECTED_TREE[1][3][4]["windows"]["generic"], "If only one version is there should give that version."
