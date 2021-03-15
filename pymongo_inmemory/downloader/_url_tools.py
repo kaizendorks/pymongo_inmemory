@@ -20,21 +20,25 @@ PATCHES = {
     "2.6": list(range(13)),
     "3.0": list(range(16)),
     "3.2": list(range(23)),
+    "3.2-suse11": list(range(20)),
     "3.2-ubuntu18": list(range(20, 23)),
     "3.2-ubuntu16": list(range(7, 23)),
     "3.2-ubuntu12": list(range(20)),
     "3.2-sunos5": list(range(15)),
     "3.4": list(range(8)) + list(range(9, 25)),
+    "3.4-suse11": list(range(8)) + list(range(9, 15)),
     "3.4-ubuntu14": list(range(8)) + list(range(9, 21)) + list(range(23, 25)),
     "3.4-ubuntu12": list(range(8)) + list(range(9, 15)),
     "3.4-sunos5": list(range(6)),
     "3.6": list(range(23)),
+    "3.6-suse11": list(range(3)),
     "3.6-ubuntu14": list(range(13)) + list(range(14, 23)),
     "3.6-ubuntu12": list(range(4)),
     "4.0": list(range(24)),
     "4.0-ubuntu14": list(range(10)) + list(range(12, 24)),
     "4.0-ubuntu18": list(range(1, 24)),
     "4.2": list(range(4)) + list(range(5, 13)),
+    "4.2-suse15": list(range(1, 4)) + list(range(5, 13)),
     "4.4": list(range(5)),
 }
 
@@ -53,6 +57,9 @@ PATTERNS = {
     "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
     "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
     "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",
+    "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
+    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
+    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
 }
 
 # OS based index is not the most compact one but it's the most handy one
@@ -275,45 +282,61 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCHES["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
-                }
-            }
+                    "url": PATTERNS["suse11"],
+                },
+                2: {
+                    "patches": PATCHES["3.2-suse11"],
+                    "url": PATTERNS["suse11"],
+                },
+                4: {
+                    "patches": PATCHES["3.4-suse11"],
+                    "url": PATTERNS["suse11"],
+                },
+                6: {
+                    "patches": PATCHES["3.6-suse11"],
+                    "url": PATTERNS["suse11"],
+                },
+            },
         },
         "12": {
             3: {
                 2: {
                     "patches": PATCHES["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
+                    "url": PATTERNS["suse12"],
+                },
+                4: {
+                    "patches": PATCHES["3.4"],
+                    "url": PATTERNS["suse12"],
                 },
                 6: {
                     "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
+                    "url": PATTERNS["suse12"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
+                    "url": PATTERNS["suse12"],
                 },
                 2: {
                     "patches": PATCHES["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
+                    "url": PATTERNS["suse12"],
                 },
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz"
+                    "url": PATTERNS["suse12"],
                 },
             },
         },
         "15": {
             4: {
                 2: {
-                    "patches": PATCHES["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
+                    "patches": PATCHES["4.2-suse15"],
+                    "url": PATTERNS["suse15"],
                 },
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
+                    "url": PATTERNS["suse15"],
                 },
             },
         },
