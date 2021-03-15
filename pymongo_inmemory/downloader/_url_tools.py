@@ -20,11 +20,20 @@ PATCHES = {
     "2.6": list(range(13)),
     "3.0": list(range(16)),
     "3.2": list(range(23)),
+    "3.2-ubuntu18": list(range(20, 23)),
+    "3.2-ubuntu16": list(range(7, 23)),
+    "3.2-ubuntu12": list(range(20)),
     "3.2-sunos5": list(range(15)),
     "3.4": list(range(8)) + list(range(9, 25)),
+    "3.4-ubuntu14": list(range(8)) + list(range(9, 21)) + list(range(23, 25)),
+    "3.4-ubuntu12": list(range(8)) + list(range(9, 15)),
     "3.4-sunos5": list(range(6)),
     "3.6": list(range(23)),
+    "3.6-ubuntu14": list(range(13)) + list(range(14, 23)),
+    "3.6-ubuntu12": list(range(4)),
     "4.0": list(range(24)),
+    "4.0-ubuntu14": list(range(10)) + list(range(12, 24)),
+    "4.0-ubuntu18": list(range(1, 24)),
     "4.2": list(range(4)) + list(range(5, 13)),
     "4.4": list(range(5)),
 }
@@ -38,6 +47,12 @@ PATTERNS = {
     "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
     "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
     "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
+    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
+    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",
 }
 
 # OS based index is not the most compact one but it's the most handy one
@@ -308,7 +323,19 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCHES["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",
+                    "url": PATTERNS["ubuntu12"],
+                },
+                2: {
+                    "patches": PATCHES["3.2-ubuntu12"],
+                    "url": PATTERNS["ubuntu12"],
+                },
+                4: {
+                    "patches": PATCHES["3.4-ubuntu12"],
+                    "url": PATTERNS["ubuntu12"],
+                },
+                6: {
+                    "patches": PATCHES["3.6-ubuntu12"],
+                    "url": PATTERNS["ubuntu12"],
                 },
             },
         },
@@ -316,69 +343,77 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCHES["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
+                    "url": PATTERNS["ubuntu14"],
                 },
                 2: {
                     "patches": PATCHES["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
+                    "url": PATTERNS["ubuntu14"],
+                },
+                4: {
+                    "patches": PATCHES["3.4-ubuntu14"],
+                    "url": PATTERNS["ubuntu14"],
                 },
                 6: {
-                    "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
+                    "patches": PATCHES["3.6-ubuntu14"],
+                    "url": PATTERNS["ubuntu14"],
                 },
             },
             4: {
                 0: {
-                    "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
+                    "patches": PATCHES["4.0-ubuntu14"],
+                    "url": PATTERNS["ubuntu14"],
                 },
             },
         },
         "16": {
             3: {
                 2: {
-                    "patches": PATCHES["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+                    "patches": PATCHES["3.2-ubuntu16"],
+                    "url": PATTERNS["ubuntu16"],
+                },
+                4: {
+                    "patches": PATCHES["3.4"],
+                    "url": PATTERNS["ubuntu16"],
                 },
                 6: {
                     "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+                    "url": PATTERNS["ubuntu16"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+                    "url": PATTERNS["ubuntu16"],
                 },
                 2: {
                     "patches": PATCHES["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+                    "url": PATTERNS["ubuntu16"],
                 },
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
+                    "url": PATTERNS["ubuntu16"],
                 },
             },
         },
         "18": {
             3: {
                 6: {
-                    "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
+                    "patches": PATCHES["3.6-ubuntu18"],
+                    "url": PATTERNS["ubuntu18"],
                 },
             },
             4: {
                 0: {
-                    "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
+                    "patches": PATCHES["4.0-ubuntu18"],
+                    "url": PATTERNS["ubuntu18"],
                 },
                 2: {
                     "patches": PATCHES["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
+                    "url": PATTERNS["ubuntu18"],
                 },
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
+                    "url": PATTERNS["ubuntu18"],
                 },
             },
         },
@@ -386,7 +421,7 @@ URLS = {
             4: {
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",
+                    "url": PATTERNS["ubuntu20"],
                 },
             },
         },
@@ -396,27 +431,31 @@ URLS = {
             2: {
                 6: {
                     "patches": PATCHES["2.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+                    "url": PATTERNS["linux"],
                 },
             },
             3: {
                 0: {
                     "patches": PATCHES["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+                    "url": PATTERNS["linux"],
                 },
                 2: {
                     "patches": PATCHES["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+                    "url": PATTERNS["linux"],
+                },
+                4: {
+                    "patches": PATCHES["3.4"],
+                    "url": PATTERNS["linux"],
                 },
                 6: {
                     "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+                    "url": PATTERNS["linux"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+                    "url": PATTERNS["linux"],
                 },
             },
         },
