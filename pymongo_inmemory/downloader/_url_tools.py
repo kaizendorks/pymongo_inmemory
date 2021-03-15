@@ -34,11 +34,14 @@ PATCHES = {
     "3.6-suse11": list(range(3)),
     "3.6-ubuntu14": list(range(13)) + list(range(14, 23)),
     "3.6-ubuntu12": list(range(4)),
+    "3.6-rhel8": list(range(17, 23)),
     "4.0": list(range(24)),
+    "4.0-rhel8": list(range(14, 24)),
     "4.0-ubuntu14": list(range(10)) + list(range(12, 24)),
     "4.0-ubuntu18": list(range(1, 24)),
     "4.2": list(range(4)) + list(range(5, 13)),
     "4.2-suse15": list(range(1, 4)) + list(range(5, 13)),
+    "4.2-rhel8": list(range(1, 4)) + list(range(5, 13)),
     "4.4": list(range(5)),
 }
 
@@ -60,6 +63,7 @@ PATTERNS = {
     "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
+    "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
 }
 
 # OS based index is not the most compact one but it's the most handy one
@@ -257,22 +261,22 @@ URLS = {
         "8": {
             3: {
                 6: {
-                    "patches": PATCHES["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+                    "patches": PATCHES["3.6-rhel8"],
+                    "url": PATTERNS["rhel8"],
                 },
             },
             4: {
                 0: {
-                    "patches": PATCHES["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+                    "patches": PATCHES["4.0-rhel8"],
+                    "url": PATTERNS["rhel8"],
                 },
                 2: {
-                    "patches": PATCHES["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+                    "patches": PATCHES["4.2-rhel8"],
+                    "url": PATTERNS["rhel8"],
                 },
                 4: {
                     "patches": PATCHES["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+                    "url": PATTERNS["rhel8"],
                 },
             },
         },
