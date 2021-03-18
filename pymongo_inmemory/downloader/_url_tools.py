@@ -70,6 +70,9 @@ PATTERNS = {
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
     "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
     "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
     "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
@@ -216,11 +219,11 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCH_RANGE["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+                    "url": PATTERNS["rhel5"],
                 },
                 2: {
                     "patches": PATCH_RANGE["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+                    "url": PATTERNS["rhel5"],
                 },
             },
         },
@@ -228,29 +231,33 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCH_RANGE["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
                 },
                 2: {
                     "patches": PATCH_RANGE["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
+                },
+                4: {
+                    "patches": PATCH_RANGE["3.4"],
+                    "url": PATTERNS["rhel6"],
                 },
                 6: {
                     "patches": PATCH_RANGE["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCH_RANGE["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
                 },
                 2: {
                     "patches": PATCH_RANGE["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+                    "url": PATTERNS["rhel6"],
                 },
             },
         },
@@ -258,29 +265,33 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCH_RANGE["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
                 },
                 2: {
                     "patches": PATCH_RANGE["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
+                },
+                4: {
+                    "patches": PATCH_RANGE["3.4"],
+                    "url": PATTERNS["rhel7"],
                 },
                 6: {
                     "patches": PATCH_RANGE["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCH_RANGE["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
                 },
                 2: {
                     "patches": PATCH_RANGE["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+                    "url": PATTERNS["rhel7"],
                 },
             },
         },
