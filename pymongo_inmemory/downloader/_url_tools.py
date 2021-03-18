@@ -40,6 +40,7 @@ PATCH_RANGE = {
     "3.6-rhel8": list(range(17, 23)),
     "3.6-debian9": list(range(5, 23)),
     "3.6-debian7": list(range(6)),
+    "3.6-amazon2": [22],
     "4.0": list(range(24)),
     "4.0-rhel8": list(range(14, 24)),
     "4.0-ubuntu14": list(range(10)) + list(range(12, 24)),
@@ -77,6 +78,8 @@ PATTERNS = {
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
     "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
     "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
+    "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+    "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
 }
 
 # OS based index is not the most compact one but it's the most handy one
@@ -87,51 +90,55 @@ URLS = {
             3: {
                 0: {
                     "patches": PATCH_RANGE["3.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
                 },
                 2: {
                     "patches": PATCH_RANGE["3.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
+                },
+                4: {
+                    "patches": PATCH_RANGE["3.4"],
+                    "url": PATTERNS["amazon1"],
                 },
                 6: {
                     "patches": PATCH_RANGE["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCH_RANGE["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
                 },
                 2: {
                     "patches": PATCH_RANGE["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+                    "url": PATTERNS["amazon1"],
                 },
             },
         },
         "2": {
             3: {
                 6: {
-                    "patches": PATCH_RANGE["3.6"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+                    "patches": PATCH_RANGE["3.6-amazon2"],
+                    "url": PATTERNS["amazon2"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCH_RANGE["4.0"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+                    "url": PATTERNS["amazon2"],
                 },
                 2: {
                     "patches": PATCH_RANGE["4.2"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+                    "url": PATTERNS["amazon2"],
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
-                    "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+                    "url": PATTERNS["amazon2"],
                 },
             },
         },
