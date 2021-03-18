@@ -9,21 +9,6 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 pip install pymongo-inmemory
 ```
 
-## Configuration
-| Config param       | Description                               | Optional? | Default                                          |
-|--------------------|-------------------------------------------|-----------|--------------------------------------------------|
-| `mongo_version`    | Which MongoD version to download and use. | Yes       | 4.4.4                                            |
-| `mongod_port`      | Override port preference.                 | Yes       | Automatically picked between `27017` and `28000` after testing availability                |
-| `operating_system` | This makes sense for Linux setting, where there are several flavours         | Yes       | Automatically determined (Generic for Linux)*           |
-| `os_version`       | If an operating system has several versions use this parameter to select one | Yes       | Latest versoin of the OS will be selected from the list |
-| `download_url`     | If set, it won't attempt to determine which MongoDB to download. However there won't be a fallback either.| Yes       | Automatically determined from given parameters and using [internal URL bank](pymongo_inmemory/downloader/urls.csv)**|
-| `ignore_cache`     | Even if there is a downloaded version in the cache, download it again. | Yes       | False               |
-||||
-
-* ****Note 1:*** Generic linux version offering for MongoDB ends with version **4.0.23**. If the operating system is just `linux` and if selected MongoDB version is higher, it will default to `4.0.23`.
-* *****Note 2:*** URL bank is filled with URLs collected from [release list](https://www.mongodb.com/download-center/community/releases) and [archived released list](https://www.mongodb.com/download-center/community/releases/archive), so if a version is not in the bank you can use the same list to provide an official download link.
-
-
 ## Usage
 ### Configure
 There are several ways you can configure `pymongo_inmemory`.
@@ -56,6 +41,46 @@ client.close()
 with MongoClient() as client:
     # do stuff
 ```
+
+## Configuration
+| Config param       | Description                               | Optional? | Default                                          |
+|--------------------|-------------------------------------------|-----------|--------------------------------------------------|
+| `mongo_version`    | Which MongoD version to download and use. | Yes       | 4.4.4                                            |
+| `mongod_port`      | Override port preference.                 | Yes       | Automatically picked between `27017` and `28000` after testing availability                |
+| `operating_system` | This makes sense for Linux setting, where there are several flavours         | Yes       | Automatically determined (Generic for Linux)*           |
+| `os_version`       | If an operating system has several versions use this parameter to select one | Yes       | Latest versoin of the OS will be selected from the list |
+| `download_url`     | If set, it won't attempt to determine which MongoDB to download. However there won't be a fallback either.| Yes       | Automatically determined from given parameters and using [internal URL bank](pymongo_inmemory/downloader/urls.csv)**|
+| `ignore_cache`     | Even if there is a downloaded version in the cache, download it again. | Yes       | False               |
+||||
+
+* ****Note 1:*** Generic Linux version offering for MongoDB ends with version **4.0.23**. If the operating system is just `linux` and if selected MongoDB version is higher, it will default to `4.0.23`.
+* *****Note 2:*** URL bank is filled with URLs collected from [release list](https://www.mongodb.com/download-center/community/releases) and [archived released list](https://www.mongodb.com/download-center/community/releases/archive), so if a version is not in the bank you can use the same list to provide an official download link.
+
+### How do we determine which MongoDB to download?
+There are two (three if it's a Linux flavour) bits of information we need to determine a MongoDB:
+operating system and MongoDB version.
+
+**Note:** You can always set `download_url` to provide an exact URL to download from.
+
+#### Operating System detection
+Python has limited tools in its standard library to determine the exact version of the operating
+system and operating system version. `pymongo_inmemory` basically reads output of [`platform.system()`](platform.system())
+to determine if OS is Linux, MacOS or Windows. For Windows and MacOS only have one version of MongoDB
+is downloaded (64bit and Windows Server version, if there is one.) However, Linux has many flavours.
+
+Up to MongoDB `4.0.23`, a MongoDB for a generic Linux OS can still be downloaded, but for later
+versions of MongoDB, there are no such builds, hence you will need to explicitly set `operating_system`
+parameter. This behaviour of `pymongo_inmemory` might change if there is demand for more **magic**,
+but for now we are keeping things simple.
+
+#### Deciding MongoDB version
+* If no version is provided, highest version of MongoDB for the operating system is selected.
+* If only a **major** version is given, like `4`, then highest `minor.patch` version is selected, like 4.4.4.
+* If only **major.minor** version is given, like `4.0`, then highest `patch` version is selected, like 4.0.23.
+* If exact **major.minor.patch** version is given, like `4.0.22`, then that version is selected.
+* If patch version is not found. like `4.0.50`, highest `patch` version is selected, like `4.0.23`.
+* If minor version is not found. like `3.90.50`, highest `minor.patch` version is selected, like `3.6.22`.
+* If major version is not found. like `1.0.0`, highest `major.minor.patch` version is selected, like `4.4.4`.
 
 ## Supported Python versions
 Since `pytest` uses [`LocalPath`](https://py.readthedocs.io/en/latest/path.html) for path related
