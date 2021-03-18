@@ -238,7 +238,9 @@ def download(os_name=None, version=None, os_ver=None):
     ):
         return
 
-    if not os.path.isfile(downloaded_file):
+    should_ignore_cache = conf("ignore_cache", False)
+
+    if should_ignore_cache or not os.path.isfile(downloaded_file):
         logger.info("Archive file is not found, {}".format(downloaded_file))
         _download_file(dl_url, dst_file)
     else:
