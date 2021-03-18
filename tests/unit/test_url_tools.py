@@ -4,122 +4,6 @@ import pytest
 
 import pymongo_inmemory.downloader._url_tools as utools
 
-
-EXPECTED_TREE = {
-    1: {
-        0: {
-            "patches": [0, 1, 2],
-            "os_names": {
-                "osx": {
-                    "generic": "https://osx.generic/{}",
-                },
-                "suse": {
-                    "1": "https://suse.1/{}",
-                    "2": "https://suse.2/{}",
-                },
-                "amazon": {
-                    "3": "https://amazon.3/{}",
-                    "4": "https://amazon.4/{}",
-                },
-                "linux": {
-                    "generic": "https://linux.generic/{}",
-                },
-            },
-        },
-    },
-    2: {
-        4: {
-            "patches": [0, 1, 2, 4, 5, 6],
-            "os_names": {
-                "osx": {
-                    "generic": "https://osx.generic/{}",
-                },
-                "suse": {
-                    "2": "https://suse.2/{}",
-                },
-                "rhel": {
-                    "7": "https://rhel.7/{}",
-                    "6": "https://rhel.6/{}",
-                },
-                "amazon": {
-                    "3": "https://amazon.3/{}",
-                    "4": "https://amazon.4/{}",
-                },
-                "linux": {
-                    "generic": "https://linux.generic/{}",
-                },
-            },
-        },
-        6: {
-            "patches": [0, 1, 2, 3, 4, 5, 6, 7],
-            "os_names": {
-                "osx": {
-                    "generic": "https://osx.generic/{}",
-                },
-                "suse": {
-                    "2": "https://suse.2/{}",
-                },
-                "rhel": {
-                    "7": "https://rhel.7/{}",
-                    "6": "https://rhel.6/{}",
-                },
-                "amazon": {
-                    "3": "https://amazon.3/{}",
-                    "4": "https://amazon.4/{}",
-                },
-                "linux": {
-                    "generic": "https://linux.generic/{}",
-                },
-            },
-        },
-    },
-    3: {
-        2: {
-            "patches": [0, 1, 2],
-            "os_names": {
-                "osx": {
-                    "generic": "https://macosx.generic/{}",
-                },
-                "suse": {
-                    "2": "https://suse.2/{}",
-                },
-                "rhel": {
-                    "7": "https://rhel.7/{}",
-                    "6": "https://rhel.6/{}",
-                },
-                "amazon": {
-                    "3": "https://amazon.3/{}",
-                    "4": "https://amazon.4/{}",
-                },
-            },
-        },
-    },
-    4: {
-        0: {
-            "patches": [0,],
-            "os_names": {
-                "osx": {
-                    "generic": "https://macosx.generic/{}",
-                },
-                "suse": {
-                    "2": "https://suse.2/{}",
-                },
-                "rhel": {
-                    "8": "https://rhel.8/{}",
-                    "7": "https://rhel.7/{}",
-                    "6": "https://rhel.6/{}",
-                },
-                "amazon": {
-                    "3": "https://amazon.3/{}",
-                    "4": "https://amazon.4/{}",
-                },
-            },
-        },
-    },
-}
-
-
-
 def test_best_url():
     """
     - Given `major.minor.patch` version:
@@ -127,14 +11,23 @@ def test_best_url():
         - If there is an exact match it should take it
         - If there isn't, it should take the highest and go on with the highest
     """
-    url_tree = EXPECTED_TREE
-    assert utools.best_url("linux") == EXPECTED_TREE[3][0][42]["linux"]["generic"], "OS is not given, should find Linux:Generic"
-    assert utools.best_url("suse") == EXPECTED_TREE[3][0][42]["suse"]["2"], "OS is SuSE, should find latest SuSE"
-    assert utools.best_url("amazon", "3") == EXPECTED_TREE[3][0][42]["amazon"]["3"], "Both OS and OS version exists, should find the URL."
-    with pytest.raises(utools.OperatingSystemNameNotFound):
-        utools.best_url("osx")
-    with pytest.raises(utools.OperatingSystemVersionNotFound):
-        utools.best_url("suse", "4")
+    assert utools.best_url("linux") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.23.tgz", "Should find latest MongoDB for Linux:Generic"
+    assert utools.best_url("linux", "3") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.6.22.tgz", "Should find latest MongoDB 3 for Linux:Generic"
+    assert utools.best_url("linux", "3.4") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.24.tgz", "Should find latest MongoDB 3.4 for Linux:Generic"
+    assert utools.best_url("linux", "2.6.11") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.6.11.tgz", "Should find exact MongoDB 2.6.11 for Linux:Generic"
 
-    assert utools.best_url("suse") == EXPECTED_TREE[1][3][4]["suse"]["1"], "OS is SuSE, should find latest SuSE for that MongoDB version"
-    assert utools.best_url("windows") == EXPECTED_TREE[1][3][4]["windows"]["generic"], "If only one version is there should give that version."
+    assert utools.best_url("linux", "4.4.4") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.23.tgz", "Linux:Generic support ends at 4.0.23, higher versions default to this."
+
+    assert utools.best_url("ubuntu") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-4.4.4.tgz", "Should find latest MongoDB for latest Ubuntu"
+    assert utools.best_url("ubuntu", os_ver=18) == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-4.4.4.tgz", "Should find latest MongoDB for Ubuntu 18"
+    assert utools.best_url("ubuntu", os_ver="14", version="3.0.3") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-3.0.3.tgz", "Should find MongoDB 3.0.3 for Ubuntu 14"
+
+    with pytest.raises(utools.OperatingSystemNameNotFound):
+        utools.best_url("xubuntu", os_ver="14", version="3.0.3")
+
+    with pytest.raises(utools.OperatingSystemVersionNotFound):
+        utools.best_url("ubuntu", os_ver="10", version="3.0.3")
+
+    assert utools.best_url("ubuntu", os_ver="14", version="1.4.4") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-4.0.23.tgz", "If major version is not there should find latest major version of MongoDB for Ubuntu 14"
+    assert utools.best_url("ubuntu", os_ver="14", version="3.8.4") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-3.6.22.tgz", "If minor version is not there should find latest minor version of MongoDB for given major version, for Ubuntu 14"
+    assert utools.best_url("ubuntu", os_ver="14", version="3.4.22") == "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-3.4.24.tgz", "If patch version is not there should find latest patch version of MongoDB for given major.minor version, for Ubuntu 14"

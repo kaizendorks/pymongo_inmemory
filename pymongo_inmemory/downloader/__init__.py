@@ -182,7 +182,7 @@ def _extract_zip(zip_file, extract_folder):
         logger.info("Extractiong finished.")
 
 
-def download(opsys=None, version=None):
+def download(os_name=None, version=None, os_ver=None):
     """Download MongoDB binaries.
     Available versions are collected form this URL:
     https://www.mongodb.com/download-center/community/releases
@@ -191,8 +191,8 @@ def download(opsys=None, version=None):
 
     Parameters
     ----------
-    opsys: str
-        If `None`, then it'll try to determine based on `paltform.system()`, if can't
+    os_name: str
+        If `None`, then it'll try to determine based on `platform.system()`, if can't
         determined `OperatingSystemNotFound` will be raised
     version: str
         Not all versions are available for all operating systems.
@@ -203,21 +203,26 @@ def download(opsys=None, version=None):
     """
     if version is None:
         version = str(conf("mongo_version"))
-    if opsys is None:
-        opsys = conf("operating_system")
-        if opsys is None:
+
+    if os_name is None:
+        os_name = conf("operating_system")
+        if os_name is None:
             _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
-            opsys = _mapping.get(platform.system())
-            if opsys is None:
+            os_name = _mapping.get(platform.system())
+            if os_name is None:
                 raise OperatingSystemNotFound("Can't determine operating system.")
-    if opsys == "linux":
+
+    if os_name == "linux":
         logger.warn((
             "Starting from MongoDB 4.2 "
             "there isn't a generic Linux version of MongoDB"
             ))
 
-    dl_url = best_url(opsys, version)
-    downloaded_file_pattern = ZIPFILE_PATTERN if opsys == 'windows' else TARFILE_PATTERN
+    if os_ver is None:
+        os_ver = conf("os_version")
+
+    dl_url = conf("download_url", best_url(os_name, version, os_ver))
+    downloaded_file_pattern = ZIPFILE_PATTERN if os_name == 'windows' else TARFILE_PATTERN  # noqa E501
 
     logger.debug("Downloading MongoD from {}".format(dl_url))
     dl_folder = _download_folder()

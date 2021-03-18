@@ -1,8 +1,6 @@
-# flake8: noqa E501
-from collections import namedtuple
 import logging
 
-from .._utils import make_semver, SemVer
+from .._utils import make_semver
 
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOAD_URL")
@@ -35,6 +33,7 @@ PATCH_RANGE = {
     "3.4-debian7": list(range(8)) + list(range(9, 16)),
     "3.6": list(range(23)),
     "3.6-suse11": list(range(3)),
+    "3.6-ubuntu18": list(range(20, 23)),
     "3.6-ubuntu14": list(range(13)) + list(range(14, 23)),
     "3.6-ubuntu12": list(range(4)),
     "3.6-rhel8": list(range(17, 23)),
@@ -54,19 +53,19 @@ PATCH_RANGE = {
 
 PATTERNS = {
     "windows32-x86_64": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
-    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",
-    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",
+    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",  # noqa E501
+    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",  # noqa E501
     "windows-x86_64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-{}.zip",
     "sunos5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
     "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
     "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
     "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
     "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
-    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",
-    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",
-    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",
-    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",
-    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",
+    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",  # noqa E501
+    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",  # noqa E501
     "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
@@ -646,37 +645,44 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
     if url_tree is None:
         url_tree = URLS
 
+    try:
+        os_branch = url_tree[os_name]
+    except KeyError:
+        raise OperatingSystemNameNotFound(
+            "Can't find a MongoDB for this OS: {}".format(os_name))
+
+    if os_ver is None:
+        os_ver = max(os_branch.keys())
+
+    os_ver = str(os_ver)
+    if os_ver not in os_branch.keys():
+        raise OperatingSystemVersionNotFound(
+            (
+                "Can't find a MongoDB for OS {} "
+                "version {}, available OS versions: {}"
+            ).format(
+                os_name, os_ver, os_branch.keys())
+            )
+
+    version_branch = os_branch[os_ver]
+
     major, minor, patch = make_semver(version)
-    if major not in url_tree.keys():
-        major = max(url_tree.keys())
-        minor = max(url_tree[major].keys())
-        patch = max(url_tree[major][minor]["patches"])
-    elif minor not in url_tree[major].keys():
-        minor = max(url_tree[major].keys())
-        patch = max(url_tree[major][minor]["patches"])
-    elif patch not in url_tree[major][minor]["patches"]:
-        patch = max(url_tree[major][minor]["patches"])
+    if major not in version_branch.keys():
+        major = max(version_branch.keys())
+        minor = max(version_branch[major].keys())
+        patch = max(version_branch[major][minor]["patches"])
+    elif minor not in version_branch[major].keys():
+        minor = max(version_branch[major].keys())
+        patch = max(version_branch[major][minor]["patches"])
+    elif patch not in version_branch[major][minor]["patches"]:
+        patch = max(version_branch[major][minor]["patches"])
 
     logger.info("Requested MongoDB version {}, found version: {}.{}.{}".format(
         version, major, minor, patch
     ))
     version = "{}.{}.{}".format(major, minor, patch)
-
-    os_branch = url_tree[major][minor]
-    os_ver = str(os_ver)
-    os_name = str(os_name)
-
-    if os_name not in os_branch.keys():
-        raise OperatingSystemNameNotFound(
-            "Can't find a MongoDB {} for {} for this version".format(version, os_name))
-
-    if os_ver not in os_branch[os_name].keys():
-        raise OperatingSystemVersionNotFound(
-            "Can't find a MongoDB {} for {} {}, available OS versions: {}".format(
-                version, os_name, os_ver, os_branch.keys()))
-
-    return os_branch[os_name][os_ver].format(version)
+    return version_branch[major][minor]["url"].format(version)
 
 
-
-
+if __name__ == "__main__":
+    print(best_url("linux"))
