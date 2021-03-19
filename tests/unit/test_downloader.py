@@ -45,9 +45,8 @@ def test_default_extract_folder(monkeypatch, tmpdir):
 
 
 def test_make_folder(monkeypatch, tmpdir):
-    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
     assert path.samefile(
-        downloader._mkdir_ifnot_exist("test"),
+        downloader._mkdir_ifnot_exist(tmpdir, "test"),
         path.join(tmpdir, "test")
     )
 

@@ -39,6 +39,7 @@ import glob
 import zipfile
 import logging
 import os
+from os import path
 import platform
 import stat
 import shutil
@@ -51,9 +52,7 @@ from .._utils import conf
 from ._urls import best_url
 
 
-TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
-ZIPFILE_PATTERN = "mongodb_archive_{ver}.zip"
-CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", ".cache")
+CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
@@ -70,25 +69,33 @@ class InvalidDownloadedFile(Exception):
     pass
 
 
-def _mkdir_ifnot_exist(folder_name):
-    if not os.path.isdir(CACHE_FOLDER):
-        os.mkdir(CACHE_FOLDER)
-    path = os.path.join(CACHE_FOLDER, folder_name)
-    if not os.path.isdir(path):
-        os.mkdir(path)
-    return path
+def _mkdir_ifnot_exist(*args):
+    p = path.join(args[0])
+    if not path.isdir(p):
+        os.mkdir(p)
+    for x in args[1:]:
+        p = path.join(p, x)
+        if not path.isdir(p):
+            os.mkdir(p)
+    return p
 
 
 def _download_folder():
-    return conf("download_folder", _mkdir_ifnot_exist("download"))
+    return conf("download_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "download"))
 
 
 def _extract_folder():
-    return conf("extract_folder", _mkdir_ifnot_exist("extract"))
+    return conf("extract_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "extract"))
+
+
+def _extracted_folder(archive_file):
+    base_folder = _extract_folder()
+    archive_folder = ".".join(path.basename(archive_file).split(".")[:-1])
+    return _mkdir_ifnot_exist(base_folder, archive_folder)
 
 
 def bin_folder():
-    return conf("bin_folder", _mkdir_ifnot_exist("bin"))
+    return conf("bin_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "bin"))
 
 
 def _dl_reporter(blocknum, block_size, total_size):
@@ -101,15 +108,15 @@ def _dl_reporter(blocknum, block_size, total_size):
         )
 
 
-def _copy_bins():
-    extract_folder = _extract_folder()
+def _copy_bins(archive_file):
+    extract_folder = _extracted_folder(archive_file)
     bin_path = bin_folder()
     for binfile_path in glob.iglob(
-        os.path.join(extract_folder, "**/bin/*"), recursive=True
+        path.join(extract_folder, "**/bin/*"), recursive=True
     ):
-        binfile_name = os.path.basename(binfile_path)
+        binfile_name = path.basename(binfile_path)
         logger.debug("Copying {} to bin folder".format(binfile_name))
-        target = os.path.join(bin_path, binfile_name)
+        target = path.join(bin_path, binfile_name)
         shutil.copyfile(binfile_path, target)
         os.chmod(target, (
             stat.S_IRUSR
@@ -125,11 +132,11 @@ def _copy_bins():
 def _download_file(dl_url, dst_file):
     dl_folder = _download_folder()
 
-    if not os.path.isdir(dl_folder):
+    if not path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
 
-    if os.path.isfile(dst_file):
+    if path.isfile(dst_file):
         logger.debug((
             "There is already a downloaded file {}, "
             "skipping download"
@@ -153,7 +160,9 @@ def _download_file(dl_url, dst_file):
 
 
 def _extract(downloaded_file):
+    logger.info("Extracting from the archive, {}".format(downloaded_file))
     extract_folder = _extract_folder()
+
     if tarfile.is_tarfile(downloaded_file):
         _extract_tar(downloaded_file, extract_folder)
     elif zipfile.is_zipfile(downloaded_file):
@@ -182,6 +191,10 @@ def _extract_zip(zip_file, extract_folder):
         logger.info("Extractiong finished.")
 
 
+def _collect_archive_name(url):
+    return url.split("/")[-1]
+
+
 def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     """Download MongoDB binaries.
     Available versions are collected form this URL:
@@ -195,7 +208,11 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
         If `None`, then it'll try to determine based on `platform.system()`, if can't
         determined `OperatingSystemNotFound` will be raised
     version: str
-        Not all versions are available for all operating systems.
+        MongoDB version
+    os_ver: str
+        Operating system version, if the OS has several versions
+    ignore_cache: bool
+        Download MongoDB, even if there is already one in the cache
 
     Raises
     ------
@@ -226,35 +243,26 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
         version=version,
         os_ver=os_ver
     ))
-    downloaded_file_pattern = ZIPFILE_PATTERN if os_name == 'windows' else TARFILE_PATTERN  # noqa E501
 
     logger.debug("Downloading MongoD from {}".format(dl_url))
     dl_folder = _download_folder()
-    downloaded_file = os.path.join(
-        dl_folder,
-        downloaded_file_pattern.format(ver=version)
-    )
-    dst_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
+    archive_file = path.join(dl_folder, _collect_archive_name(dl_url))
 
     should_ignore_cache = bool(conf("ignore_cache", ignore_cache))
     bin_dir = bin_folder()
 
-    if (
-        (not should_ignore_cache) and
-        (
-            os.path.isfile(os.path.join(bin_dir, "mongod")) or
-            os.path.isfile(os.path.join(bin_dir, "mongod.exe"))
-        )
-    ):
-        return
+    if should_ignore_cache or not path.isfile(archive_file):
+        logger.info("Archive file is not found, {}".format(archive_file))
+        _download_file(dl_url, archive_file)
+        _extract(archive_file)
 
-    if should_ignore_cache or not os.path.isfile(downloaded_file):
-        logger.info("Archive file is not found, {}".format(downloaded_file))
-        _download_file(dl_url, dst_file)
-    else:
-        # There is a downloaded file and mongod is missing, reextract
-        logger.info("Extracting from the archive, {}".format(downloaded_file))
-    _extract(downloaded_file)
+    extract_dir = _extracted_folder(archive_file)
+    if not (
+        path.isfile(path.join(extract_dir, "bin", "mongod")) or
+        path.isfile(path.join(extract_dir, "bin", "mongod.exe"))
+    ):
+        _extract(archive_file)
+
     logger.debug("Removing the binary dir")
     shutil.rmtree(bin_dir)
-    _copy_bins()
+    _copy_bins(archive_file)
