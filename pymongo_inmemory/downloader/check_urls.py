@@ -50,7 +50,7 @@ def check_url(expanded):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     promises = []
     failed = []
     logging.info("Starting checks.")
