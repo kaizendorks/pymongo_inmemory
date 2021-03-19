@@ -13,19 +13,19 @@ pip install pymongo-inmemory
 ### Configure
 There are several ways you can configure `pymongo_inmemory`.
 
-1. Insert a new section to your project's `setup.cfg` for the operating system and mongo
+1. Insert a new section titled `pymongo_inmemory` to your project's `setup.cfg`
 version you want to spin up:
     ```ini
     [pymongo_inmemory]
     mongod_port = 27019
     ```
-2. Define an ALL_CAPS environment variable with prefix `PYMONGOIM__` (attention to trailing double
+2. Define an `ALL_CAPS` environment variables with prefix `PYMONGOIM__` (attention to trailing double
    underscores.) For instance, to override the port, set up an environment variable
    `PYMONGOIM__MONGOD_PORT`.
 
 ### Import and use
-`pymongo_inmemory` wraps the client that comes from `pymongo` and configures and ephemeral server.
-Then you can import `MongoClient` from `pymongo_inmemory` instead of `pymongo` and use it:
+`pymongo_inmemory` wraps the client class `MongoClient` that comes from `pymongo` and configures with an ephemeral MongoDB server.
+You can import this `MongoClient` from `pymongo_inmemory` instead of `pymongo` and use it to perform tests:
 
 ```python
 from pymongo_inmemory import MongoClient
@@ -64,12 +64,14 @@ operating system and MongoDB version.
 #### Operating System detection
 Python has limited tools in its standard library to determine the exact version of the operating
 system and operating system version. `pymongo_inmemory` basically reads output of [`platform.system()`](platform.system())
-to determine if OS is Linux, MacOS or Windows. For Windows and MacOS only have one version of MongoDB
-is downloaded (64bit and Windows Server version, if there is one.) However, Linux has many flavours.
+to determine if underlying OS is Linux, MacOS or Windows.
 
-Up to MongoDB `4.0.23`, a MongoDB for a generic Linux OS can still be downloaded, but for later
+For Windows and MacOS, it will download only one flavour of OS for a particular MongoDB version (64bit and, for Windows, Windows Server version if there is one.)
+However, Linux has many flavours. Up to MongoDB `4.0.23`, a MongoDB for a generic Linux OS can still be downloaded, but for later
 versions of MongoDB, there are no such builds, hence you will need to explicitly set `operating_system`
-parameter. This behaviour of `pymongo_inmemory` might change if there is demand for more **magic**,
+parameter if you want to use MongoDB versions higher than that.
+
+Operating system detection behaviour of `pymongo_inmemory` might change in the future, if there is a demand for more **magic**,
 but for now we are keeping things simple.
 
 #### Deciding MongoDB version
@@ -113,5 +115,5 @@ If on NIX systems you can run further tests:
 bash tests/integrity/test_integrity.sh
 ```
 
-**See how you can wet your feet,** check out [good first
-issues](https://github.com/kaizendorks/pymongo_inmemory/contribute).
+### See how you can wet your feet
+Check out [good first issues](https://github.com/kaizendorks/pymongo_inmemory/contribute).
