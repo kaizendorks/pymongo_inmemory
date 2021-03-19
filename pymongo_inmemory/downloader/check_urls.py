@@ -1,5 +1,8 @@
+from concurrent import futures
 from http.client import HTTPSConnection
 import logging
+import time
+from random import randint
 
 from ._urls import URLS, expand_url_tree
 
@@ -15,32 +18,56 @@ def split(url):
     return host, rest
 
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+def check_url(expanded):
+    host, rest = split(expanded.url)
 
-    for expanded in expand_url_tree(URLS):
-        logger.debug("Checking URL for {} {} MongoDB {}".format(
+    # sleep some random time to prevent server side throttling
+    time.sleep(randint(1, 4))
+
+    conn = HTTPSConnection(host)
+    conn.request("HEAD", rest)
+    response = conn.getresponse()
+
+    if response.status == 200:
+        logger.debug("SUCCESS: URL check for {} {} MongoDB {}".format(
             expanded.os_name,
             expanded.os_version,
             expanded.version,
         ))
-        host, rest = split(expanded.url)
+    else:
+        logger.error((
+            "FAIL: URL check for {} {} "
+            "MongoDB {}, {}, reason: {} {}"
+        ).format(
+            expanded.os_name,
+            expanded.os_version,
+            expanded.version,
+            expanded.url,
+            response.status,
+            response.reason
+        ))
+        return expanded
 
-        conn = HTTPSConnection(host)
-        conn.request("HEAD", rest)
-        response = conn.getresponse()
 
-        if response.status == 200:
-            logger.debug("Success")
-        else:
-            logger.error((
-                "URL check failed for {} {} "
-                "MongoDB {}, {}, reason: {} {}"
-            ).format(
-                expanded.os_name,
-                expanded.os_version,
-                expanded.version,
-                expanded.url,
-                response.status,
-                response.reason
-            ))
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+    promises = []
+    failed = []
+    logging.info("Starting checks.")
+    with futures.ThreadPoolExecutor() as executor:
+        for expanded in expand_url_tree(URLS):
+            promises.append(executor.submit(check_url, expanded))
+
+        futures.wait(promises)
+        logging.info("All checks done.")
+        failed = [x.result() for x in promises if x.result() is not None]
+
+    print("= FAILED CHECKS ============================================================")
+    for x in failed:
+        print(
+            expanded.os_name,
+            expanded.os_version,
+            expanded.version,
+            expanded.url,
+        )
+    print("============================================================================")
