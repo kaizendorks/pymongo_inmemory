@@ -1,8 +1,11 @@
 from configparser import ConfigParser
 from collections import namedtuple
+import logging
 import os
 import socket
 
+
+logger = logging.getLogger("PYMONGOIM_UTILS")
 
 SemVer = namedtuple("SemVer", ["major", "minor", "patch"])
 
@@ -14,9 +17,7 @@ def find_open_port(sq):
                 return port
 
 
-DEFAULT_CONF = {
-    "mongo_version": "4.0.10"
-}
+DEFAULT_CONF = {}
 
 
 def _check_environment_vars(option, fallback=None):
@@ -93,5 +94,7 @@ def conf(option, fallback=None, optional=True):
             (
                 "Can't determine the value of {} "
                 "and it is not an optional parameter.").format(option))
+
+    logger.debug("Value for {}=={}".format(option, value))
 
     return value

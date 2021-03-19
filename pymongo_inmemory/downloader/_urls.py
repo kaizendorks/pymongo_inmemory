@@ -654,13 +654,15 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
         url_tree = URLS
 
     try:
-        os_branch = url_tree[os_name]
+        os_branch = url_tree[str(os_name).lower()]
     except KeyError:
         raise OperatingSystemNameNotFound(
             "Can't find a MongoDB for this OS: {}".format(os_name))
 
     if os_ver is None:
         os_ver = max(os_branch.keys())
+    else:
+        os_ver = str(os_ver).lower()
 
     os_ver = str(os_ver)
     if os_ver not in os_branch.keys():

@@ -182,7 +182,7 @@ def _extract_zip(zip_file, extract_folder):
         logger.info("Extractiong finished.")
 
 
-def download(os_name=None, version=None, os_ver=None):
+def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     """Download MongoDB binaries.
     Available versions are collected form this URL:
     https://www.mongodb.com/download-center/community/releases
@@ -202,7 +202,7 @@ def download(os_name=None, version=None, os_ver=None):
     OperatingSystemNotFound: If download pattern can't be determined.
     """
     if version is None:
-        version = str(conf("mongo_version"))
+        version = conf("mongo_version")
 
     if os_name is None:
         os_name = conf("operating_system")
@@ -214,14 +214,18 @@ def download(os_name=None, version=None, os_ver=None):
 
     if os_name == "linux":
         logger.warn((
-            "Starting from MongoDB 4.2 "
+            "Starting from MongoDB 4.0.23 "
             "there isn't a generic Linux version of MongoDB"
             ))
 
     if os_ver is None:
         os_ver = conf("os_version")
 
-    dl_url = conf("download_url", best_url(os_name, version, os_ver))
+    dl_url = conf("download_url", best_url(
+        os_name,
+        version=version,
+        os_ver=os_ver
+    ))
     downloaded_file_pattern = ZIPFILE_PATTERN if os_name == 'windows' else TARFILE_PATTERN  # noqa E501
 
     logger.debug("Downloading MongoD from {}".format(dl_url))
@@ -232,13 +236,17 @@ def download(os_name=None, version=None, os_ver=None):
     )
     dst_file = os.path.join(dl_folder, downloaded_file_pattern.format(ver=version))
 
+    should_ignore_cache = bool(conf("ignore_cache", ignore_cache))
+    bin_dir = bin_folder()
+
     if (
-        os.path.isfile(os.path.join(bin_folder(), "mongod")) or
-        os.path.isfile(os.path.join(bin_folder(), "mongod.exe"))
+        (not should_ignore_cache) and
+        (
+            os.path.isfile(os.path.join(bin_dir, "mongod")) or
+            os.path.isfile(os.path.join(bin_dir, "mongod.exe"))
+        )
     ):
         return
-
-    should_ignore_cache = conf("ignore_cache", False)
 
     if should_ignore_cache or not os.path.isfile(downloaded_file):
         logger.info("Archive file is not found, {}".format(downloaded_file))
@@ -247,4 +255,6 @@ def download(os_name=None, version=None, os_ver=None):
         # There is a downloaded file and mongod is missing, reextract
         logger.info("Extracting from the archive, {}".format(downloaded_file))
     _extract(downloaded_file)
+    logger.debug("Removing the binary dir")
+    shutil.rmtree(bin_dir)
     _copy_bins()

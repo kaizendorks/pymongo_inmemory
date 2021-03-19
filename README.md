@@ -17,7 +17,6 @@ There are several ways you can configure `pymongo_inmemory`.
 version you want to spin up:
     ```ini
     [pymongo_inmemory]
-    mongo_version = 4.0.10
     mongod_port = 27019
     ```
 2. Define an ALL_CAPS environment variable with prefix `PYMONGOIM__` (attention to trailing double
@@ -45,7 +44,7 @@ with MongoClient() as client:
 ## Configuration
 | Config param       | Description                               | Optional? | Default                                          |
 |--------------------|-------------------------------------------|-----------|--------------------------------------------------|
-| `mongo_version`    | Which MongoD version to download and use. | Yes       | 4.4.4                                            |
+| `mongo_version`    | Which MongoD version to download and use. | Yes       | Latest for the OS                                            |
 | `mongod_port`      | Override port preference.                 | Yes       | Automatically picked between `27017` and `28000` after testing availability                |
 | `operating_system` | This makes sense for Linux setting, where there are several flavours         | Yes       | Automatically determined (Generic for Linux)*           |
 | `os_version`       | If an operating system has several versions use this parameter to select one | Yes       | Latest versoin of the OS will be selected from the list |

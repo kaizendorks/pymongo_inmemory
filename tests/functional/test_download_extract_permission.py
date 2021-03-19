@@ -46,7 +46,7 @@ def test_downloader(make_mongo_payload, urlretrieve_patcher, monkeypatch, tmpdir
     urlretrieve = urlretrieve_patcher(tmpdir / "test_archive.tar")
     monkeypatch.setattr(request, "urlretrieve", urlretrieve)
 
-    downloader.download(os_name="osx")
+    downloader.download(os_name="osx", os_ver="generic")
     expected_mongod_path = tmpdir / ".cache" / "bin" / "mongod"
     assert os.path.isfile(expected_mongod_path)
 
