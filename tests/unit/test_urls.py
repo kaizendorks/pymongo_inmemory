@@ -2,7 +2,7 @@
 
 import pytest
 
-import pymongo_inmemory.downloader._url_tools as utools
+import pymongo_inmemory.downloader._urls as utools
 
 def test_best_url():
     """

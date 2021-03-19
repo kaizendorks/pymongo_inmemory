@@ -1,9 +1,17 @@
+from collections import namedtuple
 import logging
 
 from .._utils import make_semver
 
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOAD_URL")
+
+ExpandedURL = namedtuple("ExpandedURL", [
+    "os_name",
+    "os_version",
+    "version",
+    "url"
+])
 
 
 class OperatingSystemNameNotFound(ValueError):
@@ -684,5 +692,16 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
     return version_branch[major][minor]["url"].format(version)
 
 
-if __name__ == "__main__":
-    print(best_url("linux"))
+def expand_url_tree(tree):
+    for os_name, os_leaf in tree.items():
+        for os_version, version_leaf in os_leaf.items():
+            for major, major_leaf in version_leaf.items():
+                for minor, minor_leaf in major_leaf.items():
+                    for patch in minor_leaf["patches"]:
+                        version = "{}.{}.{}".format(major, minor, patch)
+                        yield ExpandedURL(
+                            os_name,
+                            os_version,
+                            version,
+                            minor_leaf["url"].format(version)
+                        )

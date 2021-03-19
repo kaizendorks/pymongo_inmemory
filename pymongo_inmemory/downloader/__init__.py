@@ -48,7 +48,7 @@ import urllib.request as request
 from urllib.error import HTTPError
 
 from .._utils import conf
-from ._url_tools import best_url
+from ._urls import best_url
 
 
 TARFILE_PATTERN = "mongodb_archive_{ver}.tgz"
