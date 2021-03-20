@@ -124,7 +124,7 @@ def _download_file(dl_url, dst_file):
 
 def _extract(downloaded_file):
     logger.info("Extracting from the archive, {}".format(downloaded_file))
-    extract_folder = _extract_folder()
+    extract_folder = _extracted_folder(downloaded_file)
 
     if tarfile.is_tarfile(downloaded_file):
         _extract_tar(downloaded_file, extract_folder)
