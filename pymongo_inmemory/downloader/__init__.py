@@ -32,15 +32,15 @@ class InvalidDownloadedFile(Exception):
     pass
 
 
-def _mkdir_ifnot_exist(*args):
-    p = path.join(args[0])
-    if not path.isdir(p):
-        os.mkdir(p)
-    for x in args[1:]:
-        p = path.join(p, x)
-        if not path.isdir(p):
-            os.mkdir(p)
-    return p
+def _mkdir_ifnot_exist(*folders):
+    current_path = path.join(folders[0])
+    if not path.isdir(current_path):
+        os.mkdir(current_path)
+    for x in folders[1:]:
+        current_path = path.join(current_path, x)
+        if not path.isdir(current_path):
+            os.mkdir(current_path)
+    return current_path
 
 
 def _download_folder():
@@ -52,8 +52,12 @@ def _extract_folder():
 
 
 def _extracted_folder(archive_file):
+    "Defines a nested versioned folder in the extract base folder"
     base_folder = _extract_folder()
-    archive_folder = ".".join(path.basename(archive_file).split(".")[:-1])
+    base_name = path.basename(archive_file).split(".")
+    file_name = ".".join(base_name[:-1])
+    extension = base_name[-1]
+    archive_folder = "-".join([file_name, extension])
     return _mkdir_ifnot_exist(base_folder, archive_folder)
 
 
@@ -92,18 +96,18 @@ def _copy_bins(archive_file):
         logger.debug("Copied {}".format(binfile_name))
 
 
-def _download_file(dl_url, dst_file):
+def _download_file(dl_url, destination_file):
     dl_folder = _download_folder()
 
     if not path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
 
-    if path.isfile(dst_file):
+    if path.isfile(destination_file):
         logger.debug((
             "There is already a downloaded file {}, "
             "skipping download"
-        ).format(dst_file))
+        ).format(destination_file))
         return
 
     with tempfile.NamedTemporaryFile(delete=False) as temp:
@@ -118,18 +122,18 @@ def _download_file(dl_url, dst_file):
             ).format(url=dl_url))
 
         logger.debug("Finished download.")
-        shutil.copyfile(temp.name, dst_file)
-        logger.debug("Copied file to {}".format(dst_file))
+        shutil.copyfile(temp.name, destination_file)
+        logger.debug("Copied file to {}".format(destination_file))
 
 
-def _extract(downloaded_file):
-    logger.info("Extracting from the archive, {}".format(downloaded_file))
-    extract_folder = _extracted_folder(downloaded_file)
+def _extract(archive_file):
+    logger.info("Extracting from the archive, {}".format(archive_file))
+    extract_folder = _extracted_folder(archive_file)
 
-    if tarfile.is_tarfile(downloaded_file):
-        _extract_tar(downloaded_file, extract_folder)
-    elif zipfile.is_zipfile(downloaded_file):
-        _extract_zip(downloaded_file, extract_folder)
+    if tarfile.is_tarfile(archive_file):
+        _extract_tar(archive_file, extract_folder)
+    elif zipfile.is_zipfile(archive_file):
+        _extract_zip(archive_file, extract_folder)
     else:
         raise InvalidDownloadedFile("Expecting either a .tar or a .zip file.")
 
