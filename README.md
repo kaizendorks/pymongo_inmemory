@@ -17,6 +17,8 @@ There are several ways you can configure `pymongo_inmemory`.
 version you want to spin up:
     ```ini
     [pymongo_inmemory]
+    operating_system = ubuntu
+    os_version = 18
     mongod_port = 27019
     ```
 2. Define an `ALL_CAPS` environment variables with prefix `PYMONGOIM__` (attention to trailing double
@@ -54,6 +56,46 @@ with MongoClient() as client:
 
 * ****Note 1:*** Generic Linux version offering for MongoDB ends with version **4.0.23**. If the operating system is just `linux` and if selected MongoDB version is higher, it will default to `4.0.23`.
 * *****Note 2:*** URL bank is filled with URLs collected from [release list](https://www.mongodb.com/download-center/community/releases) and [archived released list](https://www.mongodb.com/download-center/community/releases/archive), so if a version is not in the bank you can use the same list to provide an official download link.
+
+
+## Available MongoDB versions
+There is an internal [URL bank](pymongo_inmemory/downloader/_patterns.py) that is filled with URLs collected from
+* [release list](https://www.mongodb.com/download-center/community/releases) and
+* [archived released list](https://www.mongodb.com/download-center/community/releases/archive)
+
+Below table is a summary of possible setting for `operating_system`, `os_version` and available MongoDB versions for
+them to set as `mongo_version` at `major.minor` level.
+
+Note that, not all `major.minor.patch` level is available for all OS versions. For exact patch level range, either see
+release pages of MongoDB or have a look at the internal [URL bank](pymongo_inmemory/downloader/_patterns.py).
+
+| `operating_system` | `os_version` | MongoDB versions (`major.minor`)|
+|-|-|-|
+|`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`linux`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
+|`amazon`|`1`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`amazon`|`2`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`debian`|`7`| `3.0`, `3.2`, `3.4`, `3.6`|
+|`debian`|`8`| `3.2`, `3.4`, `3.6`, `4.0`|
+|`debian`|`9`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`debian`|`10`| `4.2`, `4.4`|
+|`rhel`|`5`| `3.0`, `3.2`|
+|`rhel`|`6`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`rhel`|`7`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`rhel`|`8`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`suse`|`11`| `3.0`, `3.2`, `3.4`, `3.6`|
+|`suse`|`12`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`suse`|`15`| `4.2`, `4.4`|
+|`ubuntu`|`12`| `3.0`, `3.2`, `3.4`, `3.6`|
+|`ubuntu`|`14`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
+|`ubuntu`|`16`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`ubuntu`|`18`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`ubuntu`|`20`| `4.4`|
+|`sunos`|`5`| `2.6`, `3.0`, `3.2`, `3.4`|
+||||
+
+****Note:*** No need to specify `generic`, as it will be chosen automatically since it's the only version for that OS.
 
 ### How do we determine which MongoDB to download?
 There are two (three if it's a Linux flavour) bits of information we need to determine a MongoDB:
