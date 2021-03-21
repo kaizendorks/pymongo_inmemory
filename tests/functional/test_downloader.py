@@ -39,26 +39,9 @@ def urlretrieve_patcher():
     return patcher
 
 
-@pytest.fixture
-def extracted_folder_patcher():
-    def patcher():
-        def _extracted_folder(*args, **kwargs):
-            return downloader._extract_folder()
-        return _extracted_folder
-    return patcher
-
-
-def test_downloader(
-    make_mongo_payload,
-    urlretrieve_patcher,
-    extracted_folder_patcher,
-    monkeypatch,
-    tmpdir
-):
+def test_downloader(make_mongo_payload, urlretrieve_patcher, monkeypatch, tmpdir):
     make_mongo_payload(tmpdir)
     monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir / ".cache")
-
-    monkeypatch.setattr(downloader, "_extracted_folder", extracted_folder_patcher())
 
     urlretrieve = urlretrieve_patcher(tmpdir / "test_archive.tar")
     monkeypatch.setattr(request, "urlretrieve", urlretrieve)
