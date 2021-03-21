@@ -48,7 +48,7 @@ with MongoClient() as client:
 | `mongod_port`      | Override port preference.                 | Yes       | Automatically picked between `27017` and `28000` after testing availability                |
 | `operating_system` | This makes sense for Linux setting, where there are several flavours         | Yes       | Automatically determined (Generic for Linux)*           |
 | `os_version`       | If an operating system has several versions use this parameter to select one | Yes       | Latest versoin of the OS will be selected from the list |
-| `download_url`     | If set, it won't attempt to determine which MongoDB to download. However there won't be a fallback either.| Yes       | Automatically determined from given parameters and using [internal URL bank](pymongo_inmemory/downloader/_urls.py)**|
+| `download_url`     | If set, it won't attempt to determine which MongoDB to download. However there won't be a fallback either.| Yes       | Automatically determined from given parameters and using [internal URL bank](pymongo_inmemory/downloader/_patterns.py)**|
 | `ignore_cache`     | Even if there is a downloaded version in the cache, download it again. | Yes       | False               |
 ||||
 

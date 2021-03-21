@@ -1,5 +1,5 @@
 # Updating download URLs
-Run Check URL tool from the root:
+Run URL check tool from the root:
 
 ```sh
 python -m pymongo_inmemory.downloader.check_urls
@@ -22,3 +22,5 @@ The URLs are collected from:
 The last addition is MongoDB version 4.4.4.
 
 Best way to keep track of the new version is to subscribe to [MongoDB release alerts](https://www.mongodb.com/lp/newsletter/enterprise-release-announcements).
+
+Result of the URL checking should be reflected on the [download patterns](_patterns.py).
