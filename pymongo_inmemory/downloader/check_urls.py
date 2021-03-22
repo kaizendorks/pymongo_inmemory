@@ -4,7 +4,7 @@ import logging
 import time
 from random import randint
 
-from ._urls import URLS, expand_url_tree
+from ._urls import URLS, expand_url_tree, ExpandedURL
 
 
 logger = logging.getLogger("PYMONGOIM_URL_CHECKER")
@@ -18,7 +18,7 @@ def split(url):
     return host, rest
 
 
-def check_url(expanded):
+def check_url(expanded: ExpandedURL):
     host, rest = split(expanded.url)
 
     # sleep some random time to prevent server side throttling
@@ -49,6 +49,10 @@ def check_url(expanded):
         return expanded
 
 
+def failed_url_check(x: futures.Future):
+    return x.result() is not None and x.exception() is not None
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     promises = []
@@ -60,7 +64,8 @@ if __name__ == "__main__":
 
         futures.wait(promises)
         logging.info("All checks done.")
-        failed = [x.result() for x in promises if x.result() is not None]
+
+        failed = [x.result() for x in promises if failed_url_check(x)]
 
     print("= FAILED CHECKS ============================================================")
     for x in failed:
