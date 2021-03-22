@@ -35,3 +35,29 @@ def test_environment_var_option(monkeypatch):
     assert _utils.conf("some_value") == "42"
     assert _utils.conf("SOME_VALUE") == "42"
     assert _utils.conf("SOME_OTHER_VALUE") is None
+
+
+def test_make_semver():
+    expected = _utils.make_semver("1.2.3")
+    assert expected == _utils.SemVer(1, 2, 3)
+    assert expected.major == 1
+    assert expected.minor == 2
+    assert expected.patch == 3
+
+    expected = _utils.make_semver("4")
+    assert expected == _utils.SemVer(4, None, None)
+    assert expected.major == 4
+    assert expected.minor is None
+    assert expected.patch is None
+
+    expected = _utils.make_semver("4.1")
+    assert expected == _utils.SemVer(4, 1, None)
+    assert expected.major == 4
+    assert expected.minor == 1
+    assert expected.patch is None
+
+    expected = _utils.make_semver()
+    assert expected == _utils.SemVer(None, None, None)
+    assert expected.major is None
+    assert expected.minor is None
+    assert expected.patch is None
