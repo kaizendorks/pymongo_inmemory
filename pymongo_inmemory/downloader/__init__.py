@@ -183,7 +183,7 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
 
     Raises
     ------
-    OperatingSystemNotFound: If download pattern can't be determined.
+    OperatingSystemNotFound: If OS is not MacOS, Windows or Linux variant.
     """
     if version is None:
         version = conf("mongo_version")
