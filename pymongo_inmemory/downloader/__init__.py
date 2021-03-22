@@ -162,6 +162,20 @@ def _collect_archive_name(url):
     return url.split("/")[-1]
 
 
+def _has_mongod(extracted_folder):
+    for binfile_path in glob.iglob(
+        path.join(extracted_folder, "**/bin/*"), recursive=True
+    ):
+        binfile_name = path.basename(binfile_path)
+        try:
+            binfile_name.index("mongod")
+        except ValueError:
+            continue
+        else:
+            return True
+    return False
+
+
 def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     """Download MongoDB binaries.
     Available versions are collected form this URL:
@@ -223,11 +237,8 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
         _download_file(dl_url, archive_file)
         _extract(archive_file)
 
-    extract_dir = _extracted_folder(archive_file)
-    if not (
-        path.isfile(path.join(extract_dir, "bin", "mongod")) or
-        path.isfile(path.join(extract_dir, "bin", "mongod.exe"))
-    ):
+    extracted_dir = _extracted_folder(archive_file)
+    if not _has_mongod(extracted_dir):
         _extract(archive_file)
 
     logger.debug("Removing the binary dir")
