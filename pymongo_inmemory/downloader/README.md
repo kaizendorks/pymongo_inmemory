@@ -23,4 +23,5 @@ The last addition is MongoDB version 4.4.4.
 
 Best way to keep track of the new version is to subscribe to [MongoDB release alerts](https://www.mongodb.com/lp/newsletter/enterprise-release-announcements).
 
-Result of the URL checking should be reflected on the [download patterns](_patterns.py).
+Result of the URL checking should be reflected on the [download patterns](_patterns.py)
+and the main [README](../../README.md)
