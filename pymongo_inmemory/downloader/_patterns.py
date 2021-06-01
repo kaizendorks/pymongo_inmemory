@@ -32,7 +32,7 @@ PATCH_RANGE = {
     "4.2-suse15": list(range(1, 4)) + list(range(5, 13)),
     "4.2-rhel8": list(range(1, 4)) + list(range(5, 13)),
     "4.2-debian10": list(range(1, 4)) + list(range(5, 13)),
-    "4.4": list(range(5)),
+    "4.4": list(range(7)),
 }
 
 PATTERNS = {
