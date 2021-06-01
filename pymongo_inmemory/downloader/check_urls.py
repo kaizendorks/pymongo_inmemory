@@ -4,6 +4,9 @@ import logging
 import time
 from random import randint
 
+import click
+from click._termui_impl import ProgressBar
+
 from ._urls import URLS, expand_url_tree, ExpandedURL
 
 
@@ -18,11 +21,13 @@ def split(url):
     return host, rest
 
 
-def check_url(expanded: ExpandedURL):
+def check_url(expanded: ExpandedURL, progress_bar: ProgressBar):
     host, rest = split(expanded.url)
 
     # sleep some random time to prevent server side throttling
     time.sleep(randint(1, 4))
+
+    progress_bar.update(1)
 
     conn = HTTPSConnection(host)
     conn.request("HEAD", rest)
@@ -57,15 +62,29 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     promises = []
     failed = []
+
+    logger.debug("Expanding URL tree")
+    expanded_items = list(expand_url_tree(URLS))
+
     logging.info("Starting checks.")
-    with futures.ThreadPoolExecutor() as executor:
-        for expanded in expand_url_tree(URLS):
-            promises.append(executor.submit(check_url, expanded))
+    with click.progressbar(
+        length=len(expanded_items),
+        label="Checking URLs",
+        fill_char="=",
+        empty_char=" ",
+        info_sep=" ",
+        width=42,
+        show_eta=False,
+    ) as bar:
+        with futures.ThreadPoolExecutor() as executor:
+            for expanded in expanded_items:
+                promises.append(executor.submit(check_url, expanded, bar))
 
-        futures.wait(promises)
-        logging.info("All checks done.")
+            futures.wait(promises)
+            print()
+            logging.info("All checks done.")
 
-        failed = [x.result() for x in promises if failed_url_check(x)]
+            failed = [x.result() for x in promises if failed_url_check(x)]
 
     print("= FAILED CHECKS ============================================================")
     for x in failed:

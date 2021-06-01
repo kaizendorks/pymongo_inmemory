@@ -71,27 +71,27 @@ release pages of MongoDB or have a look at the internal [URL bank](pymongo_inmem
 
 | `operating_system` | `os_version` | MongoDB versions (`major.minor`)|
 |-|-|-|
-|`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+|`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
 |`linux`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
-|`amazon`|`1`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`amazon`|`2`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`amazon`|`1`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`amazon`|`2`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
 |`debian`|`7`| `3.0`, `3.2`, `3.4`, `3.6`|
 |`debian`|`8`| `3.2`, `3.4`, `3.6`, `4.0`|
-|`debian`|`9`| `3.6`, `4.0`, `4.2`, `4.4`|
-|`debian`|`10`| `4.2`, `4.4`|
+|`debian`|`9`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`debian`|`10`| `4.2`, `4.4`, `4.5`, `4.6`|
 |`rhel`|`5`| `3.0`, `3.2`|
-|`rhel`|`6`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`rhel`|`7`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`rhel`|`8`| `3.6`, `4.0`, `4.2`, `4.4`|
+|`rhel`|`6`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`rhel`|`7`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`rhel`|`8`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
 |`suse`|`11`| `3.0`, `3.2`, `3.4`, `3.6`|
-|`suse`|`12`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`suse`|`15`| `4.2`, `4.4`|
+|`suse`|`12`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`suse`|`15`| `4.2`, `4.4`, `4.5`, `4.6`|
 |`ubuntu`|`12`| `3.0`, `3.2`, `3.4`, `3.6`|
 |`ubuntu`|`14`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
-|`ubuntu`|`16`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`ubuntu`|`18`| `3.6`, `4.0`, `4.2`, `4.4`|
-|`ubuntu`|`20`| `4.4`|
+|`ubuntu`|`16`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`ubuntu`|`18`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`|
+|`ubuntu`|`20`| `4.4`, `4.5`, `4.6`|
 |`sunos`|`5`| `2.6`, `3.0`, `3.2`, `3.4`|
 ||||
 
@@ -126,11 +126,10 @@ but for now we are keeping things simple.
 * If major version is not found. like `1.0.0`, highest `major.minor.patch` version is selected, like `4.4.4`.
 
 ## Supported Python versions
-Since `pytest` uses [`LocalPath`](https://py.readthedocs.io/en/latest/path.html) for path related
-operations and on python versions older than 3.6 `LocalPath` does not behave well with all path
-related operations, we are setting **Python 3.6.10** in our development.
+Since few development tools only support Python version 3.6 and above, all testing and tooling done
+from that version up.
 
-Technically, this also limits the minimum Python version of tested features. However theer shouldn't
+This also limits the minimum Python version of tested features. However there shouldn't
 be a hard limitation to use Python 3.5. We recommend upgrading older Python versions than that.
 
 ## Development
@@ -156,6 +155,9 @@ If on NIX systems you can run further tests:
 ```bash
 bash tests/integrity/test_integrity.sh
 ```
+
+### Adding a new MongoDB version
+Follow the guide [here](pymongo_inmemory/downloader/README.md).
 
 ### See how you can wet your feet
 Check out [good first issues](https://github.com/kaizendorks/pymongo_inmemory/contribute).
