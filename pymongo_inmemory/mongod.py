@@ -9,9 +9,10 @@ import logging
 import os
 import signal
 import subprocess
+import threading
 from tempfile import TemporaryDirectory
 
-from ._utils import find_open_port, conf
+from ._utils import conf, find_open_port
 from .downloader import bin_folder, download
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
@@ -34,7 +35,12 @@ def clean_before_kill(signum, stack):
     exit()
 
 
-signal.signal(signal.SIGTERM, clean_before_kill)
+# as per https://docs.python.org/3.6/library/signal.html#signals-and-threads
+# only the main thread is allowed to set a new signal handler.
+# This means that if this module is imported by a thread other than the
+# main one it will raise an error.
+if threading.current_thread() is threading.main_thread():
+    signal.signal(signal.SIGTERM, clean_before_kill)
 
 
 class MongodConfig:
