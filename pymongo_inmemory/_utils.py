@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from collections import namedtuple
 import logging
 import os
+import platform
 import socket
 
 
@@ -98,3 +99,7 @@ def conf(option, fallback=None, optional=True):
     logger.debug("Value for {}=={}".format(option, value))
 
     return value
+
+
+def is_windows():
+    return platform.system() == "Windows"
