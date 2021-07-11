@@ -9,11 +9,12 @@ import logging
 import os
 import signal
 import subprocess
+import time
 import threading
 from tempfile import TemporaryDirectory
 
 from ._utils import conf, find_open_port
-from .downloader import bin_folder, download
+from .downloader import download
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
@@ -68,9 +69,8 @@ class Mongod:
     """
     def __init__(self):
         logger.info("Checking binary")
-        download()
 
-        self._bin_folder = bin_folder()
+        self._bin_folder = download()
         self._proc = None
         self._mongod_port = None
         self._mongod_ip = None
@@ -117,6 +117,9 @@ class Mongod:
     def stop(self):
         logger.info("Sending kill signal to mongod.")
         self._proc.terminate()
+        while self._proc.poll() is None:
+            logger.debug("Waiting for MongoD shutdown.")
+            time.sleep(1)
         self.data_folder.cleanup()
 
     @property

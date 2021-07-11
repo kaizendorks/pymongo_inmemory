@@ -4,7 +4,6 @@ import logging
 import os
 from os import path
 import platform
-import stat
 import shutil
 import tarfile
 import tempfile
@@ -61,10 +60,6 @@ def _extracted_folder(archive_file):
     return _mkdir_ifnot_exist(base_folder, archive_folder)
 
 
-def bin_folder():
-    return conf("bin_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "bin"))
-
-
 def _dl_reporter(blocknum, block_size, total_size):
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
@@ -73,27 +68,6 @@ def _dl_reporter(blocknum, block_size, total_size):
         logger.info("{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
             percent_dled, size_dlded, total_size)
         )
-
-
-def _copy_bins(archive_file):
-    extract_folder = _extracted_folder(archive_file)
-    bin_path = bin_folder()
-    for binfile_path in glob.iglob(
-        path.join(extract_folder, "**/bin/*"), recursive=True
-    ):
-        binfile_name = path.basename(binfile_path)
-        logger.debug("Copying {} to bin folder".format(binfile_name))
-        target = path.join(bin_path, binfile_name)
-        shutil.copyfile(binfile_path, target)
-        os.chmod(target, (
-            stat.S_IRUSR
-            | stat.S_IXUSR
-            | stat.S_IRGRP
-            | stat.S_IXGRP
-            | stat.S_IROTH
-            | stat.S_IXOTH
-        ))
-        logger.debug("Copied {}".format(binfile_name))
 
 
 def _download_file(dl_url, destination_file):
@@ -162,9 +136,9 @@ def _collect_archive_name(url):
     return url.split("/")[-1]
 
 
-def _has_mongod(extracted_folder):
+def _get_mongod(base):
     for binfile_path in glob.iglob(
-        path.join(extracted_folder, "**/bin/*"), recursive=True
+        path.join(base, "**/bin/*"), recursive=True
     ):
         binfile_name = path.basename(binfile_path)
         try:
@@ -172,8 +146,11 @@ def _has_mongod(extracted_folder):
         except ValueError:
             continue
         else:
-            return True
-    return False
+            return binfile_path
+
+
+def _has_mongod(extracted_folder):
+    return _get_mongod(extracted_folder) is not None
 
 
 def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
@@ -230,7 +207,6 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     archive_file = path.join(dl_folder, _collect_archive_name(dl_url))
 
     should_ignore_cache = bool(conf("ignore_cache", ignore_cache))
-    bin_dir = bin_folder()
 
     if should_ignore_cache or not path.isfile(archive_file):
         logger.info("Archive file is not found, {}".format(archive_file))
@@ -241,6 +217,4 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     if not _has_mongod(extracted_dir):
         _extract(archive_file)
 
-    logger.debug("Removing the binary dir")
-    shutil.rmtree(bin_dir)
-    _copy_bins(archive_file)
+    return path.dirname(_get_mongod(extracted_dir))
