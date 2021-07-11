@@ -15,20 +15,6 @@ def test_env_folders_overwrite_default_extractfolder(monkeypatch):
     assert downloader._extract_folder() == "test_folder"
 
 
-def test_env_folders_overwrite_default_binfolder(monkeypatch):
-    monkeypatch.setenv("PYMONGOIM__BIN_FOLDER", "test_folder")
-    assert downloader.bin_folder() == "test_folder"
-
-
-def test_default_bin_folder(monkeypatch, tmpdir):
-    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
-    assert path.samefile(
-        downloader.bin_folder(),
-        path.join(tmpdir, "bin")
-    )
-    assert path.exists(path.join(tmpdir, "bin"))
-
-
 def test_default_dl_folder(monkeypatch, tmpdir):
     monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
     assert path.samefile(
