@@ -8,7 +8,6 @@ import warnings
 import pytest
 
 from pymongo_inmemory import downloader
-from pymongo_inmemory._utils import is_windows
 
 
 @pytest.fixture
@@ -49,11 +48,3 @@ def test_downloader(make_mongo_payload, urlretrieve_patcher, monkeypatch, tmpdir
     bin_dir = downloader.download(os_name="osx", os_ver="generic", version="4.0.1")
     expected_mongod_path = os.path.join(bin_dir, "mongod")
     assert os.path.isfile(expected_mongod_path)
-
-    # chmod can only create read-only files on windows,
-    # so this assertion fails even though code is doing its job
-    if is_windows():
-        warnings.warn("Skipping file permission assertion on Windows")
-    else:
-        st = os.stat(expected_mongod_path)
-        assert stat.filemode(st.st_mode) == "-r-xr-xr-x"
