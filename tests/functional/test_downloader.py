@@ -1,9 +1,7 @@
 import os
 import shutil
-import stat
 import tarfile
 import urllib.request as request
-import warnings
 
 import pytest
 

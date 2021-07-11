@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from collections import namedtuple
 import logging
 import os
-import platform
 import socket
 
 
