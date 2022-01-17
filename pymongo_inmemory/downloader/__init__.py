@@ -188,7 +188,7 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
                 raise OperatingSystemNotFound("Can't determine operating system.")
 
     if os_name == "linux":
-        logger.warn((
+        logger.warning((
             "Starting from MongoDB 4.0.23 "
             "there isn't a generic Linux version of MongoDB"
             ))

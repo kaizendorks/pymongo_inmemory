@@ -55,7 +55,7 @@ class MongodConfig:
         if set_port is None:
             return str(find_open_port(range(27017, 28000)))
         else:
-            logger.warn("Using Mongod port set by user: {}".format(set_port))
+            logger.warning("Using Mongod port set by user: {}".format(set_port))
             return set_port
 
 
@@ -89,7 +89,7 @@ class Mongod:
         self.data_folder = TemporaryDirectory(prefix="pymongoim")
 
         while self.is_locked:
-            logger.warn((
+            logger.warning((
                 "Lock file found, possibly another mock server is running. "
                 "Changing the data folder."
             ))
