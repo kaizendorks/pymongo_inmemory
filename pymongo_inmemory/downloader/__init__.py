@@ -50,16 +50,6 @@ def _extract_folder():
     return conf("extract_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "extract"))
 
 
-def _extracted_folder(archive_file):
-    "Defines a nested versioned folder in the extract base folder"
-    base_folder = _extract_folder()
-    base_name = path.basename(archive_file).split(".")
-    file_name = ".".join(base_name[:-1])
-    extension = base_name[-1]
-    archive_folder = "-".join([file_name, extension])
-    return _mkdir_ifnot_exist(base_folder, archive_folder)
-
-
 def _dl_reporter(blocknum, block_size, total_size):
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
@@ -102,7 +92,7 @@ def _download_file(dl_url, destination_file):
 
 def _extract(archive_file):
     logger.info("Extracting from the archive, {}".format(archive_file))
-    extract_folder = _extracted_folder(archive_file)
+    extract_folder = _extract_folder()
 
     if tarfile.is_tarfile(archive_file):
         _extract_tar(archive_file, extract_folder)
@@ -135,10 +125,9 @@ def _extract_zip(zip_file, extract_folder):
 def _collect_archive_name(url):
     return url.split("/")[-1]
 
-
-def _get_mongod(base):
+def _get_mongod():
     for binfile_path in glob.iglob(
-        path.join(base, "**/bin/*"), recursive=True
+        path.join(_extract_folder(), "**/bin/*"), recursive=True
     ):
         binfile_name = path.basename(binfile_path)
         try:
@@ -149,8 +138,8 @@ def _get_mongod(base):
             return binfile_path
 
 
-def _has_mongod(extracted_folder):
-    return _get_mongod(extracted_folder) is not None
+def _has_mongod():
+    return _get_mongod() is not None
 
 
 def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
@@ -213,8 +202,7 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
         _download_file(dl_url, archive_file)
         _extract(archive_file)
 
-    extracted_dir = _extracted_folder(archive_file)
-    if not _has_mongod(extracted_dir):
+    if not _has_mongod():
         _extract(archive_file)
 
-    return path.dirname(_get_mongod(extracted_dir))
+    return path.dirname(_get_mongod())

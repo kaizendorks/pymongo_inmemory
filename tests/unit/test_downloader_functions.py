@@ -33,18 +33,6 @@ def test_default_extract_folder(monkeypatch, tmpdir):
     assert path.exists(path.join(tmpdir, "extract"))
 
 
-def test_extracted_folder(monkeypatch, tmpdir):
-    monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
-    assert path.samefile(
-        downloader._extracted_folder("mongodb-amazon2-x86_64-1.1.1.tar"),
-        path.join(tmpdir, "extract", "mongodb-amazon2-x86_64-1.1.1-tar")
-    )
-    assert path.samefile(
-        downloader._extracted_folder("mongodb-windows-x86_64-1.1.1.zip"),
-        path.join(tmpdir, "extract", "mongodb-windows-x86_64-1.1.1-zip")
-    )
-
-
 def test_make_folder(monkeypatch, tmpdir):
     assert path.samefile(
         downloader._mkdir_ifnot_exist(tmpdir, "test"),
