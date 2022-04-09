@@ -125,6 +125,7 @@ def _extract_zip(zip_file, extract_folder):
 def _collect_archive_name(url):
     return url.split("/")[-1]
 
+
 def _get_mongod():
     for binfile_path in glob.iglob(
         path.join(_extract_folder(), "**/bin/*"), recursive=True
