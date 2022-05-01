@@ -24,15 +24,17 @@ PATCH_RANGE = {
     "3.6-debian9": list(range(5, 23)),
     "3.6-debian7": list(range(6)),
     "3.6-amazon2": [22],
-    "4.0": list(range(24)),
-    "4.0-rhel8": list(range(14, 24)),
-    "4.0-ubuntu14": list(range(10)) + list(range(12, 24)),
-    "4.0-ubuntu18": list(range(1, 24)),
-    "4.2": list(range(4)) + list(range(5, 13)),
-    "4.2-suse15": list(range(1, 4)) + list(range(5, 13)),
-    "4.2-rhel8": list(range(1, 4)) + list(range(5, 13)),
-    "4.2-debian10": list(range(1, 4)) + list(range(5, 13)),
-    "4.4": list(range(7)),
+    "4.0": list(range(29)),
+    "4.0-rhel8": list(range(14, 29)),
+    "4.0-ubuntu14": list(range(10)) + list(range(12, 29)),
+    "4.0-ubuntu18": list(range(1, 29)),
+    "4.2": list(range(4)) + list(range(5, 20)),
+    "4.2-suse15": list(range(1, 4)) + list(range(5, 20)),
+    "4.2-rhel8": list(range(1, 4)) + list(range(5, 20)),
+    "4.2-debian10": list(range(1, 4)) + list(range(5, 20)),
+    "4.4": list(range(14)),
+    "5.0": list(range(9)),
+    "5.0-debian11": list(range(8, 9)),
 }
 
 PATTERNS = {
@@ -57,6 +59,7 @@ PATTERNS = {
     "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
     "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
     "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+    "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
     "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
     "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
@@ -103,6 +106,12 @@ URLS = {
                     "url": PATTERNS["amazon1"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["amazon1"],
+                }
+            },
         },
         "2": {
             3: {
@@ -122,6 +131,12 @@ URLS = {
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["amazon2"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
                     "url": PATTERNS["amazon2"],
                 },
             },
@@ -191,6 +206,12 @@ URLS = {
                     "url": PATTERNS["debian9"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["debian9"],
+                },
+            },
         },
         "10": {
             4: {
@@ -201,6 +222,20 @@ URLS = {
                 4: {
                     "patches": PATCH_RANGE["4.4"],
                     "url": PATTERNS["debian10"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["debian10"],
+                },
+            },
+        },
+        "11": {
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0-debian11"],
+                    "url": PATTERNS["debian11"],
                 },
             },
         },
@@ -285,6 +320,12 @@ URLS = {
                     "url": PATTERNS["rhel7"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["rhel7"],
+                },
+            },
         },
         "8": {
             3: {
@@ -307,6 +348,12 @@ URLS = {
                     "url": PATTERNS["rhel8"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["rhel8"],
+                },
+            }
         },
     },
     "suse": {
@@ -359,6 +406,12 @@ URLS = {
                     "url": PATTERNS["suse12"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["suse12"],
+                },
+            },
         },
         "15": {
             4: {
@@ -368,6 +421,12 @@ URLS = {
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["suse15"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
                     "url": PATTERNS["suse15"],
                 },
             },
@@ -471,11 +530,23 @@ URLS = {
                     "url": PATTERNS["ubuntu18"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["ubuntu18"],
+                },
+            },
         },
         "20": {
             4: {
                 4: {
                     "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["ubuntu20"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
                     "url": PATTERNS["ubuntu20"],
                 },
             },
@@ -555,6 +626,12 @@ URLS = {
                     "url": PATTERNS["macos"],
                 },
             },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["macos"],
+                },
+            },
         },
     },
     "sunos": {
@@ -618,6 +695,12 @@ URLS = {
                 },
                 4: {
                     "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["windows-x86_64"]
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
                     "url": PATTERNS["windows-x86_64"]
                 },
             },
