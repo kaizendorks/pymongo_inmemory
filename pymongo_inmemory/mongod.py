@@ -41,7 +41,13 @@ def _last_line(input, as_a=int):
 
     TODO - Pull it to utils if needed elsewhere in the future.
     """
-    lines = list(filter(lambda x: x, [x.strip().decode() for x in input.split(bytes(os.linesep, 'utf8'))]))
+    lines = list(
+        filter(
+            lambda x: x, [
+                x.strip().decode() for x in input.split(bytes(os.linesep, 'utf8'))
+            ]
+        )
+    )
     return as_a(lines[-1])
 
 
