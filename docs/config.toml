@@ -1,0 +1,9 @@
+base_url = "https://kaizendorks.github.io/pymongo_inmemory"
+compile_sass = false
+build_search_index = true
+theme = "adidoks"
+
+[markdown]
+highlight_code = true
+
+[extra]
