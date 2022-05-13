@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kaizendorks.github.io/pymongo_inmemory/sitemap.xml
