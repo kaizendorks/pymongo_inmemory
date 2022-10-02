@@ -15,7 +15,6 @@ from ._urls import best_url
 
 
 CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
-VERSION_MAP_FILE = path.join(CACHE_FOLDER, "version_map.ini")
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
