@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 import glob
 import zipfile
 import logging
@@ -15,6 +16,7 @@ from ._urls import best_url
 
 
 CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
+VERSION_MAP_FILE = path.join(CACHE_FOLDER, "version_map.ini")
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
@@ -30,6 +32,20 @@ class CantDownload(Exception):
 class InvalidDownloadedFile(Exception):
     pass
 
+
+def upsert_to_version_map(mongod_version, bin_folder):
+    version_map = ConfigParser()
+    version_map.read(VERSION_MAP_FILE)
+    version_map.set("versions", mongod_version, bin_folder)
+    with open(VERSION_MAP_FILE, "w") as version_map_file:
+        version_map.write(version_map_file)
+
+
+def read_from_version_map(mongod_version):
+    version_map = ConfigParser()
+    version_map.read(VERSION_MAP_FILE)
+    return version_map.get("versions", mongod_version, fallback=None)
+    
 
 def _mkdir_ifnot_exist(*folders):
     current_path = path.join(folders[0])
