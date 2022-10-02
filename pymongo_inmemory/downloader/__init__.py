@@ -33,20 +33,6 @@ class InvalidDownloadedFile(Exception):
     pass
 
 
-def upsert_to_version_map(mongod_version, bin_folder):
-    version_map = ConfigParser()
-    version_map.read(VERSION_MAP_FILE)
-    version_map.set("versions", mongod_version, bin_folder)
-    with open(VERSION_MAP_FILE, "w") as version_map_file:
-        version_map.write(version_map_file)
-
-
-def read_from_version_map(mongod_version):
-    version_map = ConfigParser()
-    version_map.read(VERSION_MAP_FILE)
-    return version_map.get("versions", mongod_version, fallback=None)
-
-
 def _mkdir_ifnot_exist(*folders):
     current_path = path.join(folders[0])
     if not path.isdir(current_path):
@@ -142,9 +128,9 @@ def _collect_archive_name(url):
     return url.split("/")[-1]
 
 
-def _get_mongod():
+def _get_mongod(version):
     for binfile_path in glob.iglob(
-        path.join(_extract_folder(), "**/bin/*"), recursive=True
+        path.join(_extract_folder(), f"**{version}**/bin/*"), recursive=True
     ):
         binfile_name = path.basename(binfile_path)
         try:
@@ -153,10 +139,6 @@ def _get_mongod():
             continue
         else:
             return binfile_path
-
-
-def _has_mongod():
-    return _get_mongod() is not None
 
 
 def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
@@ -202,7 +184,7 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
     if os_ver is None:
         os_ver = conf("os_version")
 
-    dl_url = conf("download_url", best_url(
+    dl_url, downloaded_version = conf("download_url", best_url(
         os_name,
         version=version,
         os_ver=os_ver
@@ -219,7 +201,7 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
         _download_file(dl_url, archive_file)
         _extract(archive_file)
 
-    if not _has_mongod():
+    if _get_mongod(downloaded_version) is None:
         _extract(archive_file)
 
-    return path.dirname(_get_mongod())
+    return path.dirname(_get_mongod(downloaded_version))

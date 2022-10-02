@@ -65,7 +65,7 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
         version, major, minor, patch
     ))
     version = "{}.{}.{}".format(major, minor, patch)
-    return version_branch[major][minor]["url"].format(version)
+    return version_branch[major][minor]["url"].format(version), version
 
 
 def expand_url_tree(tree):
