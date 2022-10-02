@@ -18,7 +18,8 @@ def make_mongo_payload():
         with open(mongod_path, "a") as f:
             f.write("Something")
         with tarfile.open(tar_path, mode="w") as t:
-            t.addfile(tarfile.TarInfo("mongodb-macos-x86_64-4.0.1/bin/mongod"), mongod_path)
+            t.addfile(tarfile.TarInfo(
+                "mongodb-macos-x86_64-4.0.1/bin/mongod"), mongod_path)
     return _make_payload
 
 

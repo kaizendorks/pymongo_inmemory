@@ -1,4 +1,3 @@
-from configparser import ConfigParser
 import glob
 import zipfile
 import logging
