@@ -45,7 +45,7 @@ def read_from_version_map(mongod_version):
     version_map = ConfigParser()
     version_map.read(VERSION_MAP_FILE)
     return version_map.get("versions", mongod_version, fallback=None)
-    
+
 
 def _mkdir_ifnot_exist(*folders):
     current_path = path.join(folders[0])
