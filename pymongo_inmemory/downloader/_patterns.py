@@ -688,6 +688,12 @@ URLS = {
                     "url": PATTERNS["macos"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["macos"],
+                },
+            },
         },
     },
     "macos": {
