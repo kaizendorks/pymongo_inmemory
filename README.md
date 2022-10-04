@@ -1,8 +1,12 @@
-[![PyPI
-version](https://badge.fury.io/py/pymongo-inmemory.svg)](https://badge.fury.io/py/pymongo-inmemory)
+[ [PyPI](https://pypi.org/project/pymongo-inmemory/) ][ [GitHub](https://github.com/kaizendorks/pymongo_inmemory) ][ [BETA Docs](https://kaizendorks.github.io/pymongo_inmemory/)]
 
 # pymongo_inmemory
 A mongo mocking library with an ephemeral MongoDB running in memory.
+
+## What's new?
+### v0.2.10
+* Updated MongoDB version list.
+* With 6.0 versions, there is support of MacOS running on ARM arch.
 
 ## Installation
 ```bash
@@ -69,32 +73,33 @@ them to set as `mongo_version` at `major.minor` level.
 Note that, not all `major.minor.patch` level is available for all OS versions. For exact patch level range, either see
 release pages of MongoDB or have a look at the internal [URL bank](pymongo_inmemory/downloader/_patterns.py).
 
-| `operating_system` | `os_version` | MongoDB versions (`major.minor`)|
-|-|-|-|
-|`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`linux`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
-|`amazon`|`1`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`amazon`|`2`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`debian`|`7`| `3.0`, `3.2`, `3.4`, `3.6`|
-|`debian`|`8`| `3.2`, `3.4`, `3.6`, `4.0`|
-|`debian`|`9`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`, `5.0`|
-|`debian`|`10`| `4.2`, `4.4`, `4.5`, `4.6`, `5.0`|
-|`debian`|`11`| `5.0`|
-|`rhel`|`5`| `3.0`, `3.2`|
-|`rhel`|`6`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`rhel`|`7`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`rhel`|`8`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`suse`|`11`| `3.0`, `3.2`, `3.4`, `3.6`|
-|`suse`|`12`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`suse`|`15`| `4.2`, `4.4`, `5.0`|
-|`ubuntu`|`12`| `3.0`, `3.2`, `3.4`, `3.6`|
-|`ubuntu`|`14`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
-|`ubuntu`|`16`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
-|`ubuntu`|`18`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
-|`ubuntu`|`20`| `4.4`, `5.0`|
-|`sunos`|`5`| `2.6`, `3.0`, `3.2`, `3.4`|
-||||
+|| `operating_system` | `os_version` | MongoDB versions (`major.minor`)|
+|-|-|-|-|
+||`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
+|**NEW**|`macos`|`arm`| `6.0`|
+||`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
+||`linux`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
+||`amazon`|`1`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
+||`amazon`|`2`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
+||`debian`|`7`| `3.0`, `3.2`, `3.4`, `3.6`|
+||`debian`|`8`| `3.2`, `3.4`, `3.6`, `4.0`|
+||`debian`|`9`| `3.6`, `4.0`, `4.2`, `4.4`, `4.5`, `4.6`, `5.0`|
+||`debian`|`10`| `4.2`, `4.4`, `4.5`, `4.6`, `5.0`, `6.0`|
+||`debian`|`11`| `5.0`, `6.0`|
+||`rhel`|`5`| `3.0`, `3.2`|
+||`rhel`|`6`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+||`rhel`|`7`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
+||`rhel`|`8`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
+||`suse`|`11`| `3.0`, `3.2`, `3.4`, `3.6`|
+||`suse`|`12`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
+||`suse`|`15`| `4.2`, `4.4`, `5.0`, `6.0`|
+||`ubuntu`|`12`| `3.0`, `3.2`, `3.4`, `3.6`|
+||`ubuntu`|`14`| `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
+||`ubuntu`|`16`| `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`|
+||`ubuntu`|`18`| `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
+||`ubuntu`|`20`| `4.4`, `5.0`|
+||`sunos`|`5`| `2.6`, `3.0`, `3.2`, `3.4`|
+|||||
 
 ****Note:*** No need to specify `generic`, as it will be chosen automatically since it's the only version for that OS.
 
