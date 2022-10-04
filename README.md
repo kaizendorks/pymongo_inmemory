@@ -1,4 +1,4 @@
-[ [PyPI](https://pypi.org/project/pymongo-inmemory/) ][ [GitHub](https://github.com/kaizendorks/pymongo_inmemory) ]
+[ [PyPI](https://pypi.org/project/pymongo-inmemory/) ][ [GitHub](https://github.com/kaizendorks/pymongo_inmemory) ][ [BETA Docs](https://kaizendorks.github.io/pymongo_inmemory/)]
 
 # pymongo_inmemory
 A mongo mocking library with an ephemeral MongoDB running in memory.
