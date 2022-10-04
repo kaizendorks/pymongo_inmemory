@@ -15,26 +15,27 @@ PATCH_RANGE = {
     "3.4-ubuntu12": list(range(8)) + list(range(9, 15)),
     "3.4-sunos5": list(range(6)),
     "3.4-debian7": list(range(8)) + list(range(9, 16)),
-    "3.6": list(range(23)),
+    "3.6": list(range(24)),
     "3.6-suse11": list(range(3)),
-    "3.6-ubuntu18": list(range(20, 23)),
-    "3.6-ubuntu14": list(range(13)) + list(range(14, 23)),
+    "3.6-ubuntu18": list(range(20, 24)),
+    "3.6-ubuntu14": list(range(13)) + list(range(14, 24)),
     "3.6-ubuntu12": list(range(4)),
-    "3.6-rhel8": list(range(17, 23)),
-    "3.6-debian9": list(range(5, 23)),
+    "3.6-rhel8": list(range(17, 24)),
+    "3.6-debian9": list(range(5, 24)),
     "3.6-debian7": list(range(6)),
-    "3.6-amazon2": [22],
+    "3.6-amazon2": list(range(22, 24)),
     "4.0": list(range(29)),
     "4.0-rhel8": list(range(14, 29)),
     "4.0-ubuntu14": list(range(10)) + list(range(12, 29)),
     "4.0-ubuntu18": list(range(1, 29)),
-    "4.2": list(range(4)) + list(range(5, 20)),
-    "4.2-suse15": list(range(1, 4)) + list(range(5, 20)),
-    "4.2-rhel8": list(range(1, 4)) + list(range(5, 20)),
-    "4.2-debian10": list(range(1, 4)) + list(range(5, 20)),
-    "4.4": list(range(14)),
-    "5.0": list(range(9)),
-    "5.0-debian11": list(range(8, 9)),
+    "4.2": list(range(4)) + list(range(5, 24)),
+    "4.2-suse15": list(range(1, 4)) + list(range(5, 24)),
+    "4.2-rhel8": list(range(1, 4)) + list(range(5, 24)),
+    "4.2-debian10": list(range(1, 4)) + list(range(5, 24)),
+    "4.4": list(range(18)),
+    "5.0": list(range(14)),
+    "5.0-debian11": list(range(8, 14)),
+    "6.0": list(range(3)),
 }
 
 PATTERNS = {
@@ -46,6 +47,7 @@ PATTERNS = {
     "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
     "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
     "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
+    "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
     "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
     "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
     "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
@@ -140,6 +142,12 @@ URLS = {
                     "url": PATTERNS["amazon2"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["amazon2"],
+                },
+            },
         },
     },
     "debian": {
@@ -230,11 +238,23 @@ URLS = {
                     "url": PATTERNS["debian10"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["debian10"],
+                },
+            },
         },
         "11": {
             5: {
                 0: {
                     "patches": PATCH_RANGE["5.0-debian11"],
+                    "url": PATTERNS["debian11"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["debian11"],
                 },
             },
@@ -326,6 +346,12 @@ URLS = {
                     "url": PATTERNS["rhel7"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel7"],
+                },
+            },
         },
         "8": {
             3: {
@@ -353,7 +379,13 @@ URLS = {
                     "patches": PATCH_RANGE["5.0"],
                     "url": PATTERNS["rhel8"],
                 },
-            }
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel8"],
+                },
+            },
         },
     },
     "suse": {
@@ -412,6 +444,12 @@ URLS = {
                     "url": PATTERNS["suse12"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["suse12"],
+                },
+            },
         },
         "15": {
             4: {
@@ -427,6 +465,12 @@ URLS = {
             5: {
                 0: {
                     "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["suse15"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["suse15"],
                 },
             },
@@ -536,6 +580,12 @@ URLS = {
                     "url": PATTERNS["ubuntu18"],
                 },
             },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu18"],
+                },
+            },
         },
         "20": {
             4: {
@@ -547,6 +597,12 @@ URLS = {
             5: {
                 0: {
                     "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["ubuntu20"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["ubuntu20"],
                 },
             },
@@ -634,6 +690,16 @@ URLS = {
             },
         },
     },
+    "macos": {
+        "arm": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["macos-arm"],
+                },
+            },
+        },
+    },
     "sunos": {
         "5": {
             2: {
@@ -701,6 +767,12 @@ URLS = {
             5: {
                 0: {
                     "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["windows-x86_64"]
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["windows-x86_64"]
                 },
             },
