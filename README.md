@@ -75,7 +75,7 @@ release pages of MongoDB or have a look at the internal [URL bank](pymongo_inmem
 
 || `operating_system` | `os_version` | MongoDB versions (`major.minor`)|
 |-|-|-|-|
-||`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
+||`osx`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`, `6.0`|
 |**NEW**|`macos`|`arm`| `6.0`|
 ||`windows`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`, `4.2`, `4.4`, `5.0`|
 ||`linux`|`generic`*| `2.6`, `3.0`, `3.2`, `3.4`, `3.6`, `4.0`|
