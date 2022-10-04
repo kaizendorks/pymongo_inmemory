@@ -13,6 +13,8 @@ import time
 import threading
 from tempfile import TemporaryDirectory
 
+import pymongo
+
 from ._utils import conf, find_open_port
 from .downloader import download
 
@@ -87,8 +89,11 @@ class Mongod:
 
         self._bin_folder = download()
         self._proc = None
-        self._mongod_port = None
-        self._mongod_ip = None
+        self._connection_string = None
+
+        self.config = MongodConfig()
+        self.data_folder = TemporaryDirectory(prefix="pymongoim")
+        self._client = pymongo.MongoClient(self.connection_string)
 
     def __enter__(self):
         self.start()
@@ -98,11 +103,6 @@ class Mongod:
         self.stop()
 
     def start(self):
-        mongod_config = MongodConfig()
-        self._mongod_port = mongod_config.port
-        self._mongod_ip = mongod_config.local_address
-        self.data_folder = TemporaryDirectory(prefix="pymongoim")
-
         while self.is_locked:
             logger.warning((
                 "Lock file found, possibly another mock server is running. "
@@ -117,9 +117,9 @@ class Mongod:
             os.path.join(self._bin_folder, "mongod"),
             "--dbpath", self.data_folder.name,
             "--logpath", self.log_path,
-            "--port", self._mongod_port,
-            "--bind_ip", self._mongod_ip,
-            "--storageEngine", mongod_config.engine,
+            "--port", self.config.port,
+            "--bind_ip", self.config.local_address,
+            "--storageEngine", self.config.engine,
         ]
         logger.debug(boot_command)
         self._proc = subprocess.Popen(boot_command)
@@ -139,13 +139,21 @@ class Mongod:
 
     @property
     def connection_string(self):
-        if self._mongod_ip is not None and self._mongod_port is not None:
-            return "mongodb://{host}:{port}".format(
-                host=self._mongod_ip,
-                port=self._mongod_port
+        if self._connection_string is not None:
+            return self._connection_string
+
+        if (
+            self.config.local_address is not None
+            and self.config.port is not None
+        ):
+            self._connection_string = "mongodb://{host}:{port}".format(
+                host=self.config.local_address,
+                port=self.config.port
             )
         else:
-            return None
+            self._connection_string = None
+
+        return self._connection_string
 
     @property
     def is_locked(self):
@@ -153,21 +161,20 @@ class Mongod:
 
     @property
     def is_healthy(self):
-        healthcheck = [
-            os.path.join(self._bin_folder, "mongo"),
-            self.connection_string,
-            "--quiet",
-            "--eval", "db.serverStatus().uptime"
-        ]
+        db = self._client["admin"]
+        status = db.command("serverStatus")
         try:
             logger.debug("Getting status")
-            uptime = _last_line(subprocess.check_output(healthcheck))
+            uptime = int(status["uptime"])
         except subprocess.CalledProcessError:
             logger.debug("Status: Not running")
             return False
         else:
             if uptime > 0:
-                logger.debug("Status: Running for {} secs".format(uptime))
+                version = status["version"]
+                logger.debug(
+                    "Status: MongoDB {} running for {} secs".format(version, uptime)
+                )
                 return True
             else:
                 logger.debug("Status: Just started.")
@@ -176,8 +183,8 @@ class Mongod:
     def mongodump(self, database, collection):
         dump_command = [
             os.path.join(self._bin_folder, "mongodump"),
-            "--host", self._mongod_ip,
-            "--port", self._mongod_port,
+            "--host", self.config.local_address,
+            "--port", self.config.port,
             "--out", "-",
             "--db", database,
             "--collection", collection,
