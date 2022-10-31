@@ -10,8 +10,8 @@ class MongoClient(pymongo.MongoClient):
         super().__init__(self._mongod.connection_string, **kwargs)
 
     def close(self):
-        self._mongod.stop()
         super().close()
+        self._mongod.stop()
 
     def pim_mongodump(self, *args, **kwargs):
         return self._mongod.mongodump(*args, **kwargs)
