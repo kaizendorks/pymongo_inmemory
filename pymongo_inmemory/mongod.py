@@ -87,6 +87,7 @@ class Mongod:
     def __init__(self):
         logger.info("Checking binary")
 
+        print(not conf('use_local_mongod', False))
         self._bin_folder = download() if not conf('use_local_mongod', False) else ''
         self._proc = None
         self._connection_string = None
