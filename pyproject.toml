@@ -2,34 +2,30 @@
 name = "pymongo_inmemory"
 version = "0.2.11"
 description = "A mongo mocking library with an ephemeral MongoDB running in memory."
-authors = [
-    "Kaizen Dorks <kaizendorks@gmail.com>",
-]
+authors = ["Kaizen Dorks <kaizendorks@gmail.com>"]
 maintainers = [
-    "Ertugrul Karademir <ekarademir@gmail.com>",
-    "Daniel Jimenez Garcia",
-    "Ruben Vasconcelos",
+  "Ertugrul Karademir <ekarademir@gmail.com>",
+  "Daniel Jimenez Garcia",
+  "Ruben Vasconcelos",
 ]
 readme = "README.md"
-license="MIT"
+license = "MIT"
 homepage = "https://github.com/kaizendorks/pymongo_inmemory"
 repository = "https://github.com/kaizendorks/pymongo_inmemory"
 keywords = ["mongodb", "testing", "pymongo"]
 classifiers = [
-    "Programming Language :: Python :: 3.6",
-    "License :: OSI Approved :: MIT License",
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: Microsoft :: Windows",
-    "Topic :: Database :: Database Engines/Servers",
-    "Topic :: Software Development :: Testing",
-    "Topic :: Utilities",
+  "Programming Language :: Python :: 3.6",
+  "License :: OSI Approved :: MIT License",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
+  "Topic :: Database :: Database Engines/Servers",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities",
 ]
-include = [
-    "LICENSE",
-]
+include = ["LICENSE"]
 
 [tool.poetry.urls]
 "Bug Reports" = "https://github.com/kaizendorks/pymongo_inmemory/issues"
@@ -46,7 +42,7 @@ pytest-pythonpath = "*"
 twine = "*"
 wheel = "*"
 setuptools = "*"
-click = "^8.0.1"
+click = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]
