@@ -28,14 +28,14 @@ PATCH_RANGE = {
     "4.0-rhel8": list(range(14, 29)),
     "4.0-ubuntu14": list(range(10)) + list(range(12, 29)),
     "4.0-ubuntu18": list(range(1, 29)),
-    "4.2": list(range(4)) + list(range(5, 24)),
-    "4.2-suse15": list(range(1, 4)) + list(range(5, 24)),
-    "4.2-rhel8": list(range(1, 4)) + list(range(5, 24)),
-    "4.2-debian10": list(range(1, 4)) + list(range(5, 24)),
-    "4.4": list(range(18)),
-    "5.0": list(range(14)),
-    "5.0-debian11": list(range(8, 14)),
-    "6.0": list(range(3)),
+    "4.2": list(range(4)) + list(range(5, 25)),
+    "4.2-suse15": list(range(1, 4)) + list(range(5, 25)),
+    "4.2-rhel8": list(range(1, 4)) + list(range(5, 25)),
+    "4.2-debian10": list(range(1, 4)) + list(range(5, 25)),
+    "4.4": list(range(23)),
+    "5.0": list(range(19)),
+    "5.0-debian11": list(range(8, 19)),
+    "6.0": list(range(7)),
 }
 
 PATTERNS = {
