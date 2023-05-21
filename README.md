@@ -56,6 +56,7 @@ with MongoClient() as client:
 | `os_version`       | If an operating system has several versions use this parameter to select one | Yes       | Latest versoin of the OS will be selected from the list |
 | `download_url`     | If set, it won't attempt to determine which MongoDB to download. However there won't be a fallback either.| Yes       | Automatically determined from given parameters and using [internal URL bank](pymongo_inmemory/downloader/_patterns.py)**|
 | `ignore_cache`     | Even if there is a downloaded version in the cache, download it again. | Yes       | False               |
+| `use_local_mongod` | If set, it will try to use a local mongod instance instead of downloading one. | Yes     | False               |
 ||||
 
 * ****Note 1:*** Generic Linux version offering for MongoDB ends with version **4.0.23**. If the operating system is just `linux` and if selected MongoDB version is higher, it will default to `4.0.23`.
