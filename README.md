@@ -6,9 +6,10 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## What's new?
 
-### v0.2.12
+### v0.2.13
 
 - Ability to invoke locally set up `mongod` [Contribution by [@kschniedergers](https://github.com/kschniedergers)]
+- We also upped the development version dependency on Python for CI/CD purposes.
 
 ### v0.2.10
 
@@ -30,11 +31,11 @@ There are several ways you can configure `pymongo_inmemory`.
 1. Insert a new section titled `pymongo_inmemory` to your project's `setup.cfg`
    version you want to spin up:
    `ini
- [pymongo_inmemory]
- operating_system = ubuntu
- os_version = 18
- mongod_port = 27019
- `
+[pymongo_inmemory]
+operating_system = ubuntu
+os_version = 18
+mongod_port = 27019
+`
 2. Define an `ALL_CAPS` environment variables with prefix `PYMONGOIM__` (attention to trailing double
    underscores.) For instance, to override the port, set up an environment variable
    `PYMONGOIM__MONGOD_PORT`.
@@ -150,7 +151,7 @@ but for now we are keeping things simple.
 
 ## Supported Python versions
 
-Since few development tools only support Python version 3.6 and above, all testing and tooling done
+Since few development tools only support Python version 3.7 and above, all testing and tooling done
 from that version up.
 
 This also limits the minimum Python version of tested features. However there shouldn't
