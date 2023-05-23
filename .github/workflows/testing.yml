@@ -4,7 +4,7 @@ on: [push]
 jobs:
   test:
     name: Testing
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.6.10
@@ -12,11 +12,8 @@ jobs:
         with:
           python-version: 3.6.10
       - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.4.2
-          virtualenvs-create: true
-          virtualenvs-in-project: false
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
       - name: Install dependencies
         run: |
           poetry install
