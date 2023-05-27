@@ -15,8 +15,9 @@ from tempfile import TemporaryDirectory
 
 import pymongo
 
-from ._utils import conf, find_open_port
+from ._utils import find_open_port
 from .downloader import download
+from .downloader.context import conf
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
@@ -45,9 +46,8 @@ def _last_line(input, as_a=int):
     """
     lines = list(
         filter(
-            lambda x: x, [
-                x.strip().decode() for x in input.split(bytes(os.linesep, 'utf8'))
-            ]
+            lambda x: x,
+            [x.strip().decode() for x in input.split(bytes(os.linesep, "utf8"))],
         )
     )
     return as_a(lines[-1])
@@ -68,7 +68,7 @@ class MongodConfig:
 
     @property
     def port(self):
-        set_port = conf('mongod_port')
+        set_port = conf("mongod_port")
         if set_port is None:
             return str(find_open_port(range(27017, 28000)))
         else:
@@ -84,10 +84,11 @@ class Mongod:
     Daemon is managed by `subprocess.Popen`. all Popen objects are registered
     with `atexit` module to ensure clean up.
     """
+
     def __init__(self):
         logger.info("Checking binary")
 
-        self._bin_folder = '' if conf('use_local_mongod') == 'True' else download()
+        self._bin_folder = "" if conf("use_local_mongod") == "True" else download()
         self._proc = None
         self._connection_string = None
 
@@ -104,10 +105,12 @@ class Mongod:
 
     def start(self):
         while self.is_locked:
-            logger.warning((
-                "Lock file found, possibly another mock server is running. "
-                "Changing the data folder."
-            ))
+            logger.warning(
+                (
+                    "Lock file found, possibly another mock server is running. "
+                    "Changing the data folder."
+                )
+            )
             self.data_folder = TemporaryDirectory(prefix="pymongoim")
 
         self.log_path = os.path.join(self.data_folder.name, "mongod.log")
@@ -115,11 +118,16 @@ class Mongod:
         logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
             os.path.join(self._bin_folder, "mongod"),
-            "--dbpath", self.data_folder.name,
-            "--logpath", self.log_path,
-            "--port", self.config.port,
-            "--bind_ip", self.config.local_address,
-            "--storageEngine", self.config.engine,
+            "--dbpath",
+            self.data_folder.name,
+            "--logpath",
+            self.log_path,
+            "--port",
+            self.config.port,
+            "--bind_ip",
+            self.config.local_address,
+            "--storageEngine",
+            self.config.engine,
         ]
         logger.debug(boot_command)
         self._proc = subprocess.Popen(boot_command)
@@ -142,13 +150,9 @@ class Mongod:
         if self._connection_string is not None:
             return self._connection_string
 
-        if (
-            self.config.local_address is not None
-            and self.config.port is not None
-        ):
+        if self.config.local_address is not None and self.config.port is not None:
             self._connection_string = "mongodb://{host}:{port}".format(
-                host=self.config.local_address,
-                port=self.config.port
+                host=self.config.local_address, port=self.config.port
             )
         else:
             self._connection_string = None
@@ -183,11 +187,16 @@ class Mongod:
     def mongodump(self, database, collection):
         dump_command = [
             os.path.join(self._bin_folder, "mongodump"),
-            "--host", self.config.local_address,
-            "--port", self.config.port,
-            "--out", "-",
-            "--db", database,
-            "--collection", collection,
+            "--host",
+            self.config.local_address,
+            "--port",
+            self.config.port,
+            "--out",
+            "-",
+            "--db",
+            database,
+            "--collection",
+            collection,
         ]
         proc = subprocess.run(dump_command, stdout=subprocess.PIPE)
         return proc.stdout

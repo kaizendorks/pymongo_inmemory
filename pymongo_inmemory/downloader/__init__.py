@@ -10,7 +10,7 @@ import tempfile
 import urllib.request as request
 from urllib.error import HTTPError
 
-from .._utils import conf
+from .context import conf
 from ._urls import best_url
 
 
@@ -55,8 +55,10 @@ def _dl_reporter(blocknum, block_size, total_size):
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
     total_size = total_size / 1024 / 1024  # MBs
     if 0 <= percent_dled % 10 <= 0.01:
-        logger.info("{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
-            percent_dled, size_dlded, total_size)
+        logger.info(
+            "{:.0f} % ({:.0f} MiB of {:.0f} MiB)".format(
+                percent_dled, size_dlded, total_size
+            )
         )
 
 
@@ -68,10 +70,11 @@ def _download_file(dl_url, destination_file):
         os.mkdir(dl_folder)
 
     if path.isfile(destination_file):
-        logger.debug((
-            "There is already a downloaded file {}, "
-            "skipping download"
-        ).format(destination_file))
+        logger.debug(
+            ("There is already a downloaded file {}, " "skipping download").format(
+                destination_file
+            )
+        )
         return
 
     with tempfile.NamedTemporaryFile(delete=False) as temp:
@@ -79,11 +82,13 @@ def _download_file(dl_url, destination_file):
         try:
             request.urlretrieve(dl_url, filename=temp.name, reporthook=_dl_reporter)
         except HTTPError:
-            raise CantDownload((
-                "Can't download {url}, "
-                "make sure MongoDB provides it. "
-                "Possibly the version is not provided for the operating system."
-            ).format(url=dl_url))
+            raise CantDownload(
+                (
+                    "Can't download {url}, "
+                    "make sure MongoDB provides it. "
+                    "Possibly the version is not provided for the operating system."
+                ).format(url=dl_url)
+            )
 
         logger.debug("Finished download.")
         shutil.copyfile(temp.name, destination_file)
@@ -174,19 +179,19 @@ def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
                 raise OperatingSystemNotFound("Can't determine operating system.")
 
     if os_name == "linux":
-        logger.warning((
-            "Starting from MongoDB 4.0.23 "
-            "there isn't a generic Linux version of MongoDB"
-            ))
+        logger.warning(
+            (
+                "Starting from MongoDB 4.0.23 "
+                "there isn't a generic Linux version of MongoDB"
+            )
+        )
 
     if os_ver is None:
         os_ver = conf("os_version")
 
-    dl_url, downloaded_version = conf("download_url", best_url(
-        os_name,
-        version=version,
-        os_ver=os_ver
-    ))
+    dl_url, downloaded_version = conf(
+        "download_url", best_url(os_name, version=version, os_ver=os_ver)
+    )
 
     logger.debug("Downloading MongoD from {}".format(dl_url))
     dl_folder = _download_folder()
