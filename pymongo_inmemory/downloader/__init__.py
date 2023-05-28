@@ -10,6 +10,7 @@ import tempfile
 import urllib.request as request
 from urllib.error import HTTPError
 
+from .._utils import mkdir_ifnot_exist
 from .context import conf
 from ._urls import best_url
 
@@ -31,23 +32,12 @@ class InvalidDownloadedFile(Exception):
     pass
 
 
-def _mkdir_ifnot_exist(*folders):
-    current_path = path.join(folders[0])
-    if not path.isdir(current_path):
-        os.mkdir(current_path)
-    for x in folders[1:]:
-        current_path = path.join(current_path, x)
-        if not path.isdir(current_path):
-            os.mkdir(current_path)
-    return current_path
-
-
 def _download_folder():
-    return conf("download_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "download"))
+    return conf("download_folder", mkdir_ifnot_exist(CACHE_FOLDER, "download"))
 
 
 def _extract_folder():
-    return conf("extract_folder", _mkdir_ifnot_exist(CACHE_FOLDER, "extract"))
+    return conf("extract_folder", mkdir_ifnot_exist(CACHE_FOLDER, "extract"))
 
 
 def _dl_reporter(blocknum, block_size, total_size):

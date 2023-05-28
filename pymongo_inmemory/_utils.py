@@ -1,7 +1,8 @@
 from collections import namedtuple
 import logging
 import socket
-
+import os
+from os import path
 
 logger = logging.getLogger("PYMONGOIM_UTILS")
 
@@ -32,3 +33,14 @@ def make_semver(version=None):
         major = minor = patch = None
 
     return SemVer(major, minor, patch)
+
+
+def mkdir_ifnot_exist(*folders):
+    current_path = path.join(folders[0])
+    if not path.isdir(current_path):
+        os.mkdir(current_path)
+    for x in folders[1:]:
+        current_path = path.join(current_path, x)
+        if not path.isdir(current_path):
+            os.mkdir(current_path)
+    return current_path

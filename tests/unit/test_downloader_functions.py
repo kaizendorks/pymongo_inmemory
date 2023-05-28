@@ -17,31 +17,24 @@ def test_env_folders_overwrite_default_extractfolder(monkeypatch):
 
 def test_default_dl_folder(monkeypatch, tmpdir):
     monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
-    assert path.samefile(
-        downloader._download_folder(),
-        path.join(tmpdir, "download")
-    )
+    assert path.samefile(downloader._download_folder(), path.join(tmpdir, "download"))
     assert path.exists(path.join(tmpdir, "download"))
 
 
 def test_default_extract_folder(monkeypatch, tmpdir):
     monkeypatch.setattr(downloader, "CACHE_FOLDER", tmpdir)
-    assert path.samefile(
-        downloader._extract_folder(),
-        path.join(tmpdir, "extract")
-    )
+    assert path.samefile(downloader._extract_folder(), path.join(tmpdir, "extract"))
     assert path.exists(path.join(tmpdir, "extract"))
 
 
 def test_make_folder(monkeypatch, tmpdir):
     assert path.samefile(
-        downloader._mkdir_ifnot_exist(tmpdir, "test"),
-        path.join(tmpdir, "test")
+        downloader.mkdir_ifnot_exist(tmpdir, "test"), path.join(tmpdir, "test")
     )
     assert path.exists(path.join(tmpdir, "test"))
     assert path.samefile(
-        downloader._mkdir_ifnot_exist(tmpdir, "test2", "nested"),
-        path.join(tmpdir, "test2", "nested")
+        downloader.mkdir_ifnot_exist(tmpdir, "test2", "nested"),
+        path.join(tmpdir, "test2", "nested"),
     )
     assert path.exists(path.join(tmpdir, "test2", "nested"))
 
@@ -52,6 +45,7 @@ def test_fails_if_os_unknown(monkeypatch):
 
     def conf(*args, **kwargs):
         return
+
     monkeypatch.setattr(downloader.platform, "system", system)
     monkeypatch.setattr(downloader, "conf", conf)
     with pytest.raises(downloader.OperatingSystemNotFound):
