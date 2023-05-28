@@ -5,6 +5,7 @@ from os import path
 import platform
 
 from ._utils import mkdir_ifnot_exist
+from .downloader._urls import best_url
 
 DEFAULT_CONF = {}
 CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
@@ -82,9 +83,9 @@ class Context:
         self.mongod_port = conf("mongod_port", None)
 
         self.os_version = conf("os_version", None)
+        self.downloaded_version = None
 
-        self.download_url = conf("download_url", None)
-        self.ignore_cache = conf("ignore_cache", None)
+        self.ignore_cache = bool(conf("ignore_cache", None))
         self.use_local_mongod = conf("use_local_mongod", None)
 
         self.download_folder = conf(
@@ -92,6 +93,20 @@ class Context:
         )
         self.extract_folder = conf(
             "extract_folder", mkdir_ifnot_exist(CACHE_FOLDER, "extract")
+        )
+
+    def __str__(self):
+        return (
+            f"Mongo Version {self.mongo_version}\n"
+            f"MongoD Port {self.mongod_port}\n"
+            f"OS Name {self.operating_system}\n"
+            f"OS Version {self.os_version}\n"
+            f"Download URL {self.download_url}\n"
+            f"Download Version {self.downloaded_version}\n"
+            f"Ignore Cache {self.ignore_cache}\n"
+            f"Use Local MongoD {self.use_local_mongod}\n"
+            f"Download Folder {self.download_folder}\n"
+            f"Extract Folder {self.extract_folder}\n"
         )
 
     @property
@@ -102,3 +117,26 @@ class Context:
             os_name = _mapping.get(platform.system())
             if os_name is None:
                 raise OperatingSystemNotFound("Can't determine operating system.")
+            else:
+                if os_name == "linux":
+                    logger.warning(
+                        (
+                            "Starting from MongoDB 4.0.23 "
+                            "there isn't a generic Linux version of MongoDB"
+                        )
+                    )
+                return os_name
+
+    @property
+    def download_url(self):
+        dl_url, downloaded_version = conf(
+            "download_url",
+            best_url(
+                self.operating_system,
+                version=self.mongo_version,
+                os_ver=self.os_version,
+            ),
+        )
+
+        self.downloaded_version = downloaded_version
+        return dl_url

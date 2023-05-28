@@ -3,16 +3,13 @@ import zipfile
 import logging
 import os
 from os import path
-import platform
 import shutil
 import tarfile
 import tempfile
 import urllib.request as request
 from urllib.error import HTTPError
 
-from .._utils import mkdir_ifnot_exist
-from ..context import conf
-from ._urls import best_url
+from ..context import Context
 
 
 CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
@@ -32,14 +29,6 @@ class InvalidDownloadedFile(Exception):
     pass
 
 
-def _download_folder():
-    return conf("download_folder", mkdir_ifnot_exist(CACHE_FOLDER, "download"))
-
-
-def _extract_folder():
-    return conf("extract_folder", mkdir_ifnot_exist(CACHE_FOLDER, "extract"))
-
-
 def _dl_reporter(blocknum, block_size, total_size):
     percent_dled = blocknum * block_size / total_size * 100
     size_dlded = blocknum * block_size / 1024 / 1024  # MBs
@@ -52,9 +41,7 @@ def _dl_reporter(blocknum, block_size, total_size):
         )
 
 
-def _download_file(dl_url, destination_file):
-    dl_folder = _download_folder()
-
+def _download_file(dl_url, destination_file, dl_folder):
     if not path.isdir(dl_folder):
         logger.debug("Download folder doesn't exist, creating it.")
         os.mkdir(dl_folder)
@@ -85,9 +72,8 @@ def _download_file(dl_url, destination_file):
         logger.debug("Copied file to {}".format(destination_file))
 
 
-def _extract(archive_file):
+def _extract(archive_file, extract_folder):
     logger.info("Extracting from the archive, {}".format(archive_file))
-    extract_folder = _extract_folder()
 
     if tarfile.is_tarfile(archive_file):
         _extract_tar(archive_file, extract_folder)
@@ -121,9 +107,9 @@ def _collect_archive_name(url):
     return url.split("/")[-1]
 
 
-def _get_mongod(version):
+def _get_mongod(version, extract_folder):
     for binfile_path in glob.iglob(
-        path.join(_extract_folder(), f"**{version}**/bin/*"), recursive=True
+        path.join(extract_folder, f"**{version}**/bin/*"), recursive=True
     ):
         binfile_name = path.basename(binfile_path)
         try:
@@ -134,67 +120,27 @@ def _get_mongod(version):
             return binfile_path
 
 
-def download(os_name=None, version=None, os_ver=None, ignore_cache=False):
+def download(pim_context: Context):
     """Download MongoDB binaries.
     Available versions are collected form this URL:
     https://www.mongodb.com/download-center/community/releases
     and this one:
     https://www.mongodb.com/download-center/community/releases/archive
-
-    Parameters
-    ----------
-    os_name: str
-        If `None`, then it'll try to determine based on `platform.system()`, if can't
-        determined `OperatingSystemNotFound` will be raised
-    version: str
-        MongoDB version
-    os_ver: str
-        Operating system version, if the OS has several versions
-    ignore_cache: bool
-        Download MongoDB, even if there is already one in the cache
-
-    Raises
-    ------
-    OperatingSystemNotFound: If OS is not MacOS, Windows or Linux variant.
     """
-    if version is None:
-        version = conf("mongo_version")
-
-    if os_name is None:
-        os_name = conf("operating_system")
-        if os_name is None:
-            _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
-            os_name = _mapping.get(platform.system())
-            if os_name is None:
-                raise OperatingSystemNotFound("Can't determine operating system.")
-
-    if os_name == "linux":
-        logger.warning(
-            (
-                "Starting from MongoDB 4.0.23 "
-                "there isn't a generic Linux version of MongoDB"
-            )
-        )
-
-    if os_ver is None:
-        os_ver = conf("os_version")
-
-    dl_url, downloaded_version = conf(
-        "download_url", best_url(os_name, version=version, os_ver=os_ver)
-    )
+    dl_url = pim_context.download_url
+    downloaded_version = pim_context.downloaded_version
 
     logger.debug("Downloading MongoD from {}".format(dl_url))
-    dl_folder = _download_folder()
-    archive_file = path.join(dl_folder, _collect_archive_name(dl_url))
+    archive_file = path.join(pim_context.download_folder, _collect_archive_name(dl_url))
 
-    should_ignore_cache = bool(conf("ignore_cache", ignore_cache))
+    should_ignore_cache = pim_context.ignore_cache
 
     if should_ignore_cache or not path.isfile(archive_file):
         logger.info("Archive file is not found, {}".format(archive_file))
-        _download_file(dl_url, archive_file)
-        _extract(archive_file)
+        _download_file(dl_url, archive_file, pim_context.download_folder)
+        _extract(archive_file, pim_context.extract_folder)
 
-    if _get_mongod(downloaded_version) is None:
-        _extract(archive_file)
+    if _get_mongod(downloaded_version, pim_context.extract_folder) is None:
+        _extract(archive_file, pim_context.extract_folder)
 
-    return path.dirname(_get_mongod(downloaded_version))
+    return path.dirname(_get_mongod(downloaded_version, pim_context.extract_folder))

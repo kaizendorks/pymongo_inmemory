@@ -17,7 +17,7 @@ import pymongo
 
 from ._utils import find_open_port
 from .downloader import download
-from .context import conf
+from .context import Context
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.
@@ -62,13 +62,14 @@ if threading.current_thread() is threading.main_thread():
 
 
 class MongodConfig:
-    def __init__(self):
+    def __init__(self, pim_context: Context):
+        self._pim_context = pim_context
         self.local_address = "127.0.0.1"
         self.engine = "ephemeralForTest"
 
     @property
     def port(self):
-        set_port = conf("mongod_port")
+        set_port = self._pim_context.mongod_port
         if set_port is None:
             return str(find_open_port(range(27017, 28000)))
         else:
@@ -85,14 +86,22 @@ class Mongod:
     with `atexit` module to ensure clean up.
     """
 
-    def __init__(self):
-        logger.info("Checking binary")
+    def __init__(self, pim_context: Context = None):
+        self._pim_context = Context() if pim_context is None else pim_context
+        logger.info("Running MongoD in the following context")
+        logger.info(self._pim_context)
 
-        self._bin_folder = "" if conf("use_local_mongod") == "True" else download()
+        logger.info("Checking binary")
+        if self._pim_context.use_local_mongod:
+            logger.warn("Using local mongod instance")
+            self._bin_folder = ""
+        else:
+            self._bin_folder = download(self._pim_context)
+
         self._proc = None
         self._connection_string = None
 
-        self.config = MongodConfig()
+        self.config = MongodConfig(self._pim_context)
         self.data_folder = TemporaryDirectory(prefix="pymongoim")
         self._client = pymongo.MongoClient(self.connection_string)
 

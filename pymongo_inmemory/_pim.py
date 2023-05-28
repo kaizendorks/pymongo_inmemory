@@ -1,11 +1,13 @@
 import pymongo
 
 from .mongod import Mongod
+from .context import Context
 
 
 class MongoClient(pymongo.MongoClient):
     def __init__(self, host=None, port=None, **kwargs):
-        self._mongod = Mongod()
+        self._pim_context: Context = Context()
+        self._mongod = Mongod(self._pim_context)
         self._mongod.start()
         super().__init__(self._mongod.connection_string, **kwargs)
 
