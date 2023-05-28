@@ -1,8 +1,10 @@
 import logging
 
 from . import download
+from ..context import Context
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    download("ubuntu", os_ver="18")
+    context = Context()
+    download(context)

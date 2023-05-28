@@ -78,14 +78,20 @@ def conf(option, fallback=None, optional=True):
 
 
 class Context:
-    def __init__(self) -> None:
-        self.mongo_version = conf("mongo_version", None)
+    def __init__(
+        self, os_name=None, version=None, os_ver=None, ignore_cache=False
+    ) -> None:
+        self.mongo_version = conf("mongo_version", version)
         self.mongod_port = conf("mongod_port", None)
 
-        self.os_version = conf("os_version", None)
-        self.downloaded_version = None
+        self.operating_system = self._build_operating_system_info(os_name)
+        self.os_version = conf("os_version", os_ver)
 
-        self.ignore_cache = bool(conf("ignore_cache", None))
+        # For now order of the following line is important
+        self.downloaded_version = None
+        self.download_url = self._build_download_url()
+
+        self.ignore_cache = bool(conf("ignore_cache", ignore_cache))
         self.use_local_mongod = conf("use_local_mongod", None)
 
         self.download_folder = conf(
@@ -109,9 +115,8 @@ class Context:
             f"Extract Folder {self.extract_folder}\n"
         )
 
-    @property
-    def operating_system(self):
-        os_name = conf("operating_system")
+    def _build_operating_system_info(self, os_name=None):
+        os_name = conf("operating_system", os_name)
         if os_name is None:
             _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
             os_name = _mapping.get(platform.system())
@@ -125,10 +130,9 @@ class Context:
                             "there isn't a generic Linux version of MongoDB"
                         )
                     )
-                return os_name
+        return os_name
 
-    @property
-    def download_url(self):
+    def _build_download_url(self):
         dl_url, downloaded_version = conf(
             "download_url",
             best_url(

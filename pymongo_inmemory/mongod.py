@@ -39,20 +39,6 @@ def clean_before_kill(signum, stack):
     exit()
 
 
-def _last_line(input, as_a=int):
-    """Get the last line from given bytes
-
-    TODO - Pull it to utils if needed elsewhere in the future.
-    """
-    lines = list(
-        filter(
-            lambda x: x,
-            [x.strip().decode() for x in input.split(bytes(os.linesep, "utf8"))],
-        )
-    )
-    return as_a(lines[-1])
-
-
 # as per https://docs.python.org/3.6/library/signal.html#signals-and-threads
 # only the main thread is allowed to set a new signal handler.
 # This means that if this module is imported by a thread other than the
@@ -86,7 +72,7 @@ class Mongod:
     with `atexit` module to ensure clean up.
     """
 
-    def __init__(self, pim_context: Context = None):
+    def __init__(self, pim_context: Context):
         self._pim_context = Context() if pim_context is None else pim_context
         logger.info("Running MongoD in the following context")
         logger.info(self._pim_context)
@@ -218,7 +204,8 @@ class Mongod:
 if __name__ == "__main__":
     # This part is used for integrity tests too.
     logging.basicConfig(level=logging.DEBUG)
-    with Mongod() as md:
+    context = Context()
+    with Mongod(context) as md:
         try:
             while True:
                 pass
