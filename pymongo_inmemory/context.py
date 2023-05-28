@@ -4,7 +4,7 @@ import os
 from os import path
 import platform
 
-from .._utils import mkdir_ifnot_exist
+from ._utils import mkdir_ifnot_exist
 
 DEFAULT_CONF = {}
 CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")

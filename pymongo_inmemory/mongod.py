@@ -17,7 +17,7 @@ import pymongo
 
 from ._utils import find_open_port
 from .downloader import download
-from .downloader.context import conf
+from .context import conf
 
 logger = logging.getLogger("PYMONGOIM_MONGOD")
 # Holds references to open Popen objects which spawn MongoDB daemons.

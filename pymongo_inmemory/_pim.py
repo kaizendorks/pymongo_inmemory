@@ -19,6 +19,7 @@ class MongoClient(pymongo.MongoClient):
 
 if __name__ == "__main__":
     import logging
+
     logging.basicConfig(level=logging.DEBUG)
     m = MongoClient("mongodb://127.0.0.1/something", 27017)
     m.close()

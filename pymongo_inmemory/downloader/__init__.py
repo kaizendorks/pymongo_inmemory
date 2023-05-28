@@ -11,7 +11,7 @@ import urllib.request as request
 from urllib.error import HTTPError
 
 from .._utils import mkdir_ifnot_exist
-from .context import conf
+from ..context import conf
 from ._urls import best_url
 
 

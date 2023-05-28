@@ -1,4 +1,4 @@
-from pymongo_inmemory.downloader import context
+from pymongo_inmemory import context
 
 
 def test_environment_var_option(monkeypatch):
