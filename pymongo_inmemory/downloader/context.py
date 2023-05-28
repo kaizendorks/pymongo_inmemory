@@ -1,10 +1,19 @@
 from configparser import ConfigParser
 import logging
 import os
+from os import path
+import platform
+
+from .._utils import mkdir_ifnot_exist
 
 DEFAULT_CONF = {}
+CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
 
 logger = logging.getLogger("PYMONGOIM_UTILS")
+
+
+class OperatingSystemNotFound(ValueError):
+    pass
 
 
 def _check_environment_vars(option, fallback=None):
@@ -69,10 +78,27 @@ def conf(option, fallback=None, optional=True):
 
 class Context:
     def __init__(self) -> None:
-        self.mongo_version = None
-        self.mongod_port = None
-        self.operating_system = None
-        self.os_version = None
-        self.download_url = None
-        self.ignore_cache = None
-        self.use_local_mongod = None
+        self.mongo_version = conf("mongo_version", None)
+        self.mongod_port = conf("mongod_port", None)
+
+        self.os_version = conf("os_version", None)
+
+        self.download_url = conf("download_url", None)
+        self.ignore_cache = conf("ignore_cache", None)
+        self.use_local_mongod = conf("use_local_mongod", None)
+
+        self.download_folder = conf(
+            "download_folder", mkdir_ifnot_exist(CACHE_FOLDER, "download")
+        )
+        self.extract_folder = conf(
+            "extract_folder", mkdir_ifnot_exist(CACHE_FOLDER, "extract")
+        )
+
+    @property
+    def operating_system(self):
+        os_name = conf("operating_system")
+        if os_name is None:
+            _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
+            os_name = _mapping.get(platform.system())
+            if os_name is None:
+                raise OperatingSystemNotFound("Can't determine operating system.")
