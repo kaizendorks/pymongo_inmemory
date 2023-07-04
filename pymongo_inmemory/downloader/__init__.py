@@ -98,9 +98,9 @@ def _extract_zip(zip_file, extracted_folder):
         logger.info("Extractiong finished.")
 
 
-def _get_mongod(where_to_look, extract_folder):
+def _get_mongod(extracted_folder):
     for binfile_path in glob.iglob(
-        path.join(extract_folder, f"**/{where_to_look}/**/bin/*"), recursive=True
+        path.join(extracted_folder, "**", "bin", "*"), recursive=True
     ):
         binfile_name = path.basename(binfile_path)
         try:
@@ -123,7 +123,7 @@ def download(pim_context: Context):
         _download_file(dl_url, archive_file)
         _extract(archive_file, pim_context.extracted_folder)
 
-    if _get_mongod(pim_context.url_hash, pim_context.extract_folder) is None:
+    if _get_mongod(pim_context.extracted_folder) is None:
         _extract(archive_file, pim_context.extracted_folder)
 
-    return path.dirname(_get_mongod(pim_context.url_hash, pim_context.extract_folder))
+    return path.dirname(_get_mongod(pim_context.extracted_folder))
