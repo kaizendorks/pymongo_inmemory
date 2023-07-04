@@ -7,12 +7,7 @@ from ._patterns import URLS
 
 logger = logging.getLogger("PYMONGOIM_DOWNLOAD_URL")
 
-ExpandedURL = namedtuple("ExpandedURL", [
-    "os_name",
-    "os_version",
-    "version",
-    "url"
-])
+ExpandedURL = namedtuple("ExpandedURL", ["os_name", "os_version", "version", "url"])
 
 
 class OperatingSystemNameNotFound(ValueError):
@@ -31,7 +26,8 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
         os_branch = url_tree[str(os_name).lower()]
     except KeyError:
         raise OperatingSystemNameNotFound(
-            "Can't find a MongoDB for this OS: {}".format(os_name))
+            "Can't find a MongoDB for this OS: {}".format(os_name)
+        )
 
     if os_ver is None:
         os_ver = max(os_branch.keys())
@@ -44,9 +40,8 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
             (
                 "Can't find a MongoDB for OS {} "
                 "version {}, available OS versions: {}"
-            ).format(
-                os_name, os_ver, os_branch.keys())
-            )
+            ).format(os_name, os_ver, os_branch.keys())
+        )
 
     version_branch = os_branch[os_ver]
 
@@ -61,9 +56,11 @@ def best_url(os_name, version=None, os_ver=None, url_tree=None):
     elif patch not in version_branch[major][minor]["patches"]:
         patch = max(version_branch[major][minor]["patches"])
 
-    logger.info("Requested MongoDB version {}, found version: {}.{}.{}".format(
-        version, major, minor, patch
-    ))
+    logger.info(
+        "Requested MongoDB version {}, found version: {}.{}.{}".format(
+            version, major, minor, patch
+        )
+    )
     version = "{}.{}.{}".format(major, minor, patch)
     return version_branch[major][minor]["url"].format(version), version
 
@@ -79,5 +76,5 @@ def expand_url_tree(tree):
                             os_name,
                             os_version,
                             version,
-                            minor_leaf["url"].format(version)
+                            minor_leaf["url"].format(version),
                         )

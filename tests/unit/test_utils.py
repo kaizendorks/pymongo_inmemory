@@ -1,20 +1,13 @@
-import os
+import os.path as path
 import socket
 
 from pymongo_inmemory import _utils
-from pymongo_inmemory.mongod import _last_line
-
-
-def test__last_line():
-    assert _last_line(bytes(os.linesep, 'utf8').join([b'Sometext', b'1234'])) == 1234
-    assert _last_line(bytes(os.linesep, 'utf8').join(
-        [b'Sometext', b'1234']), as_a=str) == '1234'
 
 
 def test_find_open_port(monkeypatch):
     open_ports = (123, 125)
 
-    class mock_socket():
+    class mock_socket:
         AF_INET = None
         SOCK_STREAM = None
 
@@ -36,13 +29,6 @@ def test_find_open_port(monkeypatch):
     assert _utils.find_open_port([123, 124]) == 124
     assert _utils.find_open_port([122, 123]) == 122
     assert _utils.find_open_port([123, 125, 122]) == 122
-
-
-def test_environment_var_option(monkeypatch):
-    monkeypatch.setenv("PYMONGOIM__SOME_VALUE", "42")
-    assert _utils.conf("some_value") == "42"
-    assert _utils.conf("SOME_VALUE") == "42"
-    assert _utils.conf("SOME_OTHER_VALUE") is None
 
 
 def test_make_semver():
@@ -69,3 +55,15 @@ def test_make_semver():
     assert expected.major is None
     assert expected.minor is None
     assert expected.patch is None
+
+
+def test_make_folder(monkeypatch, tmpdir):
+    assert path.samefile(
+        _utils.mkdir_ifnot_exist(tmpdir, "test"), path.join(tmpdir, "test")
+    )
+    assert path.exists(path.join(tmpdir, "test"))
+    assert path.samefile(
+        _utils.mkdir_ifnot_exist(tmpdir, "test2", "nested"),
+        path.join(tmpdir, "test2", "nested"),
+    )
+    assert path.exists(path.join(tmpdir, "test2", "nested"))

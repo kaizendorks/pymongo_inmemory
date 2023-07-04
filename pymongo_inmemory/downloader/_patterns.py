@@ -35,7 +35,7 @@ PATCH_RANGE = {
     "4.4": list(range(23)),
     "5.0": list(range(19)),
     "5.0-debian11": list(range(8, 19)),
-    "6.0": list(range(7)),
+    "6.0": list(range(7)) + [6],
 }
 
 PATTERNS = {
@@ -733,54 +733,39 @@ URLS = {
     "windows": {
         "generic": {
             2: {
-                6: {
-                    "patches": PATCH_RANGE["2.6"],
-                    "url": PATTERNS["windows32-x86_64"]
-                },
+                6: {"patches": PATCH_RANGE["2.6"], "url": PATTERNS["windows32-x86_64"]},
             },
             3: {
                 0: {
                     "patches": PATCH_RANGE["3.0"],
-                    "url": PATTERNS["windows-2008plus-ssl"]
+                    "url": PATTERNS["windows-2008plus-ssl"],
                 },
                 2: {
                     "patches": PATCH_RANGE["3.2"],
-                    "url": PATTERNS["windows-2008plus-ssl"]
+                    "url": PATTERNS["windows-2008plus-ssl"],
                 },
                 4: {
                     "patches": PATCH_RANGE["3.4"],
-                    "url": PATTERNS["windows-2008plus-ssl"]
+                    "url": PATTERNS["windows-2008plus-ssl"],
                 },
                 6: {
                     "patches": PATCH_RANGE["3.6"],
-                    "url": PATTERNS["windows-2008plus-ssl"]
+                    "url": PATTERNS["windows-2008plus-ssl"],
                 },
             },
             4: {
                 0: {
                     "patches": PATCH_RANGE["4.0"],
-                    "url": PATTERNS["windows-2008plus-ssl"]
+                    "url": PATTERNS["windows-2008plus-ssl"],
                 },
-                2: {
-                    "patches": PATCH_RANGE["4.2"],
-                    "url": PATTERNS["windows-2012plus"]
-                },
-                4: {
-                    "patches": PATCH_RANGE["4.4"],
-                    "url": PATTERNS["windows-x86_64"]
-                },
+                2: {"patches": PATCH_RANGE["4.2"], "url": PATTERNS["windows-2012plus"]},
+                4: {"patches": PATCH_RANGE["4.4"], "url": PATTERNS["windows-x86_64"]},
             },
             5: {
-                0: {
-                    "patches": PATCH_RANGE["5.0"],
-                    "url": PATTERNS["windows-x86_64"]
-                },
+                0: {"patches": PATCH_RANGE["5.0"], "url": PATTERNS["windows-x86_64"]},
             },
             6: {
-                0: {
-                    "patches": PATCH_RANGE["6.0"],
-                    "url": PATTERNS["windows-x86_64"]
-                },
+                0: {"patches": PATCH_RANGE["6.0"], "url": PATTERNS["windows-x86_64"]},
             },
         },
     },
