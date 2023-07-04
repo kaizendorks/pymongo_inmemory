@@ -11,8 +11,6 @@ from urllib.error import HTTPError
 from ..context import Context
 
 
-CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")
-
 logger = logging.getLogger("PYMONGOIM_DOWNLOADER")
 
 
