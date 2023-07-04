@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import hashlib
 import logging
 import os
 from os import path
@@ -90,6 +91,7 @@ class Context:
         # For now order of the following line is important
         self.downloaded_version = None
         self.download_url = self._build_download_url()
+        self.url_hash = hashlib.sha256(bytes(self.download_url, "utf-8")).hexdigest()
 
         self.ignore_cache = bool(conf("ignore_cache", ignore_cache))
         self.use_local_mongod = conf("use_local_mongod", None)
@@ -100,6 +102,8 @@ class Context:
         self.extract_folder = conf(
             "extract_folder", mkdir_ifnot_exist(CACHE_FOLDER, "extract")
         )
+        self.archive_folder = mkdir_ifnot_exist(self.download_folder, self.url_hash)
+        self.extracted_folder = mkdir_ifnot_exist(self.extract_folder, self.url_hash)
 
     def __str__(self):
         return (
@@ -108,6 +112,7 @@ class Context:
             f"OS Name {self.operating_system}\n"
             f"OS Version {self.os_version}\n"
             f"Download URL {self.download_url}\n"
+            f"URL hash {self.url_hash}\n"
             f"Download Version {self.downloaded_version}\n"
             f"Ignore Cache {self.ignore_cache}\n"
             f"Use Local MongoD {self.use_local_mongod}\n"
