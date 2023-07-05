@@ -1,3 +1,5 @@
+import hashlib
+
 from pymongo_inmemory import context
 
 import pytest
@@ -33,3 +35,12 @@ def test_fails_if_os_unknown(monkeypatch):
     monkeypatch.setattr(context, "conf", conf)
     with pytest.raises(context.OperatingSystemNotFound):
         context.Context()
+
+
+def test_download_url_setting(monkeypatch):
+    provided_url = "https://www.mydownloadurl.com"
+    expected_hash = hashlib.sha256(bytes(provided_url, "utf-8")).hexdigest()
+    monkeypatch.setenv("PYMONGOIM__DOWNLOAD_URL", provided_url)
+    pim_context = context.Context()
+    assert pim_context.download_url == provided_url
+    assert pim_context.url_hash == expected_hash
