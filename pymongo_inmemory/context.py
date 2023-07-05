@@ -90,7 +90,8 @@ class Context:
 
         # For now order of the following line is important
         self.downloaded_version = None
-        self.download_url = self._build_download_url()
+        self.download_url = conf("download_url", self._build_download_url())
+
         self.url_hash = hashlib.sha256(bytes(self.download_url, "utf-8")).hexdigest()
 
         self.ignore_cache = bool(conf("ignore_cache", ignore_cache))
@@ -138,13 +139,10 @@ class Context:
         return os_name
 
     def _build_download_url(self):
-        dl_url, downloaded_version = conf(
-            "download_url",
-            best_url(
-                self.operating_system,
-                version=self.mongo_version,
-                os_ver=self.os_version,
-            ),
+        dl_url, downloaded_version = best_url(
+            self.operating_system,
+            version=self.mongo_version,
+            os_ver=self.os_version,
         )
 
         self.downloaded_version = downloaded_version
