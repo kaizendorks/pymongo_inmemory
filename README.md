@@ -6,15 +6,13 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## What's new?
 
+### v0.3.0
+- Fixed the case where provided download url wouldn't work if it didn't follow official URL pattern. Issue #70
+
 ### v0.2.13
 
 - Ability to invoke locally set up `mongod` [Contribution by [@kschniedergers](https://github.com/kschniedergers)]
 - We also upped the development version dependency on Python for CI/CD purposes.
-
-### v0.2.10
-
-- Updated MongoDB version list.
-- With 6.0 versions, there is support of MacOS running on ARM arch.
 
 ## Installation
 
