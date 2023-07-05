@@ -7,7 +7,7 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 ## What's new?
 
 ### v0.3.0
-- Fixed the case where provided download url wouldn't work if it didn't follow official URL pattern. Issue #70
+- Fixed the case where provided download url wouldn't work if it didn't follow official URL pattern. Issue [#70](https://github.com/kaizendorks/pymongo_inmemory/issues/70)
 
 ### v0.2.13
 
