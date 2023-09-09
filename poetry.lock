@@ -910,19 +910,6 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
-name = "pytest-pythonpath"
-version = "0.7.3"
-description = "pytest plugin for adding to the PYTHONPATH from command line or configs."
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytest-pythonpath-0.7.3.tar.gz", hash = "sha256:63fc546ace7d2c845c1ee289e8f7a6362c2b6bae497d10c716e58e253e801d62"},
-]
-
-[package.dependencies]
-pytest = ">=2.5.2"
-
-[[package]]
 name = "pywin32-ctypes"
 version = "0.2.2"
 description = "A (partial) reimplementation of pywin32 using ctypes/cffi"
@@ -1277,4 +1264,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "911db133897821e4d8c56af5fa7dfa01c2b09f642dfd8ffb42b2165718e260f9"
+content-hash = "313d7dedce322b585736a3d1215eec8f655f7bb798848660e71989890bddae30"
