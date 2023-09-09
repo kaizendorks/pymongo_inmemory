@@ -45,20 +45,22 @@ def test_download_url_setting(monkeypatch):
     assert pim_context.download_url == provided_url
     assert pim_context.url_hash == expected_hash
 
+
 def test_expected_type_coercion(monkeypatch):
     monkeypatch.setenv("PYMONGOIM__MONGOD_PORT", "42")
     monkeypatch.setenv("PYMONGOIM__IGNORE_CACHE", "True")
     monkeypatch.setenv("PYMONGOIM__USE_LOCAL_MONGOD", "True")
     pim_context = context.Context()
-    assert pim_context.ignore_cache == True
-    assert pim_context.use_local_mongod == True
+    assert pim_context.ignore_cache
+    assert pim_context.use_local_mongod
     assert pim_context.mongod_port == 42
+
 
 def test_type_coercion_uncoercible_values(monkeypatch):
     monkeypatch.setenv("PYMONGOIM__MONGOD_PORT", "something")
     monkeypatch.setenv("PYMONGOIM__IGNORE_CACHE", "true")
     monkeypatch.setenv("PYMONGOIM__USE_LOCAL_MONGOD", "false")
     pim_context = context.Context()
-    assert pim_context.ignore_cache == False
-    assert pim_context.use_local_mongod == False
-    assert pim_context.mongod_port == None
+    assert not pim_context.ignore_cache
+    assert not pim_context.use_local_mongod
+    assert pim_context.mongod_port is None

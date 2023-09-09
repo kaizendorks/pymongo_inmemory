@@ -13,9 +13,7 @@ if __name__ == "__main__":
             db2 = client2["test-db"]
             collection1 = db1["my-collection"]
             collection2 = db2["my-collection"]
-            data = {
-                "some": "data"
-            }
+            data = {"some": "data"}
             inserted_id1 = collection1.insert_one(data).inserted_id
             inserted_id2 = collection2.insert_one(data).inserted_id
             mongo_dump1 = bson.decode(client1.pim_mongodump("test-db", "my-collection"))

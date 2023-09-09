@@ -17,11 +17,13 @@ logger = logging.getLogger("PYMONGOIM_UTILS")
 class OperatingSystemNotFound(ValueError):
     pass
 
+
 def _coercion(consturctor, value):
     if consturctor == bool:
         return value == "True"
     else:
         return consturctor(value)
+
 
 def _check_environment_vars(option, fallback=None):
     "Check if `option` is defined in environment variables"
@@ -72,23 +74,23 @@ def conf(option, fallback=None, optional=True, ceorce_with=str):
 
     if value is None:
         if not optional:
-          raise ValueError(
-              (
-                  "Can't determine the value of {} "
-                  "and it is not an optional parameter."
-              ).format(option)
-          )
+            raise ValueError(
+                (
+                    "Can't determine the value of {} "
+                    "and it is not an optional parameter."
+                ).format(option)
+            )
     else:
         try:
-          value = _coercion(ceorce_with, value)
+            value = _coercion(ceorce_with, value)
         except ValueError:
-          value = None
+            value = None
         except Exception:
-          raise ValueError(
-            (
-                "Can't coerce the value of {} to type {}"
-            ).format(option, ceorce_with.__qualname__)
-          )
+            raise ValueError(
+                ("Can't coerce the value of {} to type {}").format(
+                    option, ceorce_with.__qualname__
+                )
+            )
 
     logger.debug("Value for {}=={}".format(option, value))
 

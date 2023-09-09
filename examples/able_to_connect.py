@@ -10,9 +10,7 @@ if __name__ == "__main__":
     with MongoClient() as client:
         db = client["test-db"]
         collection = db["my-collection"]
-        data = {
-            "some": "data"
-        }
+        data = {"some": "data"}
         inserted_id = collection.insert_one(data).inserted_id
         mongo_dump = bson.decode(client.pim_mongodump("test-db", "my-collection"))
         assert mongo_dump["some"] == "data"
