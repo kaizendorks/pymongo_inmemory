@@ -17,6 +17,11 @@ logger = logging.getLogger("PYMONGOIM_UTILS")
 class OperatingSystemNotFound(ValueError):
     pass
 
+def _coercion(consturctor, value):
+    if consturctor == bool:
+        return value == "True"
+    else:
+        return consturctor(value)
 
 def _check_environment_vars(option, fallback=None):
     "Check if `option` is defined in environment variables"
@@ -30,7 +35,7 @@ def _check_cfg(option, filename, fallback=None):
     return parser.get("pymongo_inmemory", option, fallback=fallback, raw=True)
 
 
-def conf(option, fallback=None, optional=True):
+def conf(option, fallback=None, optional=True, ceorce_with=str):
     """Retrieve asked `option` if possible. There are number of places that are checked.
     In the order of precedence,
     1. Environment variables
@@ -65,13 +70,25 @@ def conf(option, fallback=None, optional=True):
         ),
     )
 
-    if value is None and not optional:
-        raise ValueError(
+    if value is None:
+        if not optional:
+          raise ValueError(
+              (
+                  "Can't determine the value of {} "
+                  "and it is not an optional parameter."
+              ).format(option)
+          )
+    else:
+        try:
+          value = _coercion(ceorce_with, value)
+        except ValueError:
+          value = None
+        except Exception:
+          raise ValueError(
             (
-                "Can't determine the value of {} "
-                "and it is not an optional parameter."
-            ).format(option)
-        )
+                "Can't coerce the value of {} to type {}"
+            ).format(option, ceorce_with.__qualname__)
+          )
 
     logger.debug("Value for {}=={}".format(option, value))
 
@@ -83,7 +100,7 @@ class Context:
         self, os_name=None, version=None, os_ver=None, ignore_cache=False
     ) -> None:
         self.mongo_version = conf("mongo_version", version)
-        self.mongod_port = conf("mongod_port", None)
+        self.mongod_port = conf("mongod_port", None, ceorce_with=int)
 
         self.operating_system = self._build_operating_system_info(os_name)
         self.os_version = conf("os_version", os_ver)
@@ -94,8 +111,8 @@ class Context:
 
         self.url_hash = hashlib.sha256(bytes(self.download_url, "utf-8")).hexdigest()
 
-        self.ignore_cache = bool(conf("ignore_cache", ignore_cache))
-        self.use_local_mongod = conf("use_local_mongod", None)
+        self.ignore_cache = conf("ignore_cache", ignore_cache, ceorce_with=bool)
+        self.use_local_mongod = conf("use_local_mongod", False, ceorce_with=bool)
 
         self.download_folder = conf(
             "download_folder", mkdir_ifnot_exist(CACHE_FOLDER, "download")
