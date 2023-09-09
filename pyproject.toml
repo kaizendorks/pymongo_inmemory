@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymongo_inmemory"
-version = "0.3.0"
+version = "0.3.1"
 description = "A mongo mocking library with an ephemeral MongoDB running in memory."
 authors = ["Kaizen Dorks <kaizendorks@gmail.com>"]
 maintainers = [
@@ -31,14 +31,13 @@ include = ["LICENSE"]
 "Bug Reports" = "https://github.com/kaizendorks/pymongo_inmemory/issues"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 pymongo = "*"
 
 [tool.poetry.dev-dependencies]
 flake8 = "*"
 mypy = "*"
 pytest = "*"
-pytest-pythonpath = "*"
 twine = "*"
 wheel = "*"
 setuptools = "*"
@@ -51,3 +50,6 @@ black = "^23.3.0"
 [build-system]
 requires = ["poetry-core>=0.12"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "."

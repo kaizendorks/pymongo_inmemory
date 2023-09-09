@@ -59,7 +59,6 @@ class MongodConfig:
         if set_port is None:
             return str(find_open_port(range(27017, 28000)))
         else:
-            logger.warning("Using Mongod port set by user: {}".format(set_port))
             return set_port
 
 
