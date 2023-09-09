@@ -6,13 +6,15 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## What's new?
 
+### v0.3.1
+
+- Development version upped to Python 3.9
+- Update to build system. Contribution by [@pbsds](https://github.com/pbsds)
+- Coercing boolean configs correctly. Issue [#82](https://github.com/kaizendorks/pymongo_inmemory/issues/82)
+
 ### v0.3.0
+
 - Fixed the case where provided download url wouldn't work if it didn't follow official URL pattern. Issue [#70](https://github.com/kaizendorks/pymongo_inmemory/issues/70)
-
-### v0.2.13
-
-- Ability to invoke locally set up `mongod` [Contribution by [@kschniedergers](https://github.com/kschniedergers)]
-- We also upped the development version dependency on Python for CI/CD purposes.
 
 ## Installation
 
@@ -151,7 +153,7 @@ but for now we are keeping things simple.
 
 ## Supported Python versions
 
-Since few development tools only support Python version 3.7 and above, all testing and tooling done
+Since few development tools only support Python version 3.9 and above, all testing and tooling done
 from that version up.
 
 This also limits the minimum Python version of tested features. However there shouldn't
