@@ -12,6 +12,7 @@ def server(request):
     # Add finalizer at the point of least possible failure
     def fin():
         server.close()
+
     request.addfinalizer(fin)
 
     server.setblocking(0)
