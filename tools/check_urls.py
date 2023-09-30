@@ -122,11 +122,16 @@ if __name__ == "__main__":
 
     logger.debug("Expanding URL tree")
     expanded_items = list(expand_url_tree(URLS))
+    progress_bar_label = (
+        "Checking uniqueness of versions"
+        if args.hashes
+        else "Checking downloadable packages"
+    )
 
     logging.info("Starting checks.")
     with click.progressbar(
         length=len(expanded_items),
-        label="Checking URLs",
+        label=progress_bar_label,
         fill_char="=",
         empty_char=" ",
         info_sep=" ",
