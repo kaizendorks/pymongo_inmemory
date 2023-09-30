@@ -26,6 +26,7 @@ classifiers = [
   "Topic :: Utilities",
 ]
 include = ["LICENSE"]
+packages = [{ include = "pymongo_inmemory" }]
 
 [tool.poetry.urls]
 "Bug Reports" = "https://github.com/kaizendorks/pymongo_inmemory/issues"
@@ -34,18 +35,18 @@ include = ["LICENSE"]
 python = "^3.9"
 pymongo = "*"
 
-[tool.poetry.dev-dependencies]
-flake8 = "*"
-mypy = "*"
+[tool.poetry.group.test.dependencies]
 pytest = "*"
-twine = "*"
-wheel = "*"
-setuptools = "*"
-click = "*"
+mypy = "*"
+flake8 = "*"
 
 [tool.poetry.group.dev.dependencies]
 ruff-lsp = "^0.0.35"
 black = "^23.3.0"
+twine = "*"
+wheel = "*"
+setuptools = "*"
+click = "*"
 
 [build-system]
 requires = ["poetry-core>=0.12"]
