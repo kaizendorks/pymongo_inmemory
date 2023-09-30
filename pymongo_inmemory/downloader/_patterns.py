@@ -32,8 +32,8 @@ PATTERNS = {
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
     "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
     "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
-    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",
-    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",
+    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",  # noqa E501
+    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",  # noqa E501
     "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
     "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
 }
@@ -76,7 +76,7 @@ PATCH_RANGE = {
     "4.4": list(range(26)),
     "5.0": list(range(22)),
     "5.0-debian11": list(range(8, 22)),
-    # Version 6.0.5 is not suitable for production https://jira.mongodb.org/browse/WT-10551
+    # Version 6.0.5 is not suitable for production
     "6.0": list(range(5)) + list(range(6, 11)),
     "6.0-rhel9": list(range(4, 11)),
     "6.0-rhel9-arm": list(range(7, 11)),
