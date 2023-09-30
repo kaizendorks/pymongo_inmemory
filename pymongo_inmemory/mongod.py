@@ -134,14 +134,14 @@ class Mongod:
         while self._proc.poll() is None:
             logger.debug("Waiting for MongoD shutdown.")
             time.sleep(1)
-        self.clean_up()
+        self._clean_up()
 
     @property
     def data_folder(self):
         if self.is_using_temp_data_folder:
-            return self._maybe_temp_data_folder
-        else:
             return self._maybe_temp_data_folder.name
+        else:
+            return self._maybe_temp_data_folder
 
     @property
     def is_using_temp_data_folder(self):
