@@ -6,15 +6,14 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## What's new?
 
+### v0.4.0-pre
+- Tooling enhancements. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/90)]
+
 ### v0.3.1
 
 - Development version upped to Python 3.9
 - Update to build system. Contribution by [@pbsds](https://github.com/pbsds)
 - Coercing boolean configs correctly. Issue [#82](https://github.com/kaizendorks/pymongo_inmemory/issues/82)
-
-### v0.3.0
-
-- Fixed the case where provided download url wouldn't work if it didn't follow official URL pattern. Issue [#70](https://github.com/kaizendorks/pymongo_inmemory/issues/70)
 
 ## Installation
 
