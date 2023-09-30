@@ -35,13 +35,15 @@ def test_best_url():
     ), "Linux:Generic support ends at 4.0.28, higher versions default to this."
 
     assert utools.best_url("ubuntu") == (
-        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-6.0.6.tgz",
-        "6.0.6",
+        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.2.tgz",
+        "7.0.2",
     ), "Should find latest MongoDB for latest Ubuntu"
+
     assert utools.best_url("ubuntu", os_ver=18) == (
-        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-6.0.6.tgz",
-        "6.0.6",
+        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-6.0.10.tgz",
+        "6.0.10",
     ), "Should find latest MongoDB for Ubuntu 18"
+
     assert utools.best_url("ubuntu", os_ver="14", version="3.0.3") == (
         "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-3.0.3.tgz",
         "3.0.3",
