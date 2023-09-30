@@ -127,15 +127,15 @@ def execute_table_build(
 def present_table_build(table: Dict[str, Dict[str, Set[str]]]):
     print()
     print(
-        f"| {'':<10} | {'`operating_system`':<20} | {'`os_version`':<15} | {'MongoDB versions (`major.minor`)':<60} |"
+        f"| {'':<10} | {'`operating_system`':<20} | {'`os_version`':<15} | {'MongoDB versions (`major.minor`)':<60} |"  # noqa E501
     )
     print(
-        f"| {''.join(['-' * 10]):<10} | {''.join(['-' * 20]):<20} | {''.join(['-' * 15]):<15} | {''.join(['-' * 60]):<60} |"
+        f"| {''.join(['-' * 10]):<10} | {''.join(['-' * 20]):<20} | {''.join(['-' * 15]):<15} | {''.join(['-' * 60]):<60} |"  # noqa E501
     )
     for os_name, versions in table.items():
         for os_version, major_minors in versions.items():
             print(
-                f"| {'':<10} |  {os_name:<19} |  {os_version:<14} | {', '.join(major_minors):<60} |"
+                f"| {'':<10} |  {os_name:<19} |  {os_version:<14} | {', '.join(major_minors):<60} |"  # noqa E501
             )
 
 
