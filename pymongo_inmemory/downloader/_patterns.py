@@ -9,9 +9,9 @@ PATTERNS = {
     "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
     "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
     "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
-    "ubuntu22-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-{}.tgz",  # noqa E501
+    "ubuntu-arm-22": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-{}.tgz",  # noqa E501
     "ubuntu22": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-{}.tgz",  # noqa E501
-    "ubuntu20-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu-arm-20": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-{}.tgz",  # noqa E501
     "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
     "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
     "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
@@ -21,9 +21,9 @@ PATTERNS = {
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
     "rhel9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel90-{}.tgz",
-    "rhel9-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
+    "rhel-arm-9": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
     "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
-    "rhel8-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
+    "rhel-arm-8": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
     "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
     "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
     "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
@@ -71,7 +71,7 @@ PATCH_RANGE = {
     "4.2": list(range(4)) + list(range(5, 25)),
     "4.2-suse15": list(range(1, 4)) + list(range(5, 25)),
     "4.2-rhel8": list(range(1, 4)) + list(range(5, 25)),
-    "4.4-rhel8-arm": list(range(5, 25)),
+    "4.4-rhel-arm-8": list(range(5, 25)),
     "4.2-debian10": list(range(1, 4)) + list(range(5, 25)),
     "4.4": list(range(26)),
     "5.0": list(range(22)),
@@ -79,7 +79,7 @@ PATCH_RANGE = {
     # Version 6.0.5 is not suitable for production
     "6.0": list(range(5)) + list(range(6, 11)),
     "6.0-rhel9": list(range(4, 11)),
-    "6.0-rhel9-arm": list(range(7, 11)),
+    "6.0-rhel-arm-9": list(range(7, 11)),
     "7.0": list(range(3)),
 }
 
@@ -440,32 +440,6 @@ URLS = {
                 },
             },
         },
-        "8-arm": {
-            4: {
-                4: {
-                    "patches": PATCH_RANGE["4.4-rhel8-arm"],
-                    "url": PATTERNS["rhel8-arm"],
-                },
-            },
-            5: {
-                0: {
-                    "patches": PATCH_RANGE["5.0"],
-                    "url": PATTERNS["rhel8-arm"],
-                },
-            },
-            6: {
-                0: {
-                    "patches": PATCH_RANGE["6.0"],
-                    "url": PATTERNS["rhel8-arm"],
-                },
-            },
-            7: {
-                0: {
-                    "patches": PATCH_RANGE["7.0"],
-                    "url": PATTERNS["rhel8-arm"],
-                },
-            },
-        },
         "9": {
             6: {
                 0: {
@@ -480,17 +454,45 @@ URLS = {
                 },
             },
         },
-        "9-arm": {
+    },
+    "rhel-arm": {
+        "8": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4-rhel-arm-8"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
             6: {
                 0: {
-                    "patches": PATCH_RANGE["6.0-rhel9-arm"],
-                    "url": PATTERNS["rhel9-arm"],
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel-arm-8"],
                 },
             },
             7: {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
-                    "url": PATTERNS["rhel9-arm"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+        },
+        "9": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0-rhel-arm-9"],
+                    "url": PATTERNS["rhel-arm-9"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel-arm-9"],
                 },
             },
         },
@@ -732,32 +734,6 @@ URLS = {
                 },
             },
         },
-        "20-arm": {
-            4: {
-                4: {
-                    "patches": PATCH_RANGE["4.4"],
-                    "url": PATTERNS["ubuntu20-arm"],
-                },
-            },
-            5: {
-                0: {
-                    "patches": PATCH_RANGE["5.0"],
-                    "url": PATTERNS["ubuntu20-arm"],
-                },
-            },
-            6: {
-                0: {
-                    "patches": PATCH_RANGE["6.0"],
-                    "url": PATTERNS["ubuntu20-arm"],
-                },
-            },
-            7: {
-                0: {
-                    "patches": PATCH_RANGE["7.0"],
-                    "url": PATTERNS["ubuntu20-arm"],
-                },
-            },
-        },
         "22": {
             6: {
                 0: {
@@ -772,17 +748,45 @@ URLS = {
                 },
             },
         },
-        "22-arm": {
+    },
+    "ubuntu-arm": {
+        "20": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
-                    "url": PATTERNS["ubuntu22-arm"],
+                    "url": PATTERNS["ubuntu-arm-20"],
                 },
             },
             7: {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
-                    "url": PATTERNS["ubuntu22-arm"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+        },
+        "22": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu-arm-22"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu-arm-22"],
                 },
             },
         },
