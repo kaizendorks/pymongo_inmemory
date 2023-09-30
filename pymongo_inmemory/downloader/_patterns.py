@@ -31,12 +31,15 @@ PATCH_RANGE = {
     "4.2": list(range(4)) + list(range(5, 25)),
     "4.2-suse15": list(range(1, 4)) + list(range(5, 25)),
     "4.2-rhel8": list(range(1, 4)) + list(range(5, 25)),
+    "4.4-rhel8-arm": list(range(5, 25)),
     "4.2-debian10": list(range(1, 4)) + list(range(5, 25)),
     "4.4": list(range(23)),
     "5.0": list(range(19)),
     "5.0-debian11": list(range(8, 19)),
     # Version 6.0.5 is not suitable for production https://jira.mongodb.org/browse/WT-10551
     "6.0": list(range(5)) + list(range(6, 11)),
+    "6.0-rhel9": list(range(4, 11)),
+    "6.0-rhel9-rhel9-arm": list(range(7, 11)),
     "7.0": list(range(3)),
 }
 
@@ -59,7 +62,10 @@ PATTERNS = {
     "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
     "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
     "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
+    "rhel9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel90-{}.tgz",
+    "rhel9-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
     "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+    "rhel8-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
     "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
     "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
     "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
@@ -68,6 +74,8 @@ PATTERNS = {
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
     "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
     "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
+    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",
+    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",
     "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
     "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
 }
@@ -154,6 +162,22 @@ URLS = {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["amazon2"],
+                },
+            },
+        },
+        "2023": {
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["amazon2023"],
+                },
+            },
+        },
+        "2023-arm": {
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["amazon2023-arm"],
                 },
             },
         },
@@ -410,6 +434,60 @@ URLS = {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["rhel8"],
+                },
+            },
+        },
+        "8-arm": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4-rhel8-arm"],
+                    "url": PATTERNS["rhel8-arm"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["rhel8-arm"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel8-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel8-arm"],
+                },
+            },
+        },
+        "9": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0-rhel9"],
+                    "url": PATTERNS["rhel9"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel9"],
+                },
+            },
+        },
+        "9-arm": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0-rhel9-arm"],
+                    "url": PATTERNS["rhel9-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel9-arm"],
                 },
             },
         },
