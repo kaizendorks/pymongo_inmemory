@@ -1,3 +1,43 @@
+PATTERNS = {
+    "windows32-x86_64": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
+    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",  # noqa E501
+    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",  # noqa E501
+    "windows-x86_64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-{}.zip",
+    "sunos5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
+    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
+    "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
+    "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
+    "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
+    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+    "ubuntu-arm-22": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-{}.tgz",  # noqa E501
+    "ubuntu22": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-{}.tgz",  # noqa E501
+    "ubuntu-arm-20": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",  # noqa E501
+    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",  # noqa E501
+    "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
+    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
+    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
+    "rhel9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel90-{}.tgz",
+    "rhel-arm-9": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
+    "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+    "rhel-arm-8": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
+    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+    "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
+    "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
+    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
+    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
+    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
+    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",  # noqa E501
+    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",  # noqa E501
+    "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+    "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+}
+
 PATCH_RANGE = {
     "2.6": list(range(13)),
     "3.0": list(range(16)),
@@ -31,43 +71,16 @@ PATCH_RANGE = {
     "4.2": list(range(4)) + list(range(5, 25)),
     "4.2-suse15": list(range(1, 4)) + list(range(5, 25)),
     "4.2-rhel8": list(range(1, 4)) + list(range(5, 25)),
+    "4.4-rhel-arm-8": list(range(5, 25)),
     "4.2-debian10": list(range(1, 4)) + list(range(5, 25)),
-    "4.4": list(range(23)),
-    "5.0": list(range(19)),
-    "5.0-debian11": list(range(8, 19)),
-    "6.0": list(range(7)) + [6],
-}
-
-PATTERNS = {
-    "windows32-x86_64": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
-    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",  # noqa E501
-    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",  # noqa E501
-    "windows-x86_64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-{}.zip",
-    "sunos5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
-    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
-    "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
-    "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
-    "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
-    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
-    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
-    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
-    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
-    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",  # noqa E501
-    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",  # noqa E501
-    "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
-    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
-    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
-    "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
-    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
-    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
-    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
-    "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
-    "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
-    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
-    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
-    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
-    "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
-    "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+    "4.4": list(range(26)),
+    "5.0": list(range(22)),
+    "5.0-debian11": list(range(8, 22)),
+    # Version 6.0.5 is not suitable for production
+    "6.0": list(range(5)) + list(range(6, 11)),
+    "6.0-rhel9": list(range(4, 11)),
+    "6.0-rhel-arm-9": list(range(7, 11)),
+    "7.0": list(range(3)),
 }
 
 # An index of URL patterns and patch ranges. First with OS and second with MongoDB
@@ -146,6 +159,28 @@ URLS = {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["amazon2"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["amazon2"],
+                },
+            },
+        },
+        "2023": {
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["amazon2023"],
+                },
+            },
+        },
+        "2023-arm": {
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["amazon2023-arm"],
                 },
             },
         },
@@ -258,6 +293,12 @@ URLS = {
                     "url": PATTERNS["debian11"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["debian11"],
+                },
+            },
         },
     },
     "rhel": {
@@ -352,6 +393,12 @@ URLS = {
                     "url": PATTERNS["rhel7"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel7"],
+                },
+            },
         },
         "8": {
             3: {
@@ -384,6 +431,68 @@ URLS = {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
                     "url": PATTERNS["rhel8"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel8"],
+                },
+            },
+        },
+        "9": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0-rhel9"],
+                    "url": PATTERNS["rhel9"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel9"],
+                },
+            },
+        },
+    },
+    "rhel-arm": {
+        "8": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4-rhel-arm-8"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
+        },
+        "9": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0-rhel-arm-9"],
+                    "url": PATTERNS["rhel-arm-9"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel-arm-9"],
                 },
             },
         },
@@ -450,6 +559,12 @@ URLS = {
                     "url": PATTERNS["suse12"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["suse12"],
+                },
+            },
         },
         "15": {
             4: {
@@ -471,6 +586,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["suse15"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["suse15"],
                 },
             },
@@ -606,6 +727,68 @@ URLS = {
                     "url": PATTERNS["ubuntu20"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu20"],
+                },
+            },
+        },
+        "22": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu22"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu22"],
+                },
+            },
+        },
+    },
+    "ubuntu-arm": {
+        "20": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            },
+        },
+        "22": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu-arm-22"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu-arm-22"],
+                },
+            },
         },
     },
     "linux": {
@@ -694,6 +877,12 @@ URLS = {
                     "url": PATTERNS["macos"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["macos"],
+                },
+            },
         },
     },
     "macos": {
@@ -701,6 +890,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["macos-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["macos-arm"],
                 },
             },
@@ -766,6 +961,9 @@ URLS = {
             },
             6: {
                 0: {"patches": PATCH_RANGE["6.0"], "url": PATTERNS["windows-x86_64"]},
+            },
+            7: {
+                0: {"patches": PATCH_RANGE["7.0"], "url": PATTERNS["windows-x86_64"]},
             },
         },
     },

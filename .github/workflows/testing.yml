@@ -23,3 +23,6 @@ jobs:
       - name: Unit and functional tests
         run: |
           poetry run pytest
+      - name: Download URLs integrity check
+        run: |
+          poetry run python ./tools/check_urls.py --hashes

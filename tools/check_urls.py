@@ -1,16 +1,17 @@
 import argparse
 from concurrent import futures
+from collections import defaultdict
 import hashlib
 from http.client import HTTPSConnection
 import logging
 import time
-from typing import List, Set
 from random import randint
+from typing import List, Set, Any, Dict
 
 import click
 from click._termui_impl import ProgressBar
 
-from ._urls import URLS, expand_url_tree, ExpandedURL
+from pymongo_inmemory.downloader._urls import URLS, expand_url_tree, ExpandedURL
 
 
 logger = logging.getLogger("PYMONGOIM_URL_CHECKER")
@@ -87,6 +88,7 @@ def failed_url_check(x: futures.Future):
 
 def execute_url_check(expanded_items, progress_bar: ProgressBar) -> List[ExpandedURL]:
     failed: List[ExpandedURL]
+    promises = []
     with futures.ThreadPoolExecutor() as executor:
         for expanded in expanded_items:
             promises.append(executor.submit(check_url, expanded, progress_bar))
@@ -109,15 +111,51 @@ def execute_hash_check(expanded_items, progress_bar: ProgressBar) -> List[Expand
     return failed
 
 
+def execute_table_build(
+    expanded_items: List[ExpandedURL], progress_bar: ProgressBar
+) -> Any:
+    data: Dict[str, Dict[str, Set[str]]] = {}
+
+    for expanded in expanded_items:
+        progress_bar.update(1)
+        data[expanded.os_name] = data.get(expanded.os_name, defaultdict(set))
+        data[expanded.os_name][expanded.os_version].add(expanded.major_minor)
+
+    return data
+
+
+def present_table_build(table: Dict[str, Dict[str, Set[str]]]):
+    print()
+    print(
+        f"| {'':<10} | {'`operating_system`':<20} | {'`os_version`':<15} | {'MongoDB versions (`major.minor`)':<60} |"  # noqa E501
+    )
+    print(
+        f"| {''.join(['-' * 10]):<10} | {''.join(['-' * 20]):<20} | {''.join(['-' * 15]):<15} | {''.join(['-' * 60]):<60} |"  # noqa E501
+    )
+    for os_name, versions in table.items():
+        for os_version, major_minors in versions.items():
+            print(
+                f"| {'':<10} |  {os_name:<19} |  {os_version:<14} | {', '.join(major_minors):<60} |"  # noqa E501
+            )
+
+
+def _progress_bar_label(arguments):
+    if arguments.hashes:
+        return "Checking uniqueness of versions"
+    elif arguments.table_build:
+        return "Building version table for README"
+    else:
+        return "Checking downloadable packages"
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     arg_parser = argparse.ArgumentParser(prog="URL Checker")
     arg_parser.add_argument("--hashes", action="store_true")
+    arg_parser.add_argument("--table-build", action="store_true")
 
-    args = arg_parser.parse_args()
-
-    promises = []
+    arguments = arg_parser.parse_args()
     failed = []
 
     logger.debug("Expanding URL tree")
@@ -126,17 +164,22 @@ if __name__ == "__main__":
     logging.info("Starting checks.")
     with click.progressbar(
         length=len(expanded_items),
-        label="Checking URLs",
+        label=_progress_bar_label(arguments),
         fill_char="=",
         empty_char=" ",
         info_sep=" ",
         width=42,
         show_eta=False,
     ) as bar:
-        if args.hashes:
+        if arguments.hashes:
             failed = execute_hash_check(expanded_items, bar)
+            bar.finish()
+        elif arguments.table_build:
+            present_table_build(execute_table_build(expanded_items, bar))
+            bar.finish()
         else:
             failed = execute_url_check(expanded_items, bar)
+            bar.finish()
 
     logging.info("All checks done.")
 
@@ -154,3 +197,5 @@ if __name__ == "__main__":
             )
         )
     logging.warning("==== / FAILED CHECKS ====")
+    if len(failed) > 0:
+        exit(1)
