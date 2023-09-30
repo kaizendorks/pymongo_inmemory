@@ -35,7 +35,9 @@ PATCH_RANGE = {
     "4.4": list(range(23)),
     "5.0": list(range(19)),
     "5.0-debian11": list(range(8, 19)),
-    "6.0": list(range(7)) + [6],
+    # Version 6.0.5 is not suitable for production https://jira.mongodb.org/browse/WT-10551
+    "6.0": list(range(5)) + list(range(6, 11)),
+    "7.0": list(range(3)),
 }
 
 PATTERNS = {
@@ -145,6 +147,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["amazon2"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["amazon2"],
                 },
             },
@@ -258,6 +266,12 @@ URLS = {
                     "url": PATTERNS["debian11"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["debian11"],
+                },
+            },
         },
     },
     "rhel": {
@@ -352,6 +366,12 @@ URLS = {
                     "url": PATTERNS["rhel7"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["rhel7"],
+                },
+            },
         },
         "8": {
             3: {
@@ -383,6 +403,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["rhel8"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["rhel8"],
                 },
             },
@@ -450,6 +476,12 @@ URLS = {
                     "url": PATTERNS["suse12"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["suse12"],
+                },
+            },
         },
         "15": {
             4: {
@@ -471,6 +503,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["suse15"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["suse15"],
                 },
             },
@@ -606,6 +644,12 @@ URLS = {
                     "url": PATTERNS["ubuntu20"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu20"],
+                },
+            },
         },
     },
     "linux": {
@@ -694,6 +738,12 @@ URLS = {
                     "url": PATTERNS["macos"],
                 },
             },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["macos"],
+                },
+            },
         },
     },
     "macos": {
@@ -701,6 +751,12 @@ URLS = {
             6: {
                 0: {
                     "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["macos-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["macos-arm"],
                 },
             },
@@ -766,6 +822,9 @@ URLS = {
             },
             6: {
                 0: {"patches": PATCH_RANGE["6.0"], "url": PATTERNS["windows-x86_64"]},
+            },
+            7: {
+                0: {"patches": PATCH_RANGE["7.0"], "url": PATTERNS["windows-x86_64"]},
             },
         },
     },
