@@ -10,7 +10,7 @@ from random import randint
 import click
 from click._termui_impl import ProgressBar
 
-from ._urls import URLS, expand_url_tree, ExpandedURL
+from pymongo_inmemory.downloader._urls import URLS, expand_url_tree, ExpandedURL
 
 
 logger = logging.getLogger("PYMONGOIM_URL_CHECKER")

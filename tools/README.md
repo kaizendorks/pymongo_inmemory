@@ -1,8 +1,9 @@
 # Updating download URLs
+
 Run URL check tool from the root:
 
 ```sh
-python -m pymongo_inmemory.downloader.check_urls
+python ./tools/check_urls
 ```
 
 It will expnd the URL tree and check all the URLs by sending `HEAD` requests.
@@ -17,8 +18,9 @@ Note that URL checker will not generate new URLs. For instance if there is a new
 it won't be checked.
 
 The URLs are collected from:
-* [Releases](https://www.mongodb.com/download-center/community/releases) page
-* [Release archive](https://www.mongodb.com/download-center/community/releases/archive) page
+
+- [Releases](https://www.mongodb.com/download-center/community/releases) page
+- [Release archive](https://www.mongodb.com/download-center/community/releases/archive) page
 
 The last addition is MongoDB version 4.4.6.
 
