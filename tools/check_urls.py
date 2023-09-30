@@ -195,3 +195,5 @@ if __name__ == "__main__":
             )
         )
     logging.warning("==== / FAILED CHECKS ====")
+    if len(failed) > 0:
+        exit(1)
