@@ -88,6 +88,7 @@ def failed_url_check(x: futures.Future):
 
 def execute_url_check(expanded_items, progress_bar: ProgressBar) -> List[ExpandedURL]:
     failed: List[ExpandedURL]
+    promises = []
     with futures.ThreadPoolExecutor() as executor:
         for expanded in expanded_items:
             promises.append(executor.submit(check_url, expanded, progress_bar))
@@ -155,8 +156,6 @@ if __name__ == "__main__":
     arg_parser.add_argument("--table-build", action="store_true")
 
     arguments = arg_parser.parse_args()
-
-    promises = []
     failed = []
 
     logger.debug("Expanding URL tree")
@@ -174,10 +173,13 @@ if __name__ == "__main__":
     ) as bar:
         if arguments.hashes:
             failed = execute_hash_check(expanded_items, bar)
-        if arguments.table_build:
+            bar.finish()
+        elif arguments.table_build:
             present_table_build(execute_table_build(expanded_items, bar))
+            bar.finish()
         else:
             failed = execute_url_check(expanded_items, bar)
+            bar.finish()
 
     logging.info("All checks done.")
 
