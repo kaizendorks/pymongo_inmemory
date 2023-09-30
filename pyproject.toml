@@ -26,7 +26,6 @@ classifiers = [
   "Topic :: Utilities",
 ]
 include = ["LICENSE"]
-packages = [{ include = "pymongo_inmemory" }]
 
 [tool.poetry.urls]
 "Bug Reports" = "https://github.com/kaizendorks/pymongo_inmemory/issues"
