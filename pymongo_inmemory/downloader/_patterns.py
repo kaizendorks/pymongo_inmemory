@@ -1,3 +1,43 @@
+PATTERNS = {
+    "windows32-x86_64": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
+    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",  # noqa E501
+    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",  # noqa E501
+    "windows-x86_64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-{}.zip",
+    "sunos5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
+    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
+    "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
+    "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
+    "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
+    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+    "ubuntu22-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-{}.tgz",  # noqa E501
+    "ubuntu22": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-{}.tgz",  # noqa E501
+    "ubuntu20-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
+    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
+    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
+    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",  # noqa E501
+    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",  # noqa E501
+    "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
+    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
+    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
+    "rhel9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel90-{}.tgz",
+    "rhel9-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
+    "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
+    "rhel8-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
+    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
+    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
+    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+    "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
+    "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
+    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
+    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
+    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
+    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",
+    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",
+    "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
+    "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
+}
+
 PATCH_RANGE = {
     "2.6": list(range(13)),
     "3.0": list(range(16)),
@@ -33,51 +73,14 @@ PATCH_RANGE = {
     "4.2-rhel8": list(range(1, 4)) + list(range(5, 25)),
     "4.4-rhel8-arm": list(range(5, 25)),
     "4.2-debian10": list(range(1, 4)) + list(range(5, 25)),
-    "4.4": list(range(23)),
-    "5.0": list(range(19)),
-    "5.0-debian11": list(range(8, 19)),
+    "4.4": list(range(26)),
+    "5.0": list(range(22)),
+    "5.0-debian11": list(range(8, 22)),
     # Version 6.0.5 is not suitable for production https://jira.mongodb.org/browse/WT-10551
     "6.0": list(range(5)) + list(range(6, 11)),
     "6.0-rhel9": list(range(4, 11)),
-    "6.0-rhel9-rhel9-arm": list(range(7, 11)),
+    "6.0-rhel9-arm": list(range(7, 11)),
     "7.0": list(range(3)),
-}
-
-PATTERNS = {
-    "windows32-x86_64": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-{}.zip",
-    "windows-2008plus-ssl": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-{}.zip",  # noqa E501
-    "windows-2012plus": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-{}.zip",  # noqa E501
-    "windows-x86_64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-{}.zip",
-    "sunos5": "https://fastdl.mongodb.org/sunos5/mongodb-sunos5-x86_64-{}.tgz",
-    "osx": "https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-{}.tgz",
-    "osx-ssl": "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-{}.tgz",
-    "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
-    "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
-    "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
-    "ubuntu20": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2004-{}.tgz",  # noqa E501
-    "ubuntu18": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-{}.tgz",  # noqa E501
-    "ubuntu16": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-{}.tgz",  # noqa E501
-    "ubuntu14": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1404-{}.tgz",  # noqa E501
-    "ubuntu12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-{}.tgz",  # noqa E501
-    "suse15": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse15-{}.tgz",
-    "suse12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse12-{}.tgz",
-    "suse11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-suse11-{}.tgz",
-    "rhel9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel90-{}.tgz",
-    "rhel9-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel90-{}.tgz",
-    "rhel8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-{}.tgz",
-    "rhel8-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-rhel82-{}.tgz",
-    "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
-    "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
-    "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
-    "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
-    "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
-    "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
-    "debian8": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian81-{}.tgz",
-    "debian7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian71-{}.tgz",
-    "amazon2023": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2023-{}.tgz",
-    "amazon2023-arm": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-amazon2023-{}.tgz",
-    "amazon2": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon2-{}.tgz",
-    "amazon1": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-{}.tgz",
 }
 
 # An index of URL patterns and patch ranges. First with OS and second with MongoDB
@@ -726,6 +729,60 @@ URLS = {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
                     "url": PATTERNS["ubuntu20"],
+                },
+            },
+        },
+        "20-arm": {
+            4: {
+                4: {
+                    "patches": PATCH_RANGE["4.4"],
+                    "url": PATTERNS["ubuntu20-arm"],
+                },
+            },
+            5: {
+                0: {
+                    "patches": PATCH_RANGE["5.0"],
+                    "url": PATTERNS["ubuntu20-arm"],
+                },
+            },
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu20-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu20-arm"],
+                },
+            },
+        },
+        "22": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu22"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu22"],
+                },
+            },
+        },
+        "22-arm": {
+            6: {
+                0: {
+                    "patches": PATCH_RANGE["6.0"],
+                    "url": PATTERNS["ubuntu22-arm"],
+                },
+            },
+            7: {
+                0: {
+                    "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["ubuntu22-arm"],
                 },
             },
         },
