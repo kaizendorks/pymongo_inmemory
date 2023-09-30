@@ -80,7 +80,7 @@ PATCH_RANGE = {
     "6.0": list(range(5)) + list(range(6, 11)),
     "6.0-rhel9": list(range(4, 11)),
     "6.0-rhel-arm-9": list(range(7, 11)),
-    "7.0": list(range(3)) + [1],
+    "7.0": list(range(3)),
 }
 
 # An index of URL patterns and patch ranges. First with OS and second with MongoDB
