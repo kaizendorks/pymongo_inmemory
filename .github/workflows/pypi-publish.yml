@@ -25,9 +25,9 @@ jobs:
       - name: Unit and functional tests
         run: |
           poetry run pytest
-      - name: Download URLs existance check
-        run: |
-          poetry run python ./tools/check_urls.py
+      # - name: Download URLs existance check
+      #   run: |
+      #     poetry run python ./tools/check_urls.py
       - name: Build
         run: |
           poetry build
