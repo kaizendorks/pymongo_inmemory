@@ -7,6 +7,10 @@ from .context import Context
 class MongoClient(pymongo.MongoClient):
     def __init__(self, host=None, port=None, **kwargs):
         self._pim_context: Context = Context()
+        if port is not None:
+            self._pim_context.mongod_port = port
+        if host is not None:
+            self._pim_context.mongo_client_host = host
         self._mongod = Mongod(self._pim_context)
         self._mongod.start()
         super().__init__(self._mongod.connection_string, **kwargs)

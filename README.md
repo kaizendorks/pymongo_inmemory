@@ -74,6 +74,7 @@ with MongoClient() as client:
 |         | `download_folder`    | Override the default download location.                                                                    | pymongo_inmemory/.cache/download                                                                                           |
 |         | `extract_folder`     | Override the default extraction location.                                                                  | pymongo_inmemory/.cache/extract                                                                                            |
 | **NEW** | `mongod_data_folder` | Provide a data folder to be used by MongoD.                                                                | A `TemporaryDirectory` will be used                                                                                        |
+| **NEW** | `mongo_client_host`  | Hostname or connection string                                                                              |                                                                                                                            |
 | **NEW** | `dbname`             | Provide a database name to connect                                                                         | 'pimtest'                                                                                                                  |
 |         |                      |                                                                                                            |
 
@@ -82,7 +83,7 @@ with MongoClient() as client:
 
 ## Available MongoDB versions
 
-There is an internal [URL bank](pymongo_inmemory/downloader/_patterns.py) that is filled with URLs collected from
+There is an internal [URL bank](pymongo_inmemory/downloader/_patterns.py) that is filled with **URLs** collected from
 
 - [release list](https://www.mongodb.com/download-center/community/releases) and
 - [archived released list](https://www.mongodb.com/download-center/community/releases/archive)

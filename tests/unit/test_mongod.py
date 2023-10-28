@@ -30,10 +30,9 @@ def test_mongod_data_folder_config(monkeypatch):
     monkeypatch.setattr(Mongod, "is_healthy", returns_true)
     monkeypatch.setattr(downloader, "download", download)
 
-    context = Context()
-    context.mongod_data_folder = "TEST"
+    monkeypatch.setenv("PYMONGOIM__MONGOD_DATA_FOLDER", "TEST")
 
-    with Mongod(context) as md:
+    with Mongod(None) as md:
         assert md.data_folder == "TEST"
 
 
@@ -42,8 +41,17 @@ def test_dbname_config(monkeypatch):
     monkeypatch.setattr(Mongod, "is_healthy", returns_true)
     monkeypatch.setattr(downloader, "download", download)
 
-    context = Context()
-    context.dbname = "TEST"
+    monkeypatch.setenv("PYMONGOIM__DBNAME", "TEST")
 
-    with Mongod(context) as md:
+    with Mongod(None) as md:
         assert md.config.connection_string.endswith("TEST")
+
+
+def test_mongo_client_host_config(monkeypatch):
+    monkeypatch.setattr(subprocess, "Popen", Popen)
+    monkeypatch.setattr(Mongod, "is_healthy", returns_true)
+    monkeypatch.setattr(downloader, "download", download)
+    monkeypatch.setenv("PYMONGOIM__MONGO_CLIENT_HOST", "mongodb://test")
+
+    with Mongod(None) as md:
+        assert md.config.connection_string == "mongodb://test"

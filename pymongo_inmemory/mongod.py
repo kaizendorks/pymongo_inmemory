@@ -63,6 +63,12 @@ class MongodConfig:
 
     @property
     def connection_string(self):
+        if self._pim_context.mongo_client_host is not None:
+            if self._pim_context.mongo_client_host.startswith("mongodb://"):
+                return self._pim_context.mongo_client_host
+            else:
+                self.local_address = self._pim_context.mongo_client_host
+
         if self.local_address is not None and self.port is not None:
             if self._pim_context.dbname is None:
                 return "mongodb://{host}:{port}".format(

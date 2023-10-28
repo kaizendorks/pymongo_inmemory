@@ -104,7 +104,8 @@ class Context:
         self.mongo_version = conf("mongo_version", version)
         self.mongod_port = conf("mongod_port", None, coerce_with=int)
         self.mongod_data_folder = conf("mongod_data_folder", None)
-        self.dbname = conf("mongod_data_folder", "pimtest")
+        self.dbname = conf("dbname", "pimtest")
+        self.mongo_client_host = conf("mongo_client_host", None)
 
         self.operating_system = self._build_operating_system_info(os_name)
         self.os_version = conf("os_version", os_ver)
