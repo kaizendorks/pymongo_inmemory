@@ -104,6 +104,8 @@ class Context:
         self.mongo_version = conf("mongo_version", version)
         self.mongod_port = conf("mongod_port", None, coerce_with=int)
         self.mongod_data_folder = conf("mongod_data_folder", None)
+        self.dbname = conf("dbname", "pimtest")
+        self.mongo_client_host = conf("mongo_client_host", None)
 
         self.operating_system = self._build_operating_system_info(os_name)
         self.os_version = conf("os_version", os_ver)
@@ -131,10 +133,11 @@ class Context:
             f"Mongo Version {self.mongo_version}\n"
             f"MongoD Port {self.mongod_port}\n"
             f"MongoD Data Folder {self.mongod_data_folder}\n"
+            f"Database Name {self.dbname}\n"
             f"OS Name {self.operating_system}\n"
             f"OS Version {self.os_version}\n"
             f"Download URL {self.download_url}\n"
-            f"URL hash {self.url_hash}\n"
+            f"URL Hash {self.url_hash}\n"
             f"Download Version {self.downloaded_version}\n"
             f"Ignore Cache {self.ignore_cache}\n"
             f"Use Local MongoD {self.use_local_mongod}\n"

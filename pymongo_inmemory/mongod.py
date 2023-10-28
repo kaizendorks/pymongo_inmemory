@@ -61,6 +61,26 @@ class MongodConfig:
         else:
             return set_port
 
+    @property
+    def connection_string(self):
+        if self._pim_context.mongo_client_host is not None:
+            if self._pim_context.mongo_client_host.startswith("mongodb://"):
+                return self._pim_context.mongo_client_host
+            else:
+                self.local_address = self._pim_context.mongo_client_host
+
+        if self.local_address is not None and self.port is not None:
+            if self._pim_context.dbname is None:
+                return "mongodb://{host}:{port}".format(
+                    host=self.local_address, port=self.port
+                )
+            else:
+                return "mongodb://{host}:{port}/{dbname}".format(
+                    host=self.local_address,
+                    port=self.port,
+                    dbname=self._pim_context.dbname,
+                )
+
 
 class Mongod:
     """Wrapper for MongoDB daemon instance. Can be used with context managers.
@@ -146,12 +166,11 @@ class Mongod:
         if self._connection_string is not None:
             return self._connection_string
 
-        if self.config.local_address is not None and self.config.port is not None:
-            self._connection_string = "mongodb://{host}:{port}".format(
-                host=self.config.local_address, port=self.config.port
-            )
-        else:
-            self._connection_string = None
+        self._connection_string = (
+            self.config.connection_string
+            if self.config.connection_string is not None
+            else None
+        )
 
         return self._connection_string
 

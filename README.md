@@ -10,6 +10,7 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 - Tooling enhancements. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/90)]
 - Configuration for data directory. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/91)]
+- Configuration for data directory. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/94)]
 
 ### v0.3.1
 
@@ -74,6 +75,8 @@ with MongoClient() as client:
 |         | `download_folder`    | Override the default download location.                                                                    | pymongo_inmemory/.cache/download                                                                                           |
 |         | `extract_folder`     | Override the default extraction location.                                                                  | pymongo_inmemory/.cache/extract                                                                                            |
 | **NEW** | `mongod_data_folder` | Provide a data folder to be used by MongoD.                                                                | A `TemporaryDirectory` will be used                                                                                        |
+| **NEW** | `mongo_client_host`  | Hostname or connection string                                                                              |                                                                                                                            |
+| **NEW** | `dbname`             | Provide a database name to connect                                                                         | 'pimtest'                                                                                                                  |
 |         |                      |                                                                                                            |
 
 - \***_Note 1:_** Generic Linux version offering for MongoDB ends with version **4.0.23**. If the operating system is just `linux` and if selected MongoDB version is higher, it will default to `4.0.23`.
