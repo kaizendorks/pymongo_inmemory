@@ -88,10 +88,8 @@ class Mongod:
 
         self.config = MongodConfig(self._pim_context)
 
-        if self._pim_context.mongod_data_folder is None:
-            self._maybe_temp_data_folder = TemporaryDirectory(prefix="pymongoim")
-        else:
-            self._maybe_temp_data_folder = self._pim_context.mongod_data_folder
+        self._temp_data_folder = TemporaryDirectory(prefix="pymongoim")
+        self._using_tmp_folder = self._pim_context.mongod_data_folder is None
 
         self._client = pymongo.MongoClient(self.connection_string)
 
@@ -138,14 +136,10 @@ class Mongod:
 
     @property
     def data_folder(self):
-        if self.is_using_temp_data_folder:
-            return self._maybe_temp_data_folder.name
+        if self._using_tmp_folder:
+            return self._temp_data_folder.name
         else:
-            return self._maybe_temp_data_folder
-
-    @property
-    def is_using_temp_data_folder(self):
-        return isinstance(self._maybe_temp_data_folder, TemporaryDirectory)
+            return self._pim_context.mongod_data_folder
 
     @property
     def connection_string(self):
@@ -208,12 +202,12 @@ class Mongod:
             return logfile.readlines()
 
     def _clean_up(self):
-        if not self.is_using_temp_data_folder:
-            self._maybe_temp_data_folder.cleanup()
+        if self._using_tmp_folder:
+            self._temp_data_folder.cleanup()
 
     def _check_lock(self):
         while self.is_locked:
-            if self.is_using_temp_data_folder:
+            if self._using_tmp_folder:
                 raise RuntimeError(
                     (
                         "There is a lock file in the provided data folder. "
@@ -226,7 +220,7 @@ class Mongod:
                     "Changing the data folder."
                 )
             )
-            self._maybe_temp_data_folder = TemporaryDirectory(prefix="pymongoim")
+            self._temp_data_folder = TemporaryDirectory(prefix="pymongoim")
 
 
 if __name__ == "__main__":
