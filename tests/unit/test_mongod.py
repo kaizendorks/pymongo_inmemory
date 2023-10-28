@@ -2,7 +2,6 @@ import subprocess
 
 from pymongo_inmemory.mongod import Mongod
 import pymongo_inmemory.downloader as downloader
-from pymongo_inmemory.context import Context
 
 
 class Popen:
