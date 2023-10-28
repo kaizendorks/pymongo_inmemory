@@ -84,7 +84,7 @@ with MongoClient() as client:
 
 ## Available MongoDB versions
 
-There is an internal [URL bank](pymongo_inmemory/downloader/_patterns.py) that is filled with **URLs** collected from
+There is an internal [URL bank](pymongo_inmemory/downloader/_patterns.py) that is filled with URLs collected from
 
 - [release list](https://www.mongodb.com/download-center/community/releases) and
 - [archived released list](https://www.mongodb.com/download-center/community/releases/archive)
