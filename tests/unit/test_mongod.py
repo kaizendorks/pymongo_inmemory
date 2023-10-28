@@ -25,7 +25,7 @@ def download():
     return ""
 
 
-def test_mongod(monkeypatch):
+def test_mongod_data_folder_config(monkeypatch):
     monkeypatch.setattr(subprocess, "Popen", Popen)
     monkeypatch.setattr(Mongod, "is_healthy", returns_true)
     monkeypatch.setattr(downloader, "download", download)
@@ -35,3 +35,15 @@ def test_mongod(monkeypatch):
 
     with Mongod(context) as md:
         assert md.data_folder == "TEST"
+
+
+def test_dbname_config(monkeypatch):
+    monkeypatch.setattr(subprocess, "Popen", Popen)
+    monkeypatch.setattr(Mongod, "is_healthy", returns_true)
+    monkeypatch.setattr(downloader, "download", download)
+
+    context = Context()
+    context.dbname = "TEST"
+
+    with Mongod(context) as md:
+        assert md.config.connection_string.endswith("TEST")
