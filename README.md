@@ -63,7 +63,7 @@ with MongoClient() as client:
 
 ## Configuration
 
-|         | Config parameter     | Description Default                                                                                        |
+|         | Config parameter     | Description                                                                                                | Default                                                                                                                    |
 | ------- | -------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 |         | `mongo_version`      | Which MongoD version to download and use.                                                                  | Latest for the OS                                                                                                          |
 |         | `mongod_port`        | Override port preference.                                                                                  | Automatically picked between `27017` and `28000` after testing availability                                                |
