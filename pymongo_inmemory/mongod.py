@@ -87,7 +87,10 @@ class Mongod:
         self._connection_string = None
 
         self.config = MongodConfig(self._pim_context)
-        self.data_folder = TemporaryDirectory(prefix="pymongoim")
+
+        self._temp_data_folder = TemporaryDirectory(prefix="pymongoim")
+        self._using_tmp_folder = self._pim_context.mongod_data_folder is None
+
         self._client = pymongo.MongoClient(self.connection_string)
 
     def __enter__(self):
@@ -98,22 +101,14 @@ class Mongod:
         self.stop()
 
     def start(self):
-        while self.is_locked:
-            logger.warning(
-                (
-                    "Lock file found, possibly another mock server is running. "
-                    "Changing the data folder."
-                )
-            )
-            self.data_folder = TemporaryDirectory(prefix="pymongoim")
-
-        self.log_path = os.path.join(self.data_folder.name, "mongod.log")
+        self._check_lock()
+        self.log_path = os.path.join(self.data_folder, "mongod.log")
 
         logger.info("Starting mongod with {cs}...".format(cs=self.connection_string))
         boot_command = [
             os.path.join(self._bin_folder, "mongod"),
             "--dbpath",
-            self.data_folder.name,
+            self.data_folder,
             "--logpath",
             self.log_path,
             "--port",
@@ -137,7 +132,14 @@ class Mongod:
         while self._proc.poll() is None:
             logger.debug("Waiting for MongoD shutdown.")
             time.sleep(1)
-        self.data_folder.cleanup()
+        self._clean_up()
+
+    @property
+    def data_folder(self):
+        if self._using_tmp_folder:
+            return self._temp_data_folder.name
+        else:
+            return self._pim_context.mongod_data_folder
 
     @property
     def connection_string(self):
@@ -155,7 +157,7 @@ class Mongod:
 
     @property
     def is_locked(self):
-        return os.path.exists(os.path.join(self.data_folder.name, "mongod.lock"))
+        return os.path.exists(os.path.join(self.data_folder, "mongod.lock"))
 
     @property
     def is_healthy(self):
@@ -198,6 +200,27 @@ class Mongod:
     def logs(self):
         with open(self.log_path, "r") as logfile:
             return logfile.readlines()
+
+    def _clean_up(self):
+        if self._using_tmp_folder:
+            self._temp_data_folder.cleanup()
+
+    def _check_lock(self):
+        while self.is_locked:
+            if self._using_tmp_folder:
+                raise RuntimeError(
+                    (
+                        "There is a lock file in the provided data folder. "
+                        "Make sure that no other MongoDB is running."
+                    )
+                )
+            logger.warning(
+                (
+                    "Lock file found, possibly another mock server is running. "
+                    "Changing the data folder."
+                )
+            )
+            self._temp_data_folder = TemporaryDirectory(prefix="pymongoim")
 
 
 if __name__ == "__main__":

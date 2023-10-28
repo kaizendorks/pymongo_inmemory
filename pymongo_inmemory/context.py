@@ -103,6 +103,7 @@ class Context:
     ) -> None:
         self.mongo_version = conf("mongo_version", version)
         self.mongod_port = conf("mongod_port", None, coerce_with=int)
+        self.mongod_data_folder = conf("mongod_data_folder", None)
 
         self.operating_system = self._build_operating_system_info(os_name)
         self.os_version = conf("os_version", os_ver)
@@ -129,6 +130,7 @@ class Context:
         return (
             f"Mongo Version {self.mongo_version}\n"
             f"MongoD Port {self.mongod_port}\n"
+            f"MongoD Data Folder {self.mongod_data_folder}\n"
             f"OS Name {self.operating_system}\n"
             f"OS Version {self.os_version}\n"
             f"Download URL {self.download_url}\n"
