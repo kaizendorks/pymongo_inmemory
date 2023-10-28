@@ -10,6 +10,7 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 - Tooling enhancements. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/90)]
 - Configuration for data directory. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/91)]
+- Configuration for data directory. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/94)]
 
 ### v0.3.1
 
