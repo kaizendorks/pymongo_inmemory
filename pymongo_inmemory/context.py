@@ -127,6 +127,7 @@ class Context:
         )
         self.archive_folder = mkdir_ifnot_exist(self.download_folder, self.url_hash)
         self.extracted_folder = mkdir_ifnot_exist(self.extract_folder, self.url_hash)
+        self.storage_engine = "ephemeralForTest"
 
     def __str__(self):
         return (
@@ -143,6 +144,7 @@ class Context:
             f"Use Local MongoD {self.use_local_mongod}\n"
             f"Download Folder {self.download_folder}\n"
             f"Extract Folder {self.extract_folder}\n"
+            f"Storage engine {self.storage_engine}\n"
         )
 
     def _build_operating_system_info(self, os_name=None):

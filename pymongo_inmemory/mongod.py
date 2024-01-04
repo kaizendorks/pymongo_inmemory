@@ -51,7 +51,7 @@ class MongodConfig:
     def __init__(self, pim_context: Context):
         self._pim_context = pim_context
         self.local_address = "127.0.0.1"
-        self.engine = "ephemeralForTest"
+        self.engine = pim_context.storage_engine
 
     @property
     def port(self):
