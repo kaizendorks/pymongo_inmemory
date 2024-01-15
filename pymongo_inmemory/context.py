@@ -154,14 +154,6 @@ class Context:
             os_name = _mapping.get(platform.system())
             if os_name is None:
                 raise OperatingSystemNotFound("Can't determine operating system.")
-            else:
-                if os_name == "linux":
-                    logger.warning(
-                        (
-                            "Starting from MongoDB 4.0.23 "
-                            "there isn't a generic Linux version of MongoDB"
-                        )
-                    )
         return os_name
 
     def _build_download_url(self):
