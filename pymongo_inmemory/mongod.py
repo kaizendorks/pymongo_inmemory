@@ -51,7 +51,7 @@ class MongodConfig:
     def __init__(self, pim_context: Context):
         self._pim_context = pim_context
         self.local_address = "127.0.0.1"
-        self.engine = "ephemeralForTest"
+        self.engine = pim_context.storage_engine
 
     @property
     def port(self):
@@ -135,9 +135,10 @@ class Mongod:
             self.config.port,
             "--bind_ip",
             self.config.local_address,
-            "--storageEngine",
-            self.config.engine,
         ]
+        if self.config.engine is not None:
+            boot_command.append("--storageEngine")
+            boot_command.append(self.config.engine)
         logger.debug(boot_command)
         self._proc = subprocess.Popen(boot_command)
         _popen_objs.append(self._proc)
