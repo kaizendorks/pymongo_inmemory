@@ -59,7 +59,7 @@ class MongodConfig:
         if set_port is None:
             return str(find_open_port(range(27017, 28000)))
         else:
-            return set_port
+            return str(set_port)
 
     @property
     def connection_string(self):
