@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymongo_inmemory"
-version = "0.4.1"
+version = "0.4.2"
 description = "A mongo mocking library with an ephemeral MongoDB running in memory."
 authors = ["Kaizen Dorks <kaizendorks@gmail.com>"]
 maintainers = [
