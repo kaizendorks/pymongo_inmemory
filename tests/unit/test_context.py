@@ -1,8 +1,9 @@
 import hashlib
-
-from pymongo_inmemory import context
+from platform import uname_result
 
 import pytest
+
+from pymongo_inmemory import context
 
 
 def test_environment_var_option(monkeypatch):
@@ -28,10 +29,15 @@ def test_fails_if_os_unknown(monkeypatch):
     def system():
         return "Unknown"
 
+    # noinspection PyArgumentList
+    def uname():
+        return uname_result('', '', '', '', '')
+
     def conf(*args, **kwargs):
         return
 
     monkeypatch.setattr(context.platform, "system", system)
+    monkeypatch.setattr(context.platform, "uname", uname)
     monkeypatch.setattr(context, "conf", conf)
     with pytest.raises(context.OperatingSystemNotFound):
         context.Context()
