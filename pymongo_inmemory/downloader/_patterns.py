@@ -198,7 +198,7 @@ URLS = {
               0: {
                     "patches": PATCH_RANGE["8.0"],
                     "url": PATTERNS["amazon2023-arm"],
-                },  
+                },
             }
         },
     },
