@@ -5,7 +5,7 @@ import os
 from os import path
 import platform
 
-from ._utils import mkdir_ifnot_exist
+from ._utils import make_semver, mkdir_ifnot_exist
 from .downloader._urls import best_url
 
 DEFAULT_CONF = {}
@@ -127,7 +127,7 @@ class Context:
         )
         self.archive_folder = mkdir_ifnot_exist(self.download_folder, self.url_hash)
         self.extracted_folder = mkdir_ifnot_exist(self.extract_folder, self.url_hash)
-        self.storage_engine = conf("storage_engine", "ephemeralForTest")
+        self.storage_engine = self._build_storage_engine()
 
     def __str__(self):
         return (
@@ -165,3 +165,8 @@ class Context:
 
         self.downloaded_version = downloaded_version
         return dl_url
+
+    def _build_storage_engine(self):
+        major, minor, patch = make_semver(self.downloaded_version)
+        storage_engine_fallback = "wiredTiger" if major > 6 else "ephemeralForTest"
+        return conf("storage_engine", storage_engine_fallback)
