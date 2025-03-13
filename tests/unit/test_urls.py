@@ -35,7 +35,7 @@ def test_best_url():
     ), "Linux:Generic support ends at 4.0.28, higher versions default to this."
 
     assert utools.best_url("ubuntu") == (
-        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-8.0.4.tgz",
+        "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-8.0.4.tgz",
         "8.0.4",
     ), "Should find latest MongoDB for latest Ubuntu"
 
