@@ -6,6 +6,11 @@ A mongo mocking library with an ephemeral MongoDB running in memory.
 
 ## What's new?
 
+### v0.5.0
+
+- Fixed default fallback for storage engine for mongo versions > 6. by @davidwaroquiers in [[PR #119]](https://github.com/kaizendorks/pymongo_inmemory/pull/119)
+- Adding support for mongo 8 by @timjnh in [[PR #123]](https://github.com/kaizendorks/pymongo_inmemory/pull/123)
+
 ### v0.4.0
 
 - Tooling enhancements. [[PR #90](https://github.com/kaizendorks/pymongo_inmemory/pull/90)]
