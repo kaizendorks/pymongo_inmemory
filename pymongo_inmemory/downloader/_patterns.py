@@ -9,6 +9,8 @@ PATTERNS = {
     "macos": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-{}.tgz",
     "macos-arm": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-{}.tgz",
     "linux": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-{}.tgz",
+    "ubuntu-arm-24": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-{}.tgz",  # noqa E501
+    "ubuntu24": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-{}.tgz",  # noqa E501
     "ubuntu-arm-22": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-{}.tgz",  # noqa E501
     "ubuntu22": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-{}.tgz",  # noqa E501
     "ubuntu-arm-20": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-{}.tgz",  # noqa E501
@@ -81,11 +83,14 @@ PATCH_RANGE = {
     "6.0-rhel9": list(range(4, 11)),
     "6.0-rhel-arm-9": list(range(7, 11)),
     "7.0": list(range(3)),
+    "8.0": list(range(5)),
 }
 
 # An index of URL patterns and patch ranges. First with OS and second with MongoDB
 # version, because we are limited by the OS we are running on first, MongoDB
 # version second.
+#
+# ubuntu.24.8.0 represents Ubuntu 24 with MongoDB 8.0, for example
 URLS = {
     "amazon": {
         "1": {
@@ -175,6 +180,12 @@ URLS = {
                     "url": PATTERNS["amazon2023"],
                 },
             },
+            8: {
+              0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["amazon2023"],
+                },
+            }
         },
         "2023-arm": {
             7: {
@@ -183,6 +194,12 @@ URLS = {
                     "url": PATTERNS["amazon2023-arm"],
                 },
             },
+            8: {
+              0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["amazon2023-arm"],
+                },  
+            }
         },
     },
     "debian": {
@@ -300,6 +317,14 @@ URLS = {
                 },
             },
         },
+        "12": {
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["debian11"],
+                },
+            }
+        }
     },
     "rhel": {
         "5": {
@@ -439,6 +464,12 @@ URLS = {
                     "url": PATTERNS["rhel8"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["rhel8"],
+                },
+            },
         },
         "9": {
             6: {
@@ -453,6 +484,12 @@ URLS = {
                     "url": PATTERNS["rhel9"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["rhel9"],
+                },
+            }
         },
     },
     "rhel-arm": {
@@ -481,6 +518,12 @@ URLS = {
                     "url": PATTERNS["rhel-arm-8"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["rhel-arm-8"],
+                },
+            },
         },
         "9": {
             6: {
@@ -495,6 +538,12 @@ URLS = {
                     "url": PATTERNS["rhel-arm-9"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["rhel-arm-9"],
+                }
+            }
         },
     },
     "suse": {
@@ -595,6 +644,12 @@ URLS = {
                     "url": PATTERNS["suse15"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["suse15"],
+                }
+            }
         },
     },
     "ubuntu": {
@@ -733,6 +788,12 @@ URLS = {
                     "url": PATTERNS["ubuntu20"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu20"],
+                },
+            }
         },
         "22": {
             6: {
@@ -747,7 +808,21 @@ URLS = {
                     "url": PATTERNS["ubuntu22"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu22"],
+                },
+            }
         },
+        "24": {
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu24"],
+                },
+            }
+        }
     },
     "ubuntu-arm": {
         "20": {
@@ -775,6 +850,12 @@ URLS = {
                     "url": PATTERNS["ubuntu-arm-20"],
                 },
             },
+            8: {
+              0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu-arm-20"],
+                },
+            }
         },
         "22": {
             6: {
@@ -789,7 +870,21 @@ URLS = {
                     "url": PATTERNS["ubuntu-arm-22"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu-arm-22"],
+                },
+            },
         },
+        "24": {
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["ubuntu-arm-24"],
+                },
+            },
+        }
     },
     "linux": {
         "generic": {
@@ -883,6 +978,12 @@ URLS = {
                     "url": PATTERNS["macos"],
                 },
             },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
+                    "url": PATTERNS["macos"],
+                },
+            },
         },
     },
     "macos": {
@@ -896,6 +997,12 @@ URLS = {
             7: {
                 0: {
                     "patches": PATCH_RANGE["7.0"],
+                    "url": PATTERNS["macos-arm"],
+                },
+            },
+            8: {
+                0: {
+                    "patches": PATCH_RANGE["8.0"],
                     "url": PATTERNS["macos-arm"],
                 },
             },
@@ -965,6 +1072,9 @@ URLS = {
             7: {
                 0: {"patches": PATCH_RANGE["7.0"], "url": PATTERNS["windows-x86_64"]},
             },
+            8: {
+                0: {"patches": PATCH_RANGE["8.0"], "url": PATTERNS["windows-x86_64"]},
+            }
         },
     },
 }
