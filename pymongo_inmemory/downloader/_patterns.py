@@ -29,6 +29,7 @@ PATTERNS = {
     "rhel7": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-{}.tgz",
     "rhel6": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-{}.tgz",
     "rhel5": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel55-{}.tgz",
+    "debian12": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian12-{}.tgz",
     "debian11": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian11-{}.tgz",
     "debian10": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian10-{}.tgz",
     "debian9": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-debian92-{}.tgz",
@@ -83,7 +84,7 @@ PATCH_RANGE = {
     "6.0-rhel9": list(range(4, 11)),
     "6.0-rhel-arm-9": list(range(7, 11)),
     "7.0": list(range(3)),
-    "8.0": list(range(5)),
+    "8.0": list(range(6)),
 }
 
 # An index of URL patterns and patch ranges. First with OS and second with MongoDB
@@ -321,7 +322,7 @@ URLS = {
             8: {
                 0: {
                     "patches": PATCH_RANGE["8.0"],
-                    "url": PATTERNS["debian11"],
+                    "url": PATTERNS["debian12"],
                 },
             }
         }
