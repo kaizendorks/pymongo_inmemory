@@ -1,9 +1,9 @@
-from configparser import ConfigParser
 import hashlib
 import logging
 import os
-from os import path
 import platform
+from configparser import ConfigParser
+from os import path
 
 from ._utils import make_semver, mkdir_ifnot_exist
 from .downloader._urls import best_url
@@ -99,7 +99,7 @@ def conf(option, fallback=None, optional=True, coerce_with=str):
 
 class Context:
     def __init__(
-        self, os_name=None, version=None, os_ver=None, ignore_cache=False
+            self, os_name=None, version=None, os_ver=None, ignore_cache=False
     ) -> None:
         self.mongo_version = conf("mongo_version", version)
         self.mongod_port = conf("mongod_port", None, coerce_with=int)
@@ -150,8 +150,19 @@ class Context:
     def _build_operating_system_info(self, os_name=None):
         os_name = conf("operating_system", os_name)
         if os_name is None:
-            _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows"}
-            os_name = _mapping.get(platform.system())
+            # Fix for using platform.system() yields will yield 'linux'
+            platform_uname = platform.uname()
+            is_ubuntu = 'ubuntu' in platform_uname.version.lower()
+            is_debian = 'debian' in platform_uname.version.lower()
+            if is_ubuntu:
+                system = 'ubuntu'
+            elif is_debian:
+                system = 'debian'
+            else:
+                system = platform.system()
+
+            _mapping = {"Darwin": "osx", "Linux": "linux", "Windows": "windows", 'ubuntu': 'ubuntu', 'debian': 'debian'}
+            os_name = _mapping.get(system)
             if os_name is None:
                 raise OperatingSystemNotFound("Can't determine operating system.")
         return os_name
